@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 20, 2021 at 06:04 PM
+-- Generation Time: Jun 24, 2021 at 12:26 AM
 -- Server version: 8.0.23
 -- PHP Version: 7.4.3
 
@@ -21,6 +21,29 @@ SET time_zone = "+00:00";
 --
 -- Database: `db_kasir`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `detail_transaksi`
+--
+
+CREATE TABLE `detail_transaksi` (
+  `id` int NOT NULL,
+  `id_transaksi` int NOT NULL,
+  `id_produk` int NOT NULL,
+  `jumlah` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `detail_transaksi`
+--
+
+INSERT INTO `detail_transaksi` (`id`, `id_transaksi`, `id_produk`, `jumlah`) VALUES
+(1, 10, 1, 2),
+(2, 10, 2, 3),
+(3, 11, 1, 2),
+(4, 11, 2, 3);
 
 -- --------------------------------------------------------
 
@@ -81,6 +104,20 @@ INSERT INTO `kategori_produk` (`id`, `kategori`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `laporan_harian`
+-- (See below for the actual view)
+--
+CREATE TABLE `laporan_harian` (
+`jumlah_transaksi` decimal(32,0)
+,`laba_kotor` decimal(33,0)
+,`tanggal` date
+,`total_beli` decimal(32,0)
+,`total_jual` decimal(32,0)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `pelanggan`
 --
 
@@ -134,6 +171,13 @@ CREATE TABLE `platform` (
   `nama` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `platform`
+--
+
+INSERT INTO `platform` (`id`, `nama`) VALUES
+(3, 'Tokopedia');
+
 -- --------------------------------------------------------
 
 --
@@ -158,8 +202,8 @@ CREATE TABLE `produk` (
 --
 
 INSERT INTO `produk` (`id`, `barcode`, `nama_produk`, `kategori`, `satuan`, `harga_beli`, `harga_jual`, `harga_reseller`, `stok`, `terjual`) VALUES
-(1, 'PULS ALPRB', 'Voucher Pulsa 50000', 1, 2, 55000, 55000, 50000, 0, 4),
-(2, 'DJRM SPER', 'Djarum Super 12', 2, 1, 18000, 18000, 18000, 13, 2);
+(1, 'PULS ALPRB', 'Voucher Pulsa 50000', 1, 2, 45000, 55000, 50000, 24, 0),
+(2, 'DJRM SPER', 'Djarum Super 12', 2, 1, 14000, 18000, 18000, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -180,7 +224,7 @@ CREATE TABLE `reseller` (
 --
 
 INSERT INTO `reseller` (`id`, `nama`, `jenis_kelamin`, `alamat`, `telepon`) VALUES
-(1, 'Heyo', 'Wanita', 'Jalan', '08979');
+(1, 'Heyow', 'Wanita', 'Jalan', '08979');
 
 -- --------------------------------------------------------
 
@@ -220,7 +264,8 @@ CREATE TABLE `stok_keluar` (
 --
 
 INSERT INTO `stok_keluar` (`id`, `tanggal`, `barcode`, `jumlah`, `Keterangan`) VALUES
-(1, '2020-02-21 13:42:01', 1, '10', 'rusak');
+(1, '2020-02-21 13:42:01', 1, '10', 'rusak'),
+(2, '2021-06-22 14:15:34', 1, '65', 'rusak');
 
 -- --------------------------------------------------------
 
@@ -234,17 +279,26 @@ CREATE TABLE `stok_masuk` (
   `barcode` int NOT NULL,
   `jumlah` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `keterangan` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `supplier` int DEFAULT NULL
+  `supplier` int DEFAULT NULL,
+  `bayar` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `stok_masuk`
 --
 
-INSERT INTO `stok_masuk` (`id`, `tanggal`, `barcode`, `jumlah`, `keterangan`, `supplier`) VALUES
-(1, '2020-02-21 13:41:25', 1, '10', 'penambahan', NULL),
-(2, '2020-02-21 13:41:40', 2, '20', 'penambahan', 1),
-(3, '2020-02-21 13:42:23', 1, '10', 'penambahan', 2);
+INSERT INTO `stok_masuk` (`id`, `tanggal`, `barcode`, `jumlah`, `keterangan`, `supplier`, `bayar`) VALUES
+(1, '2020-02-21 13:41:25', 1, '10', 'penambahan', NULL, 0),
+(2, '2020-02-21 13:41:40', 2, '20', 'penambahan', 1, 0),
+(3, '2020-02-21 13:42:23', 1, '10', 'penambahan', 2, 0),
+(4, '0000-00-00 00:00:00', 1, '2', 'penambahan', 1, 0),
+(5, '0000-00-00 00:00:00', 1, '4', 'penambahan', 1, 0),
+(6, '0000-00-00 00:00:00', 2, '4', 'penambahan', 1, 0),
+(7, '0000-00-00 00:00:00', 1, '100', 'penambahan', 1, 0),
+(8, '0000-00-00 00:00:00', 1, '100', 'penambahan', 1, 0),
+(9, '0000-00-00 00:00:00', 1, '2', 'penambahan', 1, 110000),
+(10, '2021-06-23 12:48:44', 1, '2', 'penambahan', 1, 110000),
+(11, '2021-06-23 12:49:17', 1, '22', 'penambahan', 1, 1210000);
 
 -- --------------------------------------------------------
 
@@ -266,7 +320,7 @@ CREATE TABLE `supplier` (
 
 INSERT INTO `supplier` (`id`, `nama`, `alamat`, `telepon`, `keterangan`) VALUES
 (1, 'Tulus', 'Banjarnegara', '083321128832', 'Aktif'),
-(2, 'Nur', 'Cilacap', '082235542637', 'Baru');
+(2, 'aNur', 'Cilacap', '082235542637', 'Baru');
 
 -- --------------------------------------------------------
 
@@ -296,8 +350,6 @@ INSERT INTO `toko` (`id`, `nama`, `alamat`) VALUES
 CREATE TABLE `transaksi` (
   `id` int NOT NULL,
   `tanggal` datetime NOT NULL,
-  `barcode` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `qty` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `total_bayar` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `jumlah_uang` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `diskon` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -310,18 +362,37 @@ CREATE TABLE `transaksi` (
 -- Dumping data for table `transaksi`
 --
 
-INSERT INTO `transaksi` (`id`, `tanggal`, `barcode`, `qty`, `total_bayar`, `jumlah_uang`, `diskon`, `pelanggan`, `nota`, `kasir`) VALUES
-(1, '2020-02-21 13:42:54', '1', '2', '110000', '120000', '', 0, '7OROKLOEZ4041IQ', 1),
-(2, '2020-02-21 13:43:25', '2,1', '5,1', '145000', '150000', '1500', 1, 'YKFNJAAKDMI0GC4', 1),
-(3, '2020-02-21 13:43:25', '2,1', '5,1', '145000', '150000', '1500', 1, 'YKFNJAAKDMI0GC4', 1),
-(4, '2020-02-21 13:43:42', '1', '1', '55000', '60000', '', 2, 'GKV673Z3MC4A02V', 1),
-(5, '2020-02-21 13:49:44', '1', '2', '110000', '200000', '10000', 0, '108A992MRZ3PYME', 2),
-(6, '2021-06-20 15:28:53', '1', '4', '220000', '400000', '3000', 2, '2161ULTYP76BK82', 1),
-(7, '2021-06-20 17:24:34', '2', '2', '36000', '40000', '', 2, '4EJ5OF59DBZ9ELH', 1);
+INSERT INTO `transaksi` (`id`, `tanggal`, `total_bayar`, `jumlah_uang`, `diskon`, `pelanggan`, `nota`, `kasir`) VALUES
+(1, '2020-02-21 13:42:54', '110000', '120000', '', 0, '7OROKLOEZ4041IQ', 1),
+(2, '2020-02-21 13:43:25', '145000', '150000', '1500', 1, 'YKFNJAAKDMI0GC4', 1),
+(3, '2020-02-21 13:43:25', '145000', '150000', '1500', 1, 'YKFNJAAKDMI0GC4', 1),
+(4, '2020-02-21 13:43:42', '55000', '60000', '', 2, 'GKV673Z3MC4A02V', 1),
+(5, '2020-02-21 13:49:44', '110000', '200000', '10000', 0, '108A992MRZ3PYME', 2),
+(6, '2021-06-20 15:28:53', '220000', '400000', '3000', 2, '2161ULTYP76BK82', 1),
+(7, '2021-06-20 17:24:34', '36000', '40000', '', 2, '4EJ5OF59DBZ9ELH', 1),
+(8, '2021-06-22 23:34:39', '33000', '80000', '', 2, 'VIN0WUXLCGPH2EO', 1),
+(9, '2021-06-22 23:38:48', '11000', '100000', '', 1, '6MOS6XY4QWX463H', 1),
+(10, '2021-06-22 23:41:46', '65000', '100000', '', 1, 'REP55U3T3716C68', 1),
+(11, '2021-06-22 23:43:02', '65000', '100000', '', 1, 'UED69UIPDT8LIA7', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `laporan_harian`
+--
+DROP TABLE IF EXISTS `laporan_harian`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `laporan_harian`  AS  select cast(`transaksi`.`tanggal` as date) AS `tanggal`,sum(`produk`.`harga_beli`) AS `total_beli`,sum(`produk`.`harga_jual`) AS `total_jual`,sum(`transaksi`.`id`) AS `jumlah_transaksi`,(sum(`produk`.`harga_jual`) - sum(`produk`.`harga_beli`)) AS `laba_kotor` from ((`detail_transaksi` join `transaksi` on((`transaksi`.`id` = `detail_transaksi`.`id_transaksi`))) join `produk` on((`detail_transaksi`.`id_produk` = `produk`.`id`))) group by `transaksi`.`id` ;
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `detail_transaksi`
+--
+ALTER TABLE `detail_transaksi`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `gudang`
@@ -412,6 +483,12 @@ ALTER TABLE `transaksi`
 --
 
 --
+-- AUTO_INCREMENT for table `detail_transaksi`
+--
+ALTER TABLE `detail_transaksi`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `gudang`
 --
 ALTER TABLE `gudang`
@@ -445,7 +522,7 @@ ALTER TABLE `pengguna`
 -- AUTO_INCREMENT for table `platform`
 --
 ALTER TABLE `platform`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `produk`
@@ -469,13 +546,13 @@ ALTER TABLE `satuan_produk`
 -- AUTO_INCREMENT for table `stok_keluar`
 --
 ALTER TABLE `stok_keluar`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `stok_masuk`
 --
 ALTER TABLE `stok_masuk`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `supplier`
@@ -493,7 +570,7 @@ ALTER TABLE `toko`
 -- AUTO_INCREMENT for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
