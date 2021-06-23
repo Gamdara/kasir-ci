@@ -36,7 +36,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col">
-            <h1 class="m-0 text-dark">Edit Supplier</h1>
+            <h1 class="m-0 text-dark">Edit Reseller</h1>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
@@ -52,7 +52,7 @@
           <div class="col-sm-6">
           <?php foreach($reseller as $u){ ?>
             <form action="<?php echo base_url(). 'reseller/update'; ?>" method="post">
-            <input type="hidden" value="<?php echo $u->id_reseller ?>" name="id_reseller">
+            <input type="hidden" value="<?php echo $u->id ?>" name="id">
             <div class="form-group">
               <label> Nama </label>
               <input type="text" class="form-control col-sm-6" value="<?php echo $u->nama ?>" id="nama" name="nama">

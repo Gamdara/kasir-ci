@@ -2,7 +2,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
   <a href="<?php echo site_url('') ?>" class="brand-link text-center">
-    <span class="brand-text font-weight-light"><?php echo $this->session->userdata('master.toko')->nama ?></span>
+    <span class="brand-text font-weight-light"><?php echo $this->session->userdata('toko')->nama ?></span>
   </a>
   <?php $uri = $this->uri->segment(1) ?>
   <?php $role = $this->session->userdata('role'); ?>
@@ -150,13 +150,13 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="<?php echo site_url('laporan_penjualan') ?>" class="nav-link <?php echo $uri == 'laporan_penjualan' ? 'active' : 'no' ?>">
+              <a id="harian" href="<?php echo site_url('laporan_penjualan/index') ?>" class="nav-link <?php echo $uri == 'laporan_penjualan/index' ? 'active' : 'no' ?>">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Laporan Harian</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="<?php echo site_url('laporan_penjualan/bulanan') ?>" class="nav-link <?php echo $uri == 'laporan_penjualan/bulanan' ? 'active' : 'no' ?>">
+              <a id="bulanan" href="<?php echo site_url('laporan_penjualan/bulanan') ?>" class="nav-link <?php echo $uri == 'laporan_penjualan/bulanan' ? 'active' : 'no' ?>">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Laporan Bulanan </p>
               </a>

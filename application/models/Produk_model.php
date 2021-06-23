@@ -25,7 +25,7 @@ class Produk_model extends CI_Model {
     {
         $data = array(
             'nama_produk' => $this->input->post('nama', true),
-            'id_kategori' => $this->input->post('kategori', true),
+            'kategori' => $this->input->post('kategori', true),
             'harga_beli' => $this->input->post('beli', true),
 			'harga_jual' => $this->input->post('jual', true),
 			'harga_reseller' => $this->input->post('resell', true)
@@ -55,7 +55,7 @@ class Produk_model extends CI_Model {
 
 	public function getProduk($id)
 	{
-		$this->db->select('produk.id, produk.barcode, produk.nama_produk, produk.harga_jual, produk.stok, kategori_produk.id as kategori_id, kategori_produk.kategori, satuan_produk.id as satuan_id, satuan_produk.satuan');
+		$this->db->select('produk.id, produk.barcode, produk.nama_produk, produk.harga_jual, produk.harga_beli, produk.stok, kategori_produk.id as kategori_id, kategori_produk.kategori, satuan_produk.id as satuan_id, satuan_produk.satuan');
 		$this->db->from($this->table);
 		$this->db->join('kategori_produk', 'produk.kategori = kategori_produk.id');
 		$this->db->join('satuan_produk', 'produk.satuan = satuan_produk.id');

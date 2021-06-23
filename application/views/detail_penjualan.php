@@ -25,7 +25,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col">
-            <h1 class="m-0 text-dark">Detail Penjualan</h1>
+            <h1 class="m-0 text-dark">Transaksi</h1>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
@@ -41,12 +41,11 @@
                <i class="far fa-calendar-alt"></i> Date range picker
                <i class="fas fa-caret-down"></i>
             </button>
-            <table class="table w-100 table-bordered table-hover" id="laporan_penjualan">
+            <table class="table w-100 table-bordered table-hover" id="laporan_transaksi">
               <thead>
                 <tr>
                   <th>No</th>
                   <th>Tanggal</th>
-                  <th>Nama Produk</th> 
                   <th>Total Bayar</th> 
                   <th>Jumlah Uang</th> 
                   <th>Diskon</th> 
@@ -75,7 +74,7 @@
   var readUrl = '<?php echo site_url('transaksi/read') ?>';
   var deleteUrl = '<?php echo site_url('transaksi/delete') ?>';
 </script>
-<script src="<?php echo base_url('assets/js/laporan_penjualan.min.js') ?>"></script>
+<script src="<?php echo base_url('assets/js/unminify/laporan_penjualan.js') ?>"></script>
 <script>
   $(function () {
     //Initialize Select2 Elements

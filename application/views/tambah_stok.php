@@ -57,32 +57,35 @@
           </div>
           <div class="form-group">
               <label>Supplier</label>
-              <select class="form-control" name="supplier" id="supplier">
+              <select class="form-control" name="supplier" id="supplier" onchange="validate()">
               <option value="">No Selected</option>
               <?php foreach($supplier as $k) : ?>
-                            <option value="<?php echo $k->id_supplier,$k->nama;?>" > <?php echo $k->nama; ?></option>
+                  <option value="<?php echo $k->id;?>" > <?php echo $k->nama; ?></option>
               <?php endforeach; ?>
               </select>
-            </div>
+          </div>
             <div class="form-group">
               <label>Nama Barang</label>
               <div class="form-inline">
-              <select class="form-control select2" style="width: 100%;" name="barang" id="barang">
+              <select class="form-control select2" style="width: 100%;" name="barang" id="barang" onchange="setHarga()">
               <option value="">No Selected</option>
               <?php foreach($barang as $k) : ?>
-                            <option value="<?php echo $k->id_produk;?>" > <?php echo $k->nama_produk; ?></option>
+                            <option value="<?php echo $k->id;?>" > <?php echo $k->nama_produk; ?></option>
               <?php endforeach; ?>
-              </select>
-              </select>
               </select>
               </div>
             </div>
             <div class="form-group">
+              <label>Harga Beli</label>
+              <input id="harga_beli" type="text" class="form-control col-sm-6" 
+              value="" name="harga_beli" disabled>
+          </div>
+            <div class="form-group">
               <label>Jumlah</label>
-              <input type="number" class="form-control col-sm-6" placeholder="Jumlah" name="jumlah" id="jumlah">
+              <input type="number" class="form-control col-sm-6" placeholder="Jumlah" name="jumlah" id="jumlah" value="0" onkeyup="validate()">
             </div>
             <div class="form-group">
-              <button id="tambah" class="btn btn-success" onclick="tambah();">Tambah</button>
+              <button id="tambah" class="btn btn-success" onclick="tambah();" disabled>Tambah</button>
             </div>
           </div>
           <div class="col-sm-6 d-flex justify-content-end text-right nota">
@@ -97,12 +100,12 @@
         </div>
         <div class="card-body">
         <b class="mr-2">Tanggal : </b> <span id="nota"></span>
-          <table class="table w-100 table-bordered table-hover">
+          <table class="table w-100 table-bordered table-hover" id="stok">
             <thead>
               <tr>
                 <th>Supplier</th>
                 <th>Nama Barang</th>
-                <!--<th>Harga Beli</th>-->
+                <th>Subtotal</th>
                 <th>Stok Ditambahkan</th>
                 <!--<th>Total</th>-->
                 <th>Aksi</th>
@@ -111,7 +114,7 @@
           </table>
         </div>
         <div class="card-body">
-              <button id="bayar" class="btn btn-success" data-toggle="modal" data-target="#modal" disabled>Simpan</button>
+              <button id="simpan" class="btn btn-success" data-toggle="modal" data-target="#modal" disabled onclick="add()">Simpan</button>
             </div>
           </div>
       </div>
@@ -144,52 +147,184 @@
   })
 </script>
 <script>
-      function getNama() {
-        $.ajax({
-            type: "post",
-            dataType: "json",
-            data: {
-                id: $("#id_produk").val()
-            },
-            success: res => {
-                $("#nama_produk").html(res.nama_produk);
-                $("#harga_beli").html(res.harga_beli);
-            },
-            error: err => {
-                console.log(err)
-            }
-        })
+  let total = 0;
+  $("#total").html(total);
+  produk = [],
+  stok = $("#stok").DataTable({
+        responsive: true,
+        lengthChange: false,
+        searching: false,
+        scrollX: true,
+    });
+    
+  function reloadTable() {
+    transaksi.ajax.reload()
+  }
+  function getNama() {
+    $.ajax({
+        type: "post",
+        dataType: "json",
+        data: {
+            id: $("#id_produk").val()
+        },
+        success: res => {
+            $("#nama_produk").html(res.nama_produk);
+            $("#harga_beli").html(res.harga_beli);
+        },
+        error: err => {
+            console.log(err)
+        }
+      })
+  }
+  function validate(){
+    const sup = document.getElementById('supplier').value;
+    const barang = document.getElementById('barang').value;
+    const jumlah = document.getElementById('jumlah').value;
+
+    if(sup != "" && barang != "" && jumlah > 1)
+      $("#tambah").removeAttr("disabled")
+    else
+      $("#tambah").attr("disabled", "disabled")
+  }
+  function setHarga(){
+    validate()
+    $.ajax({
+        url : '<?php echo site_url('produk/get_produk') ?>',
+        type: "post",
+        dataType: "json",
+        data: {
+            id: $("#barang").val()
+        },
+        success: res => {
+            $("#harga_beli").val(res.harga_beli);
+        },
+        error: err => {
+            console.log(err)
+        }
+      })
+  }
+
+  function remove(nama){
+    stok.row($("[name=" + nama + "]").closest("tr")).remove().draw();
+    $("#tambah").attr("disabled", "disabled");
+    if (stok.rows().count() < 1) {
+        $("#simpan").attr("disabled", "disabled")
     }
-    function tambah()
-            {
-                
-                // untuk ambil nilai pada input
-                 var sup = document.getElementById('supplier').value;
-                 var barang = document.getElementById('barang').value;
-                 var jumlah = document.getElementById('jumlah').value;
-                  
-                  
-                  // 0 = baris awal pada tabel
-                  var table = document.getElementsByTagName('table')[0];
-                  
-                  // tambah baris kosong pada tabel
-                  // 0 = dihitung dari atas 
-                  // table.rows.length = menambahkan pada akhir baris
-                  // table.rows.length/2 = menambahkan data pada baris tengah tabel , urutan baris ke 2 
-                  var newRow = table.insertRow(table.rows.length);
-                  
-                  // tambah cell pada baris baru
-                  var cell1 = newRow.insertCell(0);
-                  var cell2 = newRow.insertCell(1);
-                  var cell3 = newRow.insertCell(2);
-                  var cell4 = newRow.insertCell(3);
-                  
-                  // tambah nilai ke dalam cell
-                  cell1.innerHTML = sup;
-                  cell2.innerHTML = barang;
-                  cell3.innerHTML = jumlah;
-                  cell4.innerHTML = '<button id="tambah" class="btn btn-success">Delete</button>';
-            }
+    
+  }
+
+  function tambah(){
+    const tanggal =  $("#tanggal").val();
+    const sup = document.getElementById('supplier');
+    const supText = sup.options[sup.selectedIndex].text;
+    const barang = document.getElementById('barang');
+    const barangText = barang.options[barang.selectedIndex].text;
+    const jumlah = document.getElementById('jumlah').value;
+    const keterangan = "pembahan";
+    const harga = $("#harga_beli").val();
+    const bayar = jumlah * harga
+
+    let ref = produk.find(el => el.supplier == sup.value && el.barcode == barang.value);
+    
+    // console.log(produk);
+    
+    if(ref != undefined){
+      ref.jumlah = jumlah;
+      // const ref = stok.rows( function ( idx, data, node ) {
+      //   return data.supplier == sup.value && data.barcode == barang.value
+      // } )
+      // .data();
+      // stok.rows().every(el=>{
+      //   console.log(this.data())
+      // })
+      stok.rows().each( function ( index ) {
+          var row = stok.row( index );
+      
+          var data = row.data();
+          // data[4] = jumlah;
+          // ... do something with data(), or row.node(), etc
+          console.log(data);
+          return;
+      } );
+      stok.draw();
+    }
+
+    produk.push({
+      tanggal: tanggal,
+      barcode: parseInt(barang.value),
+      jumlah: parseInt(jumlah),
+      keterangan: "penambahan",
+      supplier: parseInt(sup.value),
+      bayar : bayar
+    })
+
+    stok.row.add([
+      supText,
+      barangText,
+      bayar,
+      jumlah,
+      `<button name="${sup.value}" class="btn btn-sm btn-danger" onclick="remove('${sup.value}')">Hapus</btn>`
+    ]).draw()
+
+    total += harga * jumlah;
+
+    $("#simpan").removeAttr("disabled")
+    $("#total").html(total);
+  }
+
+  function add(){
+    $.ajax({
+        url: '<?php echo site_url('stok_masuk/add') ?>',
+        type: "post",
+        dataType: "json",
+        data: {
+            produk: JSON.stringify(produk),
+        },
+        success: res => {
+          console.log(res);
+          Swal.fire("Sukses", "Sukses Membayar", "success").
+              then(() => window.location.href = `<?php echo site_url('stok_masuk/') ?>`)
+        },
+        error: err => {
+          // console.log(this.data);
+            console.log(err)
+        }
+    })
+  }
+
+    // function tambah()
+    // {
+        
+    // // untuk ambil nilai pada input
+    //   var sup = document.getElementById('supplier');
+    //   const supText = sup.options[sup.selectedIndex].text;
+    //   var barang = document.getElementById('barang');
+    //   const barangText = barang.options[barang.selectedIndex].text;
+    //   var jumlah = document.getElementById('jumlah').value;
+      
+      
+    //   // 0 = baris awal pada tabel
+    //   var table = document.getElementsByTagName('table')[0];
+      
+    //   // tambah baris kosong pada tabel
+    //   // 0 = dihitung dari atas 
+    //   // table.rows.length = menambahkan pada akhir baris
+    //   // table.rows.length/2 = menambahkan data pada baris tengah tabel , urutan baris ke 2 
+    //   var newRow = table.insertRow(table.rows.length);
+
+    //   // tambah cell pada baris baru
+    //   var cell1 = newRow.insertCell(0);
+    //   var cell2 = newRow.insertCell(1);
+    //   var cell3 = newRow.insertCell(2);
+    //   var cell4 = newRow.insertCell(3);
+
+    //   // tambah nilai ke dalam cell
+    //   cell1.innerHTML = supText;
+    //   cell2.innerHTML = barangText;
+    //   cell3.innerHTML = jumlah;
+    //   cell4.innerHTML = '<button id="tambah" class="btn btn-danger  ">Delete</button>';
+    //   $("#simpan").removeAttr("disabled")
+    // }
 </script>
 </body>
 </html>

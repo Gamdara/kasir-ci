@@ -51,7 +51,7 @@
                   <th>Barcode</th>
                   <th>Nama Produk</th>
                   <th>Jumlah</th>
-                  <th>Keterangan</th>
+                  <th>Bayar</th>
                 </tr>
               </thead>
             </table>
@@ -79,7 +79,17 @@
   var addUrl = '<?php echo site_url('stok_masuk/add') ?>';
   var getBarcodeUrl = '<?php echo site_url('produk/get_barcode') ?>';
   var supplierSearchUrl = '<?php echo site_url('supplier/search') ?>';
+  $.ajax({
+        url: readUrl,
+        type: "get",
+        success: (res) => {
+            console.log(res)
+        },
+        error: err => {
+            console.log(err)
+        }
+    })
 </script>
-<script src="<?php echo base_url('assets/js/stok_masuk.min.js') ?>"></script>
+<script src="<?php echo base_url('assets/js/unminify/stok_masuk.js') ?>"></script>
 </body>
 </html>

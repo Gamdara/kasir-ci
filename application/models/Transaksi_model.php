@@ -8,14 +8,19 @@ class Transaksi_model extends CI_Model {
 	public function removeStok($id, $stok)
 	{
 		$this->db->where('id', $id);
-		$this->db->set('stok', $stok);
+		$this->db->set('stok', 'stok-'.$stok);
 		return $this->db->update('produk');
+	}
+
+	public function createDetail($data)
+	{
+		return $this->db->insert("detail_transaksi", $data);
 	}
 
 	public function addTerjual($id, $jumlah)
 	{
 		$this->db->where('id', $id);
-		$this->db->set('terjual', $jumlah);
+		$this->db->set('terjual', 'terjual+'.$jumlah);
 		return $this->db->update('produk');;
 	}
 
@@ -26,7 +31,7 @@ class Transaksi_model extends CI_Model {
 
 	public function read()
 	{
-		$this->db->select('transaksi.id, transaksi.tanggal, transaksi.barcode, transaksi.qty, transaksi.total_bayar, transaksi.jumlah_uang, transaksi.diskon, pelanggan.nama as pelanggan');
+		$this->db->select('transaksi.id, transaksi.tanggal, transaksi.total_bayar, transaksi.jumlah_uang, transaksi.diskon, pelanggan.nama as pelanggan');
 		$this->db->from($this->table);
 		$this->db->join('pelanggan', 'transaksi.pelanggan = pelanggan.id', 'left outer');
 		return $this->db->get();
@@ -49,6 +54,14 @@ class Transaksi_model extends CI_Model {
 		return join($data);
 	}
 
+	public function getDetail($id){
+		$this->db->select('detail_transaksi.jumlah, transaksi.*, produk.*');
+		$this->db->from('detail_transaksi');
+		$this->db->join('transaksi', 'transaksi.id = detail_transaksi.id_transaksi');
+		$this->db->join('produk', 'produk.id = detail_transaksi.id_produk');		
+		$this->db->where('detail_transaksi.id_transaksi', $id);
+		return $this->db->get();
+	}
 
 	public function penjualanBulan($date)
 	{
@@ -69,6 +82,15 @@ class Transaksi_model extends CI_Model {
 		return $this->db->query("SELECT COUNT(*) AS total FROM transaksi WHERE DATE_FORMAT(tanggal, '%d %m %Y') = '$hari'")->row();
 	}
 
+	public function query($query)
+	{
+		$sql = $this->db->query($query);
+		foreach($sql->result() as $transaksi){
+			$data[] = $transaksi;
+		}
+		return $data;
+	}
+
 	public function transaksiTerakhir($hari)
 	{
 		return $this->db->query("SELECT transaksi.qty FROM transaksi WHERE DATE_FORMAT(tanggal, '%d %m %Y') = '$hari' LIMIT 1")->row();
@@ -76,7 +98,7 @@ class Transaksi_model extends CI_Model {
 
 	public function getAll($id)
 	{
-		$this->db->select('transaksi.nota, transaksi.tanggal, transaksi.barcode, transaksi.qty, transaksi.total_bayar, transaksi.jumlah_uang, pengguna.nama as kasir');
+		$this->db->select('transaksi.nota, transaksi.tanggal, transaksi.total_bayar, transaksi.jumlah_uang, pengguna.nama as kasir');
 		$this->db->from('transaksi');
 		$this->db->join('pengguna', 'transaksi.kasir = pengguna.id');
 		$this->db->where('transaksi.id', $id);
@@ -86,7 +108,7 @@ class Transaksi_model extends CI_Model {
 	public function getName($barcode)
 	{
 		foreach ($barcode as $b) {
-			$this->db->select('nama_produk, harga');
+			$this->db->select('nama_produk, harga_jual');
 			$this->db->where('id', $b);
 			$data[] = $this->db->get('produk')->row();
 		}

@@ -49,14 +49,14 @@ class Produk extends CI_Controller {
 	}*/
 
 	function edit($id_produk){
-		$where = array('id_produk' => $id_produk);
+		$where = array('id' => $id_produk);
 		$data['kategori_produk']=$this->produk_model->get_kategori();
-		$data['produk'] = $this->produk_model->edit_data($where,'master.produk')->result();
+		$data['produk'] = $this->produk_model->edit_data($where,'produk')->result();
 		$this->load->view('edit_produk',$data);
 		}
 	
 	function update(){
-		$id_produk = $this->input->post('id_produk');
+		$id_produk = $this->input->post('id');
 		$nama_produk = $this->input->post('nama');
 		$id_kategori = $this->input->post('kategori');
 		$harga_beli = $this->input->post('beli');
@@ -66,17 +66,17 @@ class Produk extends CI_Controller {
 	
 			$data = array(
 				'nama_produk' => $nama_produk,
-				'id_kategori' => $id_kategori,
+				'kategori' => $id_kategori,
 				'harga_beli' => $harga_beli,
 				'harga_jual' => $harga_jual,
 				'harga_reseller'=>$harga_reseller
 			);
 		 
 			$where = array(
-				'id_produk' => $id_produk
+				'id' => $id_produk
 			);
 			
-			$this->produk_model->update_data($where,$data,'master.produk');
+			$this->produk_model->update_data($where,$data,'produk');
 			redirect('produk');
 		}
 

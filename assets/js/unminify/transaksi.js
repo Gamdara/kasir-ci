@@ -1,11 +1,11 @@
 let isCetak = false,
-    produk = [],
-    transaksi = $("#transaksi").DataTable({
-        responsive: true,
-        lengthChange: false,
-        searching: false,
-        scrollX: true
-    });
+produk = [],
+transaksi = $("#transaksi").DataTable({
+    responsive: true,
+    lengthChange: false,
+    searching: false,
+    scrollX: true
+});
 
 function reloadTable() {
     transaksi.ajax.reload()
@@ -47,7 +47,6 @@ function checkStok() {
             id: $("#barcode").val()
         },
         success: res => {
-            console.table(res)
             let barcode = $("#barcode").val(),
                 nama_produk = res.nama_produk,
                 jumlah = parseInt($("#jumlah").val()),
@@ -67,17 +66,17 @@ function checkStok() {
                     } else {
                         data[3] = data[3] + jumlah;
                         row.data(data).draw();
-                        indexProduk = produk.findIndex(a => a.id == barcode);
+                        indexProduk = produk.findIndex(a => a.id_produk == barcode);
                         produk[indexProduk].stok = stok - data[3];
                         $("#total").html(total + harga * jumlah)
                     }
                 } else {
                     
                     produk.push({
-                        id: barcode,
-                        stok: stok - jumlah,
-                        terjual: jumlah
+                        id_produk: barcode,
+                        jumlah: jumlah
                     });
+                    console.log(produk)
                     transaksi.row.add([
                         dataBarcode,
                         nama_produk,
@@ -140,11 +139,11 @@ function remove(nama) {
 }
 
 function add() {
-    let data = transaksi.rows().data(),
-        qty = [];
-    $.each(data, (index, value) => {
-        qty.push(value[3])
-    });
+    let data = transaksi.rows().data()
+    // qty = [];
+    // $.each(data, (index, value) => {
+    //     qty.push(value[3])
+    // });
     $.ajax({
         url: addUrl,
         type: "post",
@@ -152,7 +151,6 @@ function add() {
         data: {
             produk: JSON.stringify(produk),
             tanggal: $("#tanggal").val(),
-            qty: qty,
             total_bayar: $("#total").html(),
             jumlah_uang: $('[name="jumlah_uang"]').val(),
             diskon: $('[name="diskon"]').val(),

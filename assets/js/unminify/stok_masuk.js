@@ -21,7 +21,7 @@ let stok_masuk = $("#stok_masuk").DataTable({
     }, {
         data: "jumlah"
     }, {
-        data: "keterangan"
+        data: "bayar"
     }]
 });
 

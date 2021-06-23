@@ -52,7 +52,7 @@
           <div class="col-sm-6">
           <?php foreach($supplier as $u){ ?>
             <form action="<?php echo base_url(). 'supplier/update'; ?>" method="post">
-            <input type="hidden" value="<?php echo $u->id ?>" name="id_supplier">
+            <input type="hidden" value="<?php echo $u->id ?>" name="id">
             <div class="form-group">
               <label> Nama </label>
               <input type="text" class="form-control col-sm-6" value="<?php echo $u->nama ?>" id="nama" name="nama">
@@ -74,7 +74,7 @@
               <?= form_error('keterangan', '<small class="pl-3 text-danger">', '</small>'); ?>
             </div>
              <div class="form-group">
-             <button class="btn btn-success" type="submit">Add</button>
+             <button class="btn btn-success" type="submit">Simpan</button>
             </div>
             </form>
             <?php } ?>

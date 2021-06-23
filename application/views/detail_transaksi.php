@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Laporan Penjualan</title>
+  <title>Detail </title>
   <link rel="stylesheet" href="<?php echo base_url('assets/vendor/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') ?>">
   <link rel="stylesheet" href="<?php echo base_url('assets/vendor/adminlte/plugins/sweetalert2/sweetalert2.min.css') ?>">
   <link rel="stylesheet" href="<?php echo base_url('assets/vendor/adminlte/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') ?>">
@@ -25,31 +25,39 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col">
-            <h1 class="m-0 text-dark">Laporan Penjualan Bulanan</h1>
+            <h1 class="m-0 text-dark">Detail Transaksi</h1>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
-
+    
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
         <div class="card">
           <div class="card-body">
-             <button type="button" class="btn btn-default float-right" id="daterange-btn">
-               <i class="far fa-calendar-alt"></i> Date range picker
-               <i class="fas fa-caret-down"></i>
-            </button>
-            <table class="table w-100 table-bordered table-hover" id="laporan_bulanan">
+          <!-- <table class="table w-100 table-bordered table-hover" >
               <thead>
                 <tr>
-                  <th>Bulan</th>
-                  <th>Harga Beli</th> 
-                  <th>Harga Jual</th> 
-                  <th>Jumlah Transaksi</th>
-                  <th>Pengeluaran</th>  
-                  <th>Laba Kotor</th>
+                  <th>No</th>
+                  <th>Barcode</th> 
+                  <th>Nama Produk</th> 
+                  <th>Jumlah</th> 
+                  <th>Harga</th> 
+                  <th>Subtotal</th> 
+                </tr>
+              </thead>
+            </table> -->
+            <table class="table w-100 table-bordered table-hover" id="detail_transaksi">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Barcode</th> 
+                  <th>Nama Produk</th> 
+                  <th>Jumlah</th> 
+                  <th>Harga</th> 
+                  <th>Subtotal</th> 
                 </tr>
               </thead>
             </table>
@@ -68,21 +76,19 @@
 <script src="<?php echo base_url('assets/vendor/adminlte/plugins/datatables/jquery.dataTables.min.js') ?>"></script>
 <script src="<?php echo base_url('assets/vendor/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') ?>"></script>
 <script src="<?php echo base_url('assets/vendor/adminlte/plugins/sweetalert2/sweetalert2.min.js') ?>"></script>
-<script src="<?php echo base_url('assets/vendor/adminlte/plugins/daterangepicker/daterangepicker.js') ?>"></script>
 <script>
-  var readUrl = '<?php echo site_url('transaksi/getbulan') ?>';
-  var deleteUrl = '<?php echo site_url('transaksi/delete') ?>';
+  var readUrl = '<?php echo site_url('transaksi/getdetail/10') ?>';
 </script>
-<script src="<?php echo base_url('assets/js/unminify/laporan_penjualan.js') ?>"></script>
+<script src="<?php echo base_url('assets/js/unminify/detail_transaksi.js') ?>"></script>
 <script>
   $(function () {
     //Initialize Select2 Elements
-    $('.select2').select2()
-    $('#bulanan').addClass('active');
+    // $('.select2').select2()
+
     //Initialize Select2 Elements
-    $('.select2bs4').select2({
-      theme: 'bootstrap4'
-    })
+    // $('.select2bs4').select2({
+    //   theme: 'bootstrap4'
+    // })
 
     //Datemask dd/mm/yyyy
     $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })

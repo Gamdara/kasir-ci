@@ -46,13 +46,13 @@ class Reseller extends CI_Controller {
 	}
 
 	function edit($id_reseller){
-		$where = array('id_reseller' => $id_reseller);
-		$data['reseller'] = $this->reseller_model->edit_data($where,'master.reseller')->result();
+		$where = array('id' => $id_reseller);
+		$data['reseller'] = $this->reseller_model->edit_data($where,'reseller')->result();
 		$this->load->view('edit_reseller',$data);
 		}
 	
 	function update(){
-			$id_reseller = $this->input->post('id_reseller');
+			$id = $this->input->post('id');
 			$nama = $this->input->post('nama');
 			$alamat = $this->input->post('alamat');
 			$telp = $this->input->post('telp');
@@ -64,10 +64,10 @@ class Reseller extends CI_Controller {
 			);
 		 
 			$where = array(
-				'id_reseller' => $id_reseller
+				'id' => $id
 			);
 		 
-			$this->reseller_model->update_data($where,$data,'master.reseller');
+			$this->reseller_model->update_data($where,$data,'reseller');
 			redirect('reseller');
 		}
 

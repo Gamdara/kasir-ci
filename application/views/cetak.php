@@ -29,7 +29,7 @@
 						<td><?php echo $key->nama_produk ?></td>
 						<td></td>
 						<td align="right"><?php echo $key->total ?></td>
-						<td align="right"><?php echo $key->harga ?></td>
+						<td align="right"><?php echo $key->harga_jual ?></td>
 					</tr>
 				<?php endforeach ?>
 			</table>

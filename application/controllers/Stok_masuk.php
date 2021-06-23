@@ -44,7 +44,7 @@ class Stok_masuk extends CI_Controller {
 					'barcode' => $stok_masuk->barcode,
 					'nama_produk' => $stok_masuk->nama_produk,
 					'jumlah' => $stok_masuk->jumlah,
-					'keterangan' => $stok_masuk->keterangan
+					'bayar' => $stok_masuk->bayar
 				);
 			}
 		} else {
@@ -58,24 +58,13 @@ class Stok_masuk extends CI_Controller {
 
 	public function add()
 	{
-		$id = $this->input->post('barcode');
-		$jumlah = $this->input->post('jumlah');
-		$stok = $this->stok_masuk_model->getStok($id)->stok;
-		$rumus = max($stok + $jumlah,0);
-		$addStok = $this->stok_masuk_model->addStok($id, $rumus);
-		if ($addStok) {
-			$tanggal = new DateTime($this->input->post('tanggal'));
-			$data = array(
-				'tanggal' => $tanggal->format('Y-m-d H:i:s'),
-				'barcode' => $id,
-				'jumlah' => $jumlah,
-				'keterangan' => $this->input->post('keterangan'),
-				'supplier' => $this->input->post('supplier')
-			);
-			if ($this->stok_masuk_model->create($data)) {
-				echo json_encode('sukses');
-			}
+		$produks = json_decode($this->input->post('produk'));
+		foreach ($produks as $key => $produk) {
+			$tanggal = new DateTime($produk->tanggal);
+			$produk->tanggal = $tanggal->format('Y-m-d H:i:s');
+			$this->stok_masuk_model->create($produk);
 		}
+		echo json_encode($this->input->post('produk'));
 	}
 
 	public function get_barcode()

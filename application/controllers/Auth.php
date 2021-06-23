@@ -25,9 +25,10 @@ class Auth extends CI_Controller {
 							'nama' => $data->nama,
 							'role' => $data->role == '1' ? 'admin' : 'kasir',
 							'status' => 'login',
-							'master.toko' => $toko
+							'toko' => $toko
 						);
 						$this->session->set_userdata($userdata);
+
 						echo json_encode('sukses');
 					} else {
 						echo json_encode('passwordsalah');
