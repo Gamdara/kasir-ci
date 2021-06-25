@@ -39,8 +39,8 @@
     <section class="content">
       <div class="container-fluid">
         <div class="card">
-        <div class="card-header">
-           <a href="<?php echo base_url('stok_keluar/tambah'); ?>"> <button class="btn btn-success">Add</button> </a>
+          <div class="card-header">
+            <button class="btn btn-success" data-toggle="modal" data-target="#modal">Add</button>
           </div>
           <div class="card-body">
             <table class="table w-100 table-bordered table-hover" id="stok_keluar">

@@ -11,9 +11,7 @@ class Produk_model extends CI_Model {
         return $this->db->from('produk')
           ->join('kategori_produk', 'produk.kategori=kategori_produk.id')
           ->get()
-		  ->result_array();
-
-		  
+		  ->result_array();	  
 	}
 
 	public function get_kategori(){

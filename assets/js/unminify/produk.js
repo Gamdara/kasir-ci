@@ -13,13 +13,34 @@ let produk = $("#produk").DataTable({
     ],
     columns: [
         { data: null }, 
-        { data: "barcode" },
-        { data: "nama" },
-        { data: "satuan" },
         { data: "kategori" },
-        { data: "harga" },
-        { data: "stok" },
+        { data: "nama_produk" },
+        { data: "harga_beli" },
+        { data: "harga_jual" },
+        { data: "harga_reseller" },
         { data: "action" }
+    ]
+});
+
+let daftar_stok = $("#daftar_stok").DataTable({
+    responsive: true,
+    scrollX: true,
+    ajax: readUrl,
+    columnDefs: [{
+        searcable: false,
+        orderable: false,
+        targets: 0
+    }],
+    order: [
+        [1, "asc"]
+    ],
+    columns: [
+        { data: null }, 
+        { data: "barcode" },
+        { data: "nama_produk" },
+        { data: "harga_jual" },
+        { data: "stok" },
+        { data: "subtotal" }
     ]
 });
 
@@ -126,6 +147,26 @@ produk.on("order.dt search.dt", () => {
         el.innerHTML = val + 1
     });
 });
+
+daftar_stok.on("order.dt search.dt", () => {
+    daftar_stok.column(0, {
+        search: "applied",
+        order: "applied"
+    }).nodes().each((el, val) => {
+        // console.log(el, val)
+        el.innerHTML = val + 1
+    });
+});
+
+let a = 0;
+daftar_stok.on("order.dt search.dt", () => {
+    daftar_stok.column(5).nodes().each((el, val) => {
+        a += parseInt(el.innerHTML);
+        console.log(el, val)
+    });
+});
+console.log(a)
+
 $("#form").validate({
     errorElement: "span",
     errorPlacement: (err, el) => {

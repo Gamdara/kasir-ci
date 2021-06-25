@@ -61,7 +61,7 @@
               <select class="form-control" name="kategori" id="kategori">
                         <option value="">No Selected</option>
                         <?php foreach($kategori_produk as $k) : ?>
-                            <option value="<?php echo $k->id_kategori;?>"> <?php echo $k->kategori; ?></option>
+                            <option value="<?php echo $k->id;?>"> <?php echo $k->kategori; ?></option>
                         <?php endforeach; ?>
                 </select>
               <?= form_error('kategori', '<small class="pl-3 text-danger">', '</small>'); ?>

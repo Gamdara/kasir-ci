@@ -42,14 +42,15 @@
             <button class="btn btn-success" data-toggle="modal" data-target="#modal" onclick="add()">Add</button>
           </div> -->
           <div class="card-body">
-            <table class="table w-100 table-bordered table-hover" id="produk">
+            <table class="table w-100 table-bordered table-hover" id="daftar_stok">
               <thead>
                 <tr>
                   <th>No</th>
-                  <th>ID Produk</th>
+                  <th>Barcode</th>
                   <th>Nama</th>
-                  <th>Harga Beli</th>
-                  <th>Stok Akhir</th>
+                  <th>Harga Jual</th>
+                  <th>Stok </th>
+                  <th>Stok (Rp)</th>
                 </tr>
               </thead>
             </table>
@@ -63,7 +64,7 @@
 
 </div>
 
-<div class="modal fade" id="modal">
+<!-- <div class="modal fade" id="modal">
 <div class="modal-dialog">
 <div class="modal-content">
   <div class="modal-header">
@@ -105,7 +106,7 @@
   </div>
 </div>
 </div>
-</div>
+</div> -->
 <!-- ./wrapper -->
 <?php $this->load->view('includes/footer'); ?>
 <?php $this->load->view('partials/footer'); ?>
@@ -123,6 +124,6 @@
   var kategoriSearchUrl = '<?php echo site_url('kategori_produk/search') ?>';
   var satuanSearchUrl = '<?php echo site_url('satuan_produk/search') ?>';
 </script>
-<script src="<?php echo base_url('assets/js/produk.min.js') ?>"></script>
+<script src="<?php echo base_url('assets/js/unminify/produk.js') ?>"></script>
 </body>
 </html>

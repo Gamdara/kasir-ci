@@ -174,7 +174,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="<?php echo site_url('laporan_penjualan/laporan_pengeluaran') ?>" class="nav-link <?php echo $uri == 'laporan_penjualan/laporan_pengeluaran' ? 'active' : 'no' ?>">
+              <a href="<?php echo site_url('laporan/pengeluaran') ?>" class="nav-link <?php echo $uri == 'laporan_penjualan/laporan_pengeluaran' ? 'active' : 'no' ?>">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Laporan Pengluaran </p>
               </a>

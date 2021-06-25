@@ -41,7 +41,7 @@
           <a href="<?= base_url('produk/add/'); ?>"><button class="btn btn-success">Add</button></a>
           </div>
           <div class="card-body">
-            <table class="table w-100 table-bordered table-hover">
+            <table class="table w-100 table-bordered table-hover" id="produk">
               <thead>
               <tr>
                   <th>No</th>
@@ -53,7 +53,7 @@
                   <th>Aksi</th>
               </tr>
               </thead>
-              <tbody>
+              <!-- <tbody>
                    <?php $no = 1; 
                    foreach ($produk as $m) { ?>
                     <tr>
@@ -67,7 +67,7 @@
                     <a href="<?= base_url('produk/delete/'); ?><?= $m['id']; ?>"><button type="submit"  class="btn btn-sm btn-primary" name="hapus">Hapus</button></a></td>
                     </tr>
                     <?php } ?>
-                </tbody>
+                </tbody> -->
             </table>
           </div>
         </div>
@@ -86,5 +86,9 @@
 <script src="<?php echo base_url('assets/vendor/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') ?>"></script>
 <script src="<?php echo base_url('assets/vendor/adminlte/plugins/jquery-validation/jquery.validate.min.js') ?>"></script>
 <script src="<?php echo base_url('assets/vendor/adminlte/plugins/sweetalert2/sweetalert2.min.js') ?>"></script>
+<script>
+  const readUrl = '<?= base_url('produk/read') ?>'
+</script>
+<script src="<?php echo base_url('assets/js/unminify/produk.js') ?>"></script>
 </body>
 </html>

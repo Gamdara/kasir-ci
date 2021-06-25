@@ -18,7 +18,22 @@ class Produk extends CI_Controller {
 		$this->load->view('daftar_produk',$data);
 	}
 
-
+	public function read(){
+		header('Content-type: application/json');
+		$data = array();
+		foreach ($this->produk_model->view() as $produk) {
+			$produk['action'] = "
+			<a href='".base_url('produk/edit/'.$produk['id'])."'><button type='submit'  class='btn btn-sm btn-primary' name='edit'>Edit</button></a>
+			<a href='".base_url('produk/delete/'.$produk['id'])."'><button type='submit'  class='btn btn-sm btn-primary' name='edit'>Hapus</button></a>
+			";
+			$produk["subtotal"] = $produk["harga_jual"] * $produk["stok"];
+			$data[] = $produk;
+		}
+		$stok_masuk = array(
+			'data' => $data
+		);
+		echo json_encode($stok_masuk);
+	}
 
 	public function add()
 	{

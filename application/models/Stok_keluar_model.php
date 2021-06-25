@@ -10,6 +10,8 @@ class Stok_keluar_model extends CI_Model {
 		return $this->db->insert($this->table, $data);
 	}
 
+	
+
 	public function read()
 	{
 		$this->db->select('stok_keluar.tanggal, stok_keluar.jumlah, stok_keluar.keterangan, produk.barcode, produk.nama_produk');
@@ -25,10 +27,10 @@ class Stok_keluar_model extends CI_Model {
 		return $this->db->get('produk')->row();
 	}
 
-	public function addStok($id,$stok)
+	public function removeStok($id,$stok)
 	{
 		$this->db->where('id', $id);
-		$this->db->set('stok', $stok);
+		$this->db->set('stok', 'stok-'.$stok, FALSE);
 		return $this->db->update('produk');
 	}
 

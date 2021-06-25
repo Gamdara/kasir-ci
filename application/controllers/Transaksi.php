@@ -45,8 +45,7 @@ class Transaksi extends CI_Controller {
 	{
 		$produks = json_decode($this->input->post('produk'));
 		$tanggal = new DateTime($this->input->post('tanggal'));
-		$data = $this->input->post('form');
-		
+		// $data = $this->input->post('form')
 		$data = array(
 			'tanggal' => $tanggal->format('Y-m-d H:i:s'),
 			'total_bayar' => $this->input->post('total_bayar'),
@@ -61,12 +60,12 @@ class Transaksi extends CI_Controller {
 			foreach ($produks as $produk) {
 				$detail = array(
 					'id_transaksi' => $id_transaksi,
-					'id_produk' => $produk->id_produk,
+					'id_produk' => intval($produk->id_produk),
 					'jumlah' => $produk->jumlah
 				);
 				$this->transaksi_model->createDetail($detail);
-				$this->transaksi_model->removeStok($produk->id_produk, $produk->jumlah);
-				$this->transaksi_model->addTerjual($produk->id_produk, $produk->jumlah);
+				$this->transaksi_model->removeStok(intval($produk->id_produk), $produk->jumlah);
+				$this->transaksi_model->addTerjual(intval($produk->id_produk), $produk->jumlah);
 			}
 			echo json_encode($id_transaksi);
 		}
@@ -153,15 +152,17 @@ class Transaksi extends CI_Controller {
 	public function gethari()
 	{
 		$query = "
-		select date_format(transaksi.tanggal,'%d %b %Y') as tanggal, 
-			sum(produk.harga_beli) as total_beli, 
-			sum(produk.harga_jual) as total_jual, 
-			sum(transaksi.id) as jumlah_transaksi, 
-			(sum(produk.harga_jual) - sum(produk.harga_beli)) as laba_kotor 
-		from detail_transaksi
-		join transaksi on transaksi.id = detail_transaksi.id_transaksi
-		join produk on detail_transaksi.id_produk = produk.id
-		group by transaksi.id
+		select laporan_harian.tanggal, 
+			total_beli, 
+			total_jual, 
+			jumlah_transaksi, 
+			(
+				total_jual - total_beli - ifnull(sum(pengeluaran.nominal),0)
+			) as laba_kotor ,
+			ifnull(sum(pengeluaran.nominal),0) as total_pengeluaran
+		from laporan_harian
+		left join pengeluaran on date_format(pengeluaran.tanggal,'%d %b %Y') = laporan_harian.tanggal
+		group by laporan_harian.tanggal
 		";
 
 		$data = array();
@@ -185,13 +186,17 @@ class Transaksi extends CI_Controller {
 	public function getbulan()
 	{
 		$query = "
-		select date_format(tanggal, '%M %Y') as bulan, 
-			sum(total_beli) as total_beli, 
-			sum(total_jual) as total_jual, 
-			sum(jumlah_transaksi) as jumlah_transaksi, 
-			(sum(total_jual) - sum(total_beli)) as laba_kotor 
-		from laporan_harian
-		group by date_format(tanggal, '%M %Y')
+		select bulan, 
+			total_beli, 
+			total_jual, 
+			jumlah_transaksi, 
+			(
+				total_jual - total_beli - sum(pengeluaran.nominal)
+			) as laba_kotor ,
+			sum(pengeluaran.nominal) as total_pengeluaran
+		from laporan_bulanan
+		join pengeluaran on date_format(pengeluaran.tanggal, '%M %Y') = bulan
+		group by bulan
 		";
 
 		$data = array();
@@ -201,7 +206,7 @@ class Transaksi extends CI_Controller {
 				'bulan' => $transaksi->bulan,
 				'total_beli' => $transaksi->total_beli,
 				'total_jual' => $transaksi->total_jual,
-				'total_pengeluaran' => 0,
+				'total_pengeluaran' => $transaksi->total_pengeluaran,
 				'jumlah_transaksi' => $transaksi->jumlah_transaksi,
 				'laba' => $transaksi->laba_kotor,
 			);

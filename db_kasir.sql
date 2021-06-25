@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 24, 2021 at 12:26 AM
+-- Generation Time: Jun 25, 2021 at 06:20 PM
 -- Server version: 8.0.23
 -- PHP Version: 7.4.3
 
@@ -43,7 +43,13 @@ INSERT INTO `detail_transaksi` (`id`, `id_transaksi`, `id_produk`, `jumlah`) VAL
 (1, 10, 1, 2),
 (2, 10, 2, 3),
 (3, 11, 1, 2),
-(4, 11, 2, 3);
+(4, 11, 2, 3),
+(5, 12, 1, 2),
+(6, 13, 1, 2),
+(7, 14, 1, 1),
+(8, 15, 1, 1),
+(9, 16, 1, 1),
+(10, 17, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -104,13 +110,25 @@ INSERT INTO `kategori_produk` (`id`, `kategori`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `laporan_bulanan`
+-- (See below for the actual view)
+--
+CREATE TABLE `laporan_bulanan` (
+`bulan` varchar(69)
+,`jumlah_transaksi` decimal(42,0)
+,`total_beli` decimal(54,0)
+,`total_jual` decimal(54,0)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Stand-in structure for view `laporan_harian`
 -- (See below for the actual view)
 --
 CREATE TABLE `laporan_harian` (
-`jumlah_transaksi` decimal(32,0)
-,`laba_kotor` decimal(33,0)
-,`tanggal` date
+`jumlah_transaksi` bigint
+,`tanggal` varchar(40)
 ,`total_beli` decimal(32,0)
 ,`total_jual` decimal(32,0)
 );
@@ -136,6 +154,27 @@ CREATE TABLE `pelanggan` (
 INSERT INTO `pelanggan` (`id`, `nama`, `jenis_kelamin`, `alamat`, `telepon`) VALUES
 (1, 'Adam', 'Pria', 'Seoul', '081237483291'),
 (2, 'Rahma', 'Wanita', 'Banjarnegara', '085463728374');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pengeluaran`
+--
+
+CREATE TABLE `pengeluaran` (
+  `id` int NOT NULL,
+  `tanggal` date NOT NULL,
+  `nominal` int NOT NULL,
+  `jenis_bayar` varchar(100) NOT NULL,
+  `keterangan` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `pengeluaran`
+--
+
+INSERT INTO `pengeluaran` (`id`, `tanggal`, `nominal`, `jenis_bayar`, `keterangan`) VALUES
+(5, '2021-06-24', 10000, 'BCA', '-');
 
 -- --------------------------------------------------------
 
@@ -202,8 +241,8 @@ CREATE TABLE `produk` (
 --
 
 INSERT INTO `produk` (`id`, `barcode`, `nama_produk`, `kategori`, `satuan`, `harga_beli`, `harga_jual`, `harga_reseller`, `stok`, `terjual`) VALUES
-(1, 'PULS ALPRB', 'Voucher Pulsa 50000', 1, 2, 45000, 55000, 50000, 24, 0),
-(2, 'DJRM SPER', 'Djarum Super 12', 2, 1, 14000, 18000, 18000, 0, 0);
+(1, 'PULS ALPRB', 'Voucher Pulsa 50000', 1, 2, 45000, 55000, 50000, 95, 5),
+(2, 'DJRM SPER', 'Djarum Super 12', 2, 1, 14000, 18000, 18000, 62, 2);
 
 -- --------------------------------------------------------
 
@@ -224,7 +263,7 @@ CREATE TABLE `reseller` (
 --
 
 INSERT INTO `reseller` (`id`, `nama`, `jenis_kelamin`, `alamat`, `telepon`) VALUES
-(1, 'Heyow', 'Wanita', 'Jalan', '08979');
+(1, 'Heyo', 'Wanita', 'Jalan', '08979');
 
 -- --------------------------------------------------------
 
@@ -265,7 +304,18 @@ CREATE TABLE `stok_keluar` (
 
 INSERT INTO `stok_keluar` (`id`, `tanggal`, `barcode`, `jumlah`, `Keterangan`) VALUES
 (1, '2020-02-21 13:42:01', 1, '10', 'rusak'),
-(2, '2021-06-22 14:15:34', 1, '65', 'rusak');
+(2, '2021-06-22 14:15:34', 1, '65', 'rusak'),
+(3, '2021-06-24 21:58:14', 1, '2', 'rusak'),
+(4, '2021-06-24 22:41:22', 1, '2', 'rusak'),
+(5, '2021-06-25 01:02:48', 2, '2', 'rusak'),
+(6, '2021-06-25 12:06:24', 2, '2', '-'),
+(7, '2021-06-25 12:06:24', 2, '2', '-'),
+(8, '2021-06-25 12:06:24', 2, '2', '-'),
+(9, '2021-06-25 12:07:02', 2, '2', '-'),
+(10, '2021-06-25 12:38:40', 2, '2', '-'),
+(11, '2021-06-25 12:39:43', 2, '1', '-'),
+(12, '2021-06-25 12:40:21', 1, '3', '-'),
+(13, '2021-06-25 12:40:21', 2, '3', '-');
 
 -- --------------------------------------------------------
 
@@ -298,7 +348,11 @@ INSERT INTO `stok_masuk` (`id`, `tanggal`, `barcode`, `jumlah`, `keterangan`, `s
 (8, '0000-00-00 00:00:00', 1, '100', 'penambahan', 1, 0),
 (9, '0000-00-00 00:00:00', 1, '2', 'penambahan', 1, 110000),
 (10, '2021-06-23 12:48:44', 1, '2', 'penambahan', 1, 110000),
-(11, '2021-06-23 12:49:17', 1, '22', 'penambahan', 1, 1210000);
+(11, '2021-06-23 12:49:17', 1, '22', 'penambahan', 1, 1210000),
+(12, '2021-06-24 14:17:12', 1, '80', 'penambahan', 1, 3600000),
+(13, '2021-06-24 14:17:44', 2, '80', 'penambahan', 1, 1120000),
+(14, '2021-06-24 23:57:32', 1, '80', 'penambahan', 1, 3600000),
+(15, '2021-06-25 12:40:05', 1, '100', 'penambahan', 1, 4500000);
 
 -- --------------------------------------------------------
 
@@ -373,7 +427,22 @@ INSERT INTO `transaksi` (`id`, `tanggal`, `total_bayar`, `jumlah_uang`, `diskon`
 (8, '2021-06-22 23:34:39', '33000', '80000', '', 2, 'VIN0WUXLCGPH2EO', 1),
 (9, '2021-06-22 23:38:48', '11000', '100000', '', 1, '6MOS6XY4QWX463H', 1),
 (10, '2021-06-22 23:41:46', '65000', '100000', '', 1, 'REP55U3T3716C68', 1),
-(11, '2021-06-22 23:43:02', '65000', '100000', '', 1, 'UED69UIPDT8LIA7', 1);
+(11, '2021-06-22 23:43:02', '65000', '100000', '', 1, 'UED69UIPDT8LIA7', 1),
+(12, '2021-06-25 00:54:19', '110000', '1000000', '', 1, '8KKAVAYGC6FJOH8', 1),
+(13, '2021-06-25 00:58:17', '110000', '1111111', '', 1, '9MJNXQM0A2UX9SL', 1),
+(14, '2021-06-25 09:39:49', '55000', '100000', '', 1, 'ZC5HK3R975XI6AC', 1),
+(15, '2021-06-25 09:39:49', '55000', '100000', '', 1, 'ZC5HK3R975XI6AC', 1),
+(16, '2021-06-25 09:39:49', '55000', '100000', '', 1, 'ZC5HK3R975XI6AC', 1),
+(17, '2021-06-25 09:41:53', '36000', '100000', '', 1, 'V0BWR0T3OX5L3EJ', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `laporan_bulanan`
+--
+DROP TABLE IF EXISTS `laporan_bulanan`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `laporan_bulanan`  AS  select date_format(cast(str_to_date(`laporan_harian`.`tanggal`,'%d %b %Y') as date),'%M %Y') AS `bulan`,sum(`laporan_harian`.`total_beli`) AS `total_beli`,sum(`laporan_harian`.`total_jual`) AS `total_jual`,sum(`laporan_harian`.`jumlah_transaksi`) AS `jumlah_transaksi` from `laporan_harian` group by date_format(cast(str_to_date(`laporan_harian`.`tanggal`,'%d %b %Y') as date),'%M %Y') ;
 
 -- --------------------------------------------------------
 
@@ -382,7 +451,7 @@ INSERT INTO `transaksi` (`id`, `tanggal`, `total_bayar`, `jumlah_uang`, `diskon`
 --
 DROP TABLE IF EXISTS `laporan_harian`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `laporan_harian`  AS  select cast(`transaksi`.`tanggal` as date) AS `tanggal`,sum(`produk`.`harga_beli`) AS `total_beli`,sum(`produk`.`harga_jual`) AS `total_jual`,sum(`transaksi`.`id`) AS `jumlah_transaksi`,(sum(`produk`.`harga_jual`) - sum(`produk`.`harga_beli`)) AS `laba_kotor` from ((`detail_transaksi` join `transaksi` on((`transaksi`.`id` = `detail_transaksi`.`id_transaksi`))) join `produk` on((`detail_transaksi`.`id_produk` = `produk`.`id`))) group by `transaksi`.`id` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `laporan_harian`  AS  select date_format(`transaksi`.`tanggal`,'%d %b %Y') AS `tanggal`,sum(`produk`.`harga_beli`) AS `total_beli`,sum(`produk`.`harga_jual`) AS `total_jual`,count(`transaksi`.`id`) AS `jumlah_transaksi` from ((`detail_transaksi` join `transaksi` on((`transaksi`.`id` = `detail_transaksi`.`id_transaksi`))) join `produk` on((`detail_transaksi`.`id_produk` = `produk`.`id`))) group by date_format(`transaksi`.`tanggal`,'%d %b %Y') ;
 
 --
 -- Indexes for dumped tables
@@ -416,6 +485,12 @@ ALTER TABLE `kategori_produk`
 -- Indexes for table `pelanggan`
 --
 ALTER TABLE `pelanggan`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `pengeluaran`
+--
+ALTER TABLE `pengeluaran`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -486,7 +561,7 @@ ALTER TABLE `transaksi`
 -- AUTO_INCREMENT for table `detail_transaksi`
 --
 ALTER TABLE `detail_transaksi`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `gudang`
@@ -511,6 +586,12 @@ ALTER TABLE `kategori_produk`
 --
 ALTER TABLE `pelanggan`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `pengeluaran`
+--
+ALTER TABLE `pengeluaran`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `pengguna`
@@ -546,13 +627,13 @@ ALTER TABLE `satuan_produk`
 -- AUTO_INCREMENT for table `stok_keluar`
 --
 ALTER TABLE `stok_keluar`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `stok_masuk`
 --
 ALTER TABLE `stok_masuk`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `supplier`
@@ -570,7 +651,7 @@ ALTER TABLE `toko`
 -- AUTO_INCREMENT for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

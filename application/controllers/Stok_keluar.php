@@ -10,6 +10,14 @@ class Stok_keluar extends CI_Controller {
 			redirect('/');
 		}
 		$this->load->model('stok_keluar_model');
+		$this->load->model('stok_masuk_model');
+		
+	}
+
+	public function tambah()
+	{
+		$data['barang']=$this->stok_masuk_model->barang();
+		$this->load->view('kurang_stok',$data);
 	}
 
 	public function index()
@@ -42,23 +50,14 @@ class Stok_keluar extends CI_Controller {
 
 	public function add()
 	{
-		$id = $this->input->post('barcode');
-		$jumlah = $this->input->post('jumlah');
-		$stok = $this->stok_keluar_model->getStok($id)->stok;
-		$rumus = max($stok - $jumlah,0);
-		$addStok = $this->stok_keluar_model->addStok($id, $rumus);
-		if ($addStok) {
-			$tanggal = new DateTime($this->input->post('tanggal'));
-			$data = array(
-				'tanggal' => $tanggal->format('Y-m-d H:i:s'),
-				'barcode' => $id,
-				'jumlah' => $jumlah,
-				'keterangan' => $this->input->post('keterangan')
-			);
-			if ($this->stok_keluar_model->create($data)) {
-				echo json_encode('sukses');
-			}
+		$produks = json_decode($this->input->post('produk'));
+		foreach ($produks as $key => $produk) {
+			$tanggal = new DateTime($produk->tanggal);
+			$produk->tanggal = $tanggal->format('Y-m-d H:i:s');
+			$this->stok_keluar_model->create($produk);
+			$this->stok_keluar_model->removeStok($produk->barcode,$produk->jumlah);
 		}
+		echo json_encode($this->input->post('produk'));
 	}
 
 	public function get_barcode()

@@ -8,7 +8,7 @@ class Transaksi_model extends CI_Model {
 	public function removeStok($id, $stok)
 	{
 		$this->db->where('id', $id);
-		$this->db->set('stok', 'stok-'.$stok);
+		$this->db->set('stok', 'stok-'.$stok, FALSE);
 		return $this->db->update('produk');
 	}
 
@@ -20,7 +20,7 @@ class Transaksi_model extends CI_Model {
 	public function addTerjual($id, $jumlah)
 	{
 		$this->db->where('id', $id);
-		$this->db->set('terjual', 'terjual+'.$jumlah);
+		$this->db->set('terjual', 'terjual+'.$jumlah, FALSE);
 		return $this->db->update('produk');;
 	}
 

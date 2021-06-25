@@ -36,6 +36,9 @@
     <section class="content">
       <div class="container-fluid">
         <div class="card">
+          <div class="card-header">
+            <button class="btn btn-success" data-toggle="modal" data-target="#modal">Add</button>
+          </div>
           <div class="card-body">
              <button type="button" class="btn btn-default float-right" id="daterange-btn">
                <i class="far fa-calendar-alt"></i> Date range picker
@@ -46,9 +49,9 @@
                 <tr>
                   <th>No</th>
                   <th>Tanggal</th>
-                  <th>Total</th> 
-                  <th>Keterangan</th> 
+                  <th>Nominal</th> 
                   <th>Jenis Pembayaran</th>
+                  <th>Keterangan</th> 
                   <th>Aksi</th>
                 </tr>
               </thead>
@@ -60,8 +63,55 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-
 </div>
+
+<div class="modal fade" id="modal">
+<div class="modal-dialog">
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title">Add Data</h5>
+    <button class="close" data-dismiss="modal">
+      <span>&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form id="form">
+      <div class="form-group">
+        <label>Tanggal</label>
+        <input id="tanggal" type="text" class="form-control" value="<?php date_default_timezone_set('Asia/Jakarta'); echo date('d-m-Y H:i:s');?>" name="tanggal" disabled>
+      </div>
+      
+      <div class="form-group">
+        <label>Nominal</label>
+        <input type="number" class="form-control" placeholder="Jumlah" name="nominal" required>
+      </div>
+
+      <div class="form-group">
+        <label>Jenis Pembayaran</label>
+        <input type="text" class="form-control" placeholder="Jenis Pembayaran" name="jenis_bayar" required>
+      </div>
+
+      <div class="form-group">
+        <label>Keterangan</label>
+        <input type="text" name="keterangan" id=""  class="form-control">
+        <!-- <input type="text" class="form-control" placeholder="Jenis Pembayaran" name="jenis_pembayaran" required> -->
+      </div>
+      <!-- <div class="form-group">
+        <label>Keterangan</label>
+        <select class="form-control" placeholder="Keterangan" name="keterangan" required>
+          <option value="rusak">Rusak</option>
+          <option value="hilang">Hilang</option>
+          <option value="kadaluarsa">Kadaluarsa</option>
+        </select>
+      </div> -->
+      <button class="btn btn-success" type="submit" onclick="addData()">Add</button>
+      <button class="btn btn-danger" data-dismiss="modal">Close</button>
+    </form>
+  </div>
+</div>
+</div>
+</div>
+
 <!-- ./wrapper -->
 <?php $this->load->view('includes/footer'); ?>
 <?php $this->load->view('partials/footer'); ?>
@@ -70,10 +120,88 @@
 <script src="<?php echo base_url('assets/vendor/adminlte/plugins/sweetalert2/sweetalert2.min.js') ?>"></script>
 <script src="<?php echo base_url('assets/vendor/adminlte/plugins/daterangepicker/daterangepicker.js') ?>"></script>
 <script>
-  var readUrl = '<?php echo site_url('transaksi/read') ?>';
+  var readUrl = '<?php echo site_url('laporan/getpengeluaran') ?>';
+  var addUrl = '<?php echo site_url('laporan/addpengeluaran') ?>';
   var deleteUrl = '<?php echo site_url('transaksi/delete') ?>';
 </script>
-<script src="<?php echo base_url('assets/js/laporan_penjualan.min.js') ?>"></script>
+<script >
+  let laporan_penjualan = $("#laporan_penjualan").DataTable({
+      responsive: true,
+      scrollX: true,
+      ajax: readUrl,
+      columnDefs: [{
+          searcable: false,
+          orderable: false,
+          targets: 0
+      }],
+      order: [
+          [1, "asc"]
+      ],
+      columns: [
+        {data: "no"}, 
+        {data: "tanggal"}, 
+        {data: "nominal"}, 
+        {data: "jenis_bayar"}, 
+        {data: "keterangan"}, 
+        {data: "action"}
+      ]
+  });
+
+  $("#tanggal").datetimepicker({
+    format: "dd-mm-yyyy h:ii:ss"
+  });
+
+  $(".modal").on("show.bs.modal", () => {
+    let a = moment().format("D-MM-Y H:mm:ss");
+    $("#tanggal").val(a)
+  });
+  $(".modal").on("hidden.bs.modal", () => {
+    $("#form")[0].reset();
+    $("#form").validate().resetForm()
+  });
+  $("#form").validate({
+    errorElement: "span",
+    errorPlacement: (err, el) => {
+        err.addClass("invalid-feedback"), el.closest(".form-group").append(err)
+    },
+    submitHandler: () => {
+        addData()
+      }
+    });
+    
+  function reloadTable() {
+    stok_keluar.ajax.reload()
+  }
+  
+  function addData() {
+    // console.log($("#form").serialize());
+    $.ajax({
+        url: addUrl,
+        type: "post",
+        dataType: "json",
+        data: $("#form").serialize(),
+        success: () => {
+            $(".modal").modal("hide");
+            Swal.fire("Sukses", "Sukses Menambahkan Data", "success");
+            reloadTable()
+        },
+        error: err => {
+            console.log(err)
+        }
+    })
+  }
+
+  laporan_penjualan.on("order.dt search.dt", () => {
+    laporan_penjualan.column(0, {
+        search: "applied",
+        order: "applied"
+    }).nodes().each((el, val) => {
+        console.log(val);
+        el.innerHTML = val + 1
+    })
+  });
+
+</script>
 <script>
   $(function () {
     //Initialize Select2 Elements
