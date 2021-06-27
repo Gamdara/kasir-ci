@@ -55,7 +55,7 @@
                 <b class="mr-2">Nota</b> <span id="nota"></span>
               </div>
             </div>
-            <div class="mb-2"><select id="pelanggan" style="width: 200px;" class="form-control select2 col-sm-6" onchange=""></select></div>
+            <div class="mb-2"><select id="pelanggan" style="width: 200px;" class="form-control select2 col-sm-6" onchange="setReseller()"></select></div>
             <div class="mb-2"><input id="tanggal" style="width: 200px;" type="text" class="form-control" placeholder="Tanggal" name="tanggal" value="<?php date_default_timezone_set('Asia/Jakarta'); echo date('d-m-Y H:i:s');?>" disabled></div>
           </div>
           <div class="col-sm-6 text-right nota">

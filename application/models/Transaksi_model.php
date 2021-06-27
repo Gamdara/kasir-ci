@@ -34,6 +34,7 @@ class Transaksi_model extends CI_Model {
 		$this->db->select('transaksi.id, transaksi.tanggal, transaksi.total_bayar, transaksi.jumlah_uang, transaksi.diskon, pelanggan.nama as pelanggan');
 		$this->db->from($this->table);
 		$this->db->join('pelanggan', 'transaksi.pelanggan = pelanggan.id', 'left outer');
+		$this->db->where("transaksi.jenis_piutang !=", "refund");
 		return $this->db->get();
 	}
 

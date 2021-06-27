@@ -38,7 +38,7 @@
       <div class="container-fluid">
         <div class="card">
           <div class="card-body">
-            <table class="table w-100 table-bordered table-hover" id="stok_masuk">
+            <table class="table w-100 table-bordered table-hover" id="refund">
               <thead>
               <tr>
                   <th>No</th>
@@ -67,12 +67,8 @@
 <script src="<?php echo base_url('assets/vendor/adminlte/plugins/jquery-validation/jquery.validate.min.js') ?>"></script>
 <script src="<?php echo base_url('assets/vendor/adminlte/plugins/sweetalert2/sweetalert2.min.js') ?>"></script>
 <script>
-  var readUrl = '<?php echo site_url('satuan_produk/read') ?>';
-  var addUrl = '<?php echo site_url('satuan_produk/add') ?>';
-  var removeUrl = '<?php echo site_url('satuan_produk/delete') ?>';
-  var editUrl = '<?php echo site_url('satuan_produk/edit') ?>';
-  var get_satuanUrl = '<?php echo site_url('satuan_produk/get_satuan') ?>';
+  var readUrl = '<?php echo site_url('laporan/getrefund') ?>';
 </script>
-<script src="<?php echo base_url('assets/js/satuan_produk.min.js') ?>"></script>
+<script src="<?php echo base_url('assets/js/unminify/refund.js') ?>"></script>
 </body>
 </html>

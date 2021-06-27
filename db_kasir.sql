@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 25, 2021 at 06:20 PM
+-- Generation Time: Jun 27, 2021 at 05:38 PM
 -- Server version: 8.0.23
 -- PHP Version: 7.4.3
 
@@ -49,7 +49,12 @@ INSERT INTO `detail_transaksi` (`id`, `id_transaksi`, `id_produk`, `jumlah`) VAL
 (7, 14, 1, 1),
 (8, 15, 1, 1),
 (9, 16, 1, 1),
-(10, 17, 2, 2);
+(10, 17, 2, 2),
+(11, 18, 1, 2),
+(12, 19, 1, 3),
+(13, 20, 1, 3),
+(14, 21, 1, 3),
+(15, 22, 1, 3);
 
 -- --------------------------------------------------------
 
@@ -115,9 +120,9 @@ INSERT INTO `kategori_produk` (`id`, `kategori`) VALUES
 --
 CREATE TABLE `laporan_bulanan` (
 `bulan` varchar(69)
-,`jumlah_transaksi` decimal(42,0)
 ,`total_beli` decimal(54,0)
 ,`total_jual` decimal(54,0)
+,`jumlah_transaksi` decimal(42,0)
 );
 
 -- --------------------------------------------------------
@@ -127,10 +132,10 @@ CREATE TABLE `laporan_bulanan` (
 -- (See below for the actual view)
 --
 CREATE TABLE `laporan_harian` (
-`jumlah_transaksi` bigint
-,`tanggal` varchar(40)
+`tanggal` varchar(40)
 ,`total_beli` decimal(32,0)
 ,`total_jual` decimal(32,0)
+,`jumlah_transaksi` bigint
 );
 
 -- --------------------------------------------------------
@@ -144,16 +149,17 @@ CREATE TABLE `pelanggan` (
   `nama` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `jenis_kelamin` set('Pria','Wanita','Lainya') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `alamat` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `telepon` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
+  `telepon` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `level` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `pelanggan`
 --
 
-INSERT INTO `pelanggan` (`id`, `nama`, `jenis_kelamin`, `alamat`, `telepon`) VALUES
-(1, 'Adam', 'Pria', 'Seoul', '081237483291'),
-(2, 'Rahma', 'Wanita', 'Banjarnegara', '085463728374');
+INSERT INTO `pelanggan` (`id`, `nama`, `jenis_kelamin`, `alamat`, `telepon`, `level`) VALUES
+(1, 'Adam', 'Pria', 'Seoul', '081237483291', 'pelanggan'),
+(2, 'Rahma', 'Wanita', 'Banjarnegara', '085463728374', 'reseller');
 
 -- --------------------------------------------------------
 
@@ -241,8 +247,29 @@ CREATE TABLE `produk` (
 --
 
 INSERT INTO `produk` (`id`, `barcode`, `nama_produk`, `kategori`, `satuan`, `harga_beli`, `harga_jual`, `harga_reseller`, `stok`, `terjual`) VALUES
-(1, 'PULS ALPRB', 'Voucher Pulsa 50000', 1, 2, 45000, 55000, 50000, 95, 5),
+(1, 'PULS ALPRB', 'Voucher Pulsa 50000', 1, 2, 45000, 55000, 50000, 81, 19),
 (2, 'DJRM SPER', 'Djarum Super 12', 2, 1, 14000, 18000, 18000, 62, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `refund`
+--
+
+CREATE TABLE `refund` (
+  `id` int NOT NULL,
+  `id_transaksi` int NOT NULL,
+  `tanggal` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `refund`
+--
+
+INSERT INTO `refund` (`id`, `id_transaksi`, `tanggal`) VALUES
+(1, 3, '2021-06-27'),
+(2, 13, '2021-06-27'),
+(5, 16, '2021-06-27');
 
 -- --------------------------------------------------------
 
@@ -404,36 +431,36 @@ INSERT INTO `toko` (`id`, `nama`, `alamat`) VALUES
 CREATE TABLE `transaksi` (
   `id` int NOT NULL,
   `tanggal` datetime NOT NULL,
-  `total_bayar` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `jumlah_uang` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `diskon` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `total_bayar` int NOT NULL,
+  `jumlah_uang` int NOT NULL,
+  `diskon` int NOT NULL,
   `pelanggan` int DEFAULT NULL,
   `nota` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `kasir` int NOT NULL
+  `kasir` int NOT NULL,
+  `marketplace` int NOT NULL,
+  `jenis_piutang` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `piutang_kurang` int NOT NULL,
+  `jenis_bayar` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `jenis_kirim` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ongkir` int NOT NULL,
+  `bank` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `transaksi`
 --
 
-INSERT INTO `transaksi` (`id`, `tanggal`, `total_bayar`, `jumlah_uang`, `diskon`, `pelanggan`, `nota`, `kasir`) VALUES
-(1, '2020-02-21 13:42:54', '110000', '120000', '', 0, '7OROKLOEZ4041IQ', 1),
-(2, '2020-02-21 13:43:25', '145000', '150000', '1500', 1, 'YKFNJAAKDMI0GC4', 1),
-(3, '2020-02-21 13:43:25', '145000', '150000', '1500', 1, 'YKFNJAAKDMI0GC4', 1),
-(4, '2020-02-21 13:43:42', '55000', '60000', '', 2, 'GKV673Z3MC4A02V', 1),
-(5, '2020-02-21 13:49:44', '110000', '200000', '10000', 0, '108A992MRZ3PYME', 2),
-(6, '2021-06-20 15:28:53', '220000', '400000', '3000', 2, '2161ULTYP76BK82', 1),
-(7, '2021-06-20 17:24:34', '36000', '40000', '', 2, '4EJ5OF59DBZ9ELH', 1),
-(8, '2021-06-22 23:34:39', '33000', '80000', '', 2, 'VIN0WUXLCGPH2EO', 1),
-(9, '2021-06-22 23:38:48', '11000', '100000', '', 1, '6MOS6XY4QWX463H', 1),
-(10, '2021-06-22 23:41:46', '65000', '100000', '', 1, 'REP55U3T3716C68', 1),
-(11, '2021-06-22 23:43:02', '65000', '100000', '', 1, 'UED69UIPDT8LIA7', 1),
-(12, '2021-06-25 00:54:19', '110000', '1000000', '', 1, '8KKAVAYGC6FJOH8', 1),
-(13, '2021-06-25 00:58:17', '110000', '1111111', '', 1, '9MJNXQM0A2UX9SL', 1),
-(14, '2021-06-25 09:39:49', '55000', '100000', '', 1, 'ZC5HK3R975XI6AC', 1),
-(15, '2021-06-25 09:39:49', '55000', '100000', '', 1, 'ZC5HK3R975XI6AC', 1),
-(16, '2021-06-25 09:39:49', '55000', '100000', '', 1, 'ZC5HK3R975XI6AC', 1),
-(17, '2021-06-25 09:41:53', '36000', '100000', '', 1, 'V0BWR0T3OX5L3EJ', 1);
+INSERT INTO `transaksi` (`id`, `tanggal`, `total_bayar`, `jumlah_uang`, `diskon`, `pelanggan`, `nota`, `kasir`, `marketplace`, `jenis_piutang`, `piutang_kurang`, `jenis_bayar`, `jenis_kirim`, `ongkir`, `bank`) VALUES
+(13, '2021-06-25 00:58:17', 110000, 1111111, 0, 1, '9MJNXQM0A2UX9SL', 1, 0, 'refund', 0, '', '', 0, ''),
+(14, '2021-06-25 09:39:49', 55000, 100000, 0, 1, 'ZC5HK3R975XI6AC', 1, 0, '', 0, '', '', 0, ''),
+(15, '2021-06-25 09:39:49', 55000, 100000, 0, 1, 'ZC5HK3R975XI6AC', 1, 0, '', 0, '', '', 0, ''),
+(16, '2021-06-25 09:39:49', 55000, 100000, 0, 1, 'ZC5HK3R975XI6AC', 1, 0, 'refund', 0, '', '', 0, ''),
+(17, '2021-06-25 09:41:53', 36000, 100000, 0, 1, 'V0BWR0T3OX5L3EJ', 1, 0, '', 0, '', '', 0, ''),
+(18, '2021-06-25 19:59:04', 110000, 1000000, 0, 2, 'M3HJUCZYAYPC2HA', 1, 0, '', 0, '', '', 0, ''),
+(19, '2021-06-25 22:45:29', 165000, 1000000, 0, 1, '0FE2WMTYF3URGQK', 1, 3, 'lunas', 0, 'cash', 'JNE', 20000, 'BCA'),
+(20, '2021-06-27 12:55:41', 165000, 100000, 0, 1, '6DIDQ15QBYJM9UN', 1, 1, 'lunas', 0, 'cash', '', 0, 'BCA'),
+(21, '2021-06-27 16:41:33', 150000, 1000000, 0, 2, 'LC3JM81S730LTH9', 1, 0, 'dp', 0, 'bank', '', 0, 'BCA'),
+(22, '2021-06-27 16:43:56', 150000, 1000000, 0, 2, 'DTH61EEUWK9MSQ2', 1, 0, 'dp', 0, 'bank', '', 0, 'BCA');
 
 -- --------------------------------------------------------
 
@@ -512,6 +539,12 @@ ALTER TABLE `produk`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `refund`
+--
+ALTER TABLE `refund`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `reseller`
 --
 ALTER TABLE `reseller`
@@ -561,7 +594,7 @@ ALTER TABLE `transaksi`
 -- AUTO_INCREMENT for table `detail_transaksi`
 --
 ALTER TABLE `detail_transaksi`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `gudang`
@@ -585,7 +618,7 @@ ALTER TABLE `kategori_produk`
 -- AUTO_INCREMENT for table `pelanggan`
 --
 ALTER TABLE `pelanggan`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `pengeluaran`
@@ -610,6 +643,12 @@ ALTER TABLE `platform`
 --
 ALTER TABLE `produk`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `refund`
+--
+ALTER TABLE `refund`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `reseller`
@@ -651,7 +690,7 @@ ALTER TABLE `toko`
 -- AUTO_INCREMENT for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

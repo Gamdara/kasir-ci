@@ -67,10 +67,23 @@
 <script src="<?php echo base_url('assets/vendor/adminlte/plugins/daterangepicker/daterangepicker.js') ?>"></script>
 <script>
   var readUrl = '<?php echo site_url('laporan/getpiutang') ?>';
-  var deleteUrl = '<?php echo site_url('transaksi/delete') ?>';
+  var deleteUrl = '<?php echo site_url('laporan/deletepiutang/') ?>';
 </script>
 <script src="<?php echo base_url('assets/js/unminify/laporan_penjualan.js') ?>"></script>
 <script>
+function del(id) {
+      $.ajax({
+          url: deleteUrl+id,
+          type: "get",
+          success: res => {
+            Swal.fire("Sukses", "Sukses Delete", "success")
+            reloadTable()
+          },
+          error: err => {
+              console.log(err)
+          }
+      })
+    }
   $(function () {
     //Initialize Select2 Elements
     $('.select2').select2()

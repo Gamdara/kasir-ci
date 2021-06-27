@@ -27,7 +27,7 @@
           <div class="col">
             <h1 class="m-0 text-dark">Detail Refund</h1>
             
-            <h5>No.Refund</h5>
+            <h5><?= $transaksi->nota ?>-<?= $transaksi->tgl_refund ?></h5>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
@@ -42,8 +42,8 @@
         <div class="row">
           <div class="col-sm-0" style="margin-right:55%; padding:7px">
               <div class="mb-0">
-              <h5>Nota <span id="nota">25DTXUY84A1ATSE</span></h5>
-                <a class="btn btn-sm btn-success" href="http://localhost/kasir-ci/transaksi/detail/6"><h6>Detail Order</h6></a>
+              <h5>Nota <span id="nota"><?= $transaksi->nota ?></span></h5>
+                
               </div>
               <br>
             </div>
@@ -51,8 +51,8 @@
             <div class="col-sm-0" style="padding:7px">
             <div>
               <div class="mb-0">
-                <h6 class="mr-0">Tanggal  : DAY MONTH YEAR</h6>
-                <h6 class="mr-5">Pelanggan  : MASTHA</h6>
+                <h6 class="mr-0">Tanggal  : <?= $transaksi->tanggal ?></h6>
+                <h6 class="mr-5">Pelanggan  : <?= $transaksi->nama_pelanggan ?></h6>
               </div>
             </div>
         </div>
@@ -75,8 +75,8 @@
               <div class="mb-0">
                 <br>
                 <h5 class="mr-0">Delivery</h5>
-                <h5 class="mr-0">Marketplace</h5>
-                <h5 class="mr-0">Jenis Pengiriman</h5>
+                <h5 class="mr-0">Marketplace : <?= $transaksi->nama_marketplace ?></h5>
+                <h5 class="mr-0">Jenis Pengiriman : <?= $transaksi->jenis_kirim ?></h5>
               </div>
         </div>
         <!-- </center>
@@ -85,25 +85,26 @@
               <div class="mb-0" style="">
                 <br>
                 <h5 class="mr-0">Piutang</h5>
-                <h5 class="mr-0">DP/Lunas</h5>
-                <h5 class="mr-0">Kekurangan</h5>
+                <h5 class="mr-0">DP/Lunas : <?= $transaksi->piutang_kurang == 0 ? 'Lunas' : 'DP' ?></h5>
+                <h5 class="mr-0">Kekurangan : <?= $transaksi->piutang_kurang ?></h5>
               </div>
         </div>
         <div class="col-sm-3" style="margin:7px;">
               <div class="mb-0" style="">
                 <br>
-                <h5 class="mr-0">Diskon</h5>
-                <h5 class="mr-0">Bayar</h5>
-                <h5 class="mr-0">Kembali</h5>
-                <h5 class="mr-0">Jenis Bayar</h5>
+                <h5 class="mr-0">Diskon : <?= $transaksi->diskon ?></h5>
+                <h5 class="mr-0">Bayar : <?= $transaksi->jumlah_uang ?></h5>
+                <h5 class="mr-0">Kembali : <?= $transaksi->jumlah_uang - $transaksi->total_bayar - $transaksi->diskon ?></h5>
+                <h5 class="mr-0">Jenis Bayar : <?= $transaksi->jenis_bayar ?></h5>
               </div>
+              <!-- <?php print_r($transaksi) ?> -->
               <br>
               <br>
           <div class="col-sm-0">
               <div class="mb-0">
                 <h4 class="mr-0">Total Harga</h4>
               </div>
-              <span id="total" style="font-size: 46px; line-height: 1" class="text-danger">999.999.999</span>
+              <span id="total" style="font-size: 46px; line-height: 1" class="text-danger"><?= $transaksi->total_bayar ?></span>
             </div>
             </div>
           </div>   
@@ -116,14 +117,15 @@
                <i class="fas fa-caret-down"></i>
             </button>
             
-            <table class="table w-100 table-bordered table-hover" id="laporan_transaksi">
+            <table class="table w-100 table-bordered table-hover" id="detail_transaksi">
               <thead>
-                <tr>
-                  <th>Nama Barang</th>
-                  <th>Harga Satuan</th>
+              <tr>
+                  <th>No</th>
+                  <th>Barcode</th> 
+                  <th>Nama Produk</th> 
                   <th>Jumlah</th> 
-                  <th>Harga Akhir</th> 
-                  <th>Action</th> 
+                  <th>Harga</th> 
+                  <th>Subtotal</th> 
                 </tr>
               </thead>
             </table>
@@ -133,8 +135,6 @@
     </section>
     <!-- /.content -->
   </div>
-  <!-- /.content-wrapper -->
-
 </div>
 <!-- ./wrapper -->
 <?php $this->load->view('includes/footer'); ?>
@@ -144,10 +144,9 @@
 <script src="<?php echo base_url('assets/vendor/adminlte/plugins/sweetalert2/sweetalert2.min.js') ?>"></script>
 <script src="<?php echo base_url('assets/vendor/adminlte/plugins/daterangepicker/daterangepicker.js') ?>"></script>
 <script>
-  var readUrl = '<?php echo site_url('transaksi/read') ?>';
-  var deleteUrl = '<?php echo site_url('transaksi/delete') ?>';
+  var readUrl = '<?php echo site_url('transaksi/getdetail/'.$id) ?>';
 </script>
-<script src="<?php echo base_url('assets/js/unminify/laporan_penjualan.js') ?>"></script>
+<script src="<?php echo base_url('assets/js/unminify/detail_transaksi.js') ?>"></script>
 <script>
   $(function () {
     //Initialize Select2 Elements

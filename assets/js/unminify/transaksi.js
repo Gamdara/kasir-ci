@@ -1,5 +1,6 @@
 let isCetak = false,
 produk = [],
+isReseller = false,
 transaksi = $("#transaksi").DataTable({
     responsive: true,
     lengthChange: false,
@@ -47,6 +48,15 @@ function totalBayar(){
     $(".total_bayar").html(bayar)
 }
 
+function setReseller(){
+    let text = $("#pelanggan option:selected").text()
+    if(text.includes("reseller"))
+    isReseller = true
+    else 
+    isReseller = false
+    console.log(isReseller)
+}
+
 function isDp(str){
     if(str == 'dp')
     $("#nominal").removeAttr("disabled")
@@ -76,6 +86,7 @@ function checkStok() {
             id: $("#barcode").val()
         },
         success: res => {
+            $("#pelanggan").attr("disabled", "disabled")
             let barcode = $("#barcode").val(),
                 nama_produk = res.nama_produk,
                 jumlah = parseInt($("#jumlah").val()),
@@ -84,6 +95,8 @@ function checkStok() {
                 hargaTotal = parseInt(res.harga_jual) * parseInt($("#jumlah").val()),
                 dataBarcode = res.barcode,
                 total = parseInt($("#total").html());
+            if(isReseller)
+                harga = parseInt(res.harga_reseller);
             if (stok < jumlah) Swal.fire("Gagal", "Stok Tidak Cukup", "warning");
             else {
                 let a = transaksi.rows().indexes().filter((a, t) => dataBarcode === transaksi.row(a).data()[0]);
@@ -169,10 +182,6 @@ function remove(nama) {
 
 function add() {
     let data = transaksi.rows().data()
-    // qty = [];
-    // $.each(data, (index, value) => {
-    //     qty.push(value[3])
-    // });
     $.ajax({
         url: addUrl,
         type: "post",
@@ -194,6 +203,7 @@ function add() {
             bank: $("#bank").val(),
         },
         success: res => {
+            console.log($("#pelanggan").val())
             if (isCetak) {
                 Swal.fire("Sukses", "Sukses Membayar", "success").
                     then(() => window.location.href = `${cetakUrl}${res}`)

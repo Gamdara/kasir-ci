@@ -22,9 +22,10 @@ class Laporan extends CI_Controller {
 		$data = array();
 		$no = 0;
 		foreach ($this->laporan_model->read('pengeluaran') as $pengeluaran) {
+			$id = $pengeluaran["id"];
 			$pengeluaran["no"] = ++$no;
 			$pengeluaran['action'] = "
-			    <a href='".base_url('laporan/deletepengeluaran/'.$pengeluaran['id'])."'><button type='submit'  class='btn btn-sm btn-primary' name='edit'>Hapus</button></a>
+			    <button type='submit'  class='btn btn-sm btn-primary' name='edit' onclick='del($id)'>Hapus</button>
 			";
 			$data[] = $pengeluaran;
 		}
@@ -51,16 +52,20 @@ class Laporan extends CI_Controller {
 
 	public function deletepengeluaran($id){
 		$this->laporan_model->delete('pengeluaran',$id);
-		redirect('laporan/pengeluaran');
+		echo json_encode($id);
 	}
 
 	public function deletepiutang($id){
-		$this->laporan_model->delete('piutang',$id);
-		redirect('laporan/piutang');
+		$this->laporan_model->delete('transaksi',$id);
+		echo json_encode($id);
 	}
 
 	public function piutang(){
 		$this->load->view('laporan_piutang');
+	}
+
+	public function list_refund(){
+		$this->load->view('laporan_refund');
 	}
 
 	public function getpiutang(){
@@ -72,7 +77,7 @@ class Laporan extends CI_Controller {
 			$piutang->no = ++$no;
 			$piutang->action = "
 				<a href='".base_url('laporan/lunas/'.$piutang->id)."'><button type='submit'  class='btn btn-sm btn-primary' name='edit'>Lunas</button></a>
-			    <a href='".base_url('laporan/deletepiutang/'.$piutang->id)."'><button type='submit'  class='btn btn-sm btn-primary' name='edit'>Hapus</button></a>
+			    <button type='submit' onclick='del($piutang->id)'  class='btn btn-sm btn-primary' name='edit'>Hapus</button>
 			";
 			$data[] = $piutang;
 		}
@@ -106,6 +111,59 @@ class Laporan extends CI_Controller {
 		$this->laporan_model->addJumlah($id,$this->input->post('jumlah_uang'));
 		
 		echo json_encode($id);
+	}
+
+	function refunded($id){
+		$where = array('id' => $id);
+		$data = array(
+			'jenis_piutang' => 'refund',
+		);
+	 
+		$where = array(
+			'id' => $id
+		);
+	 
+		$this->laporan_model->update_data($where,$data,'transaksi');
+		$add = array(
+			"id_transaksi" => $id,
+			"tanggal" => date("Y-m-d")
+		);
+		$this->laporan_model->create('refund',$add);
+		echo json_encode($id);
+	}
+
+	public function refund($id){
+		$data["id"] = $id;
+		$query = $this->laporan_model->query("
+		select transaksi.*, pelanggan.nama as nama_pelanggan, platform.nama as nama_marketplace, refund.tanggal as tgl_refund 
+		from transaksi 
+		join pelanggan on pelanggan.id = transaksi.pelanggan left 
+		join platform on transaksi.marketplace = platform.id  
+		join refund on refund.id_transaksi = $id
+		where transaksi.id = $id
+		");
+		$data["transaksi"] = $query[0];
+		$this->load->view('detail_refund', $data);
+	}
+
+	public function getrefund(){
+		header('Content-type: application/json');
+		$data = array();
+		$no = 0;
+		$piutangs = $this->laporan_model->query("select transaksi.*, refund.tanggal as tgl_refund from transaksi join refund on transaksi.id = refund.id_transaksi where jenis_piutang = 'refund'");
+		foreach ($piutangs as $piutang) {
+			$piutang->no = ++$no;
+			$piutang->total_refund = $piutang->total_bayar - $piutang->piutang_kurang;
+			
+			$piutang->action = "
+			    <a href='".base_url('laporan/refund/'.$piutang->id)."'><button type='submit'  class='btn btn-sm btn-primary' name='edit'>Detail</button></a>
+			";
+			$data[] = $piutang;
+		}
+		$stok_masuk = array(
+			'data' => $data
+		);
+		echo json_encode($stok_masuk);
 	}
 }
 

@@ -77,7 +77,7 @@ class Produk_model extends CI_Model {
 
 	public function getStok($id)
 	{
-		$this->db->select('stok, nama_produk, harga_jual, barcode');
+		$this->db->select('stok, nama_produk, harga_jual, harga_reseller, barcode');
 		$this->db->where('id', $id);
 		return $this->db->get($this->table)->row();
 	}

@@ -122,7 +122,7 @@
 <script>
   var readUrl = '<?php echo site_url('laporan/getpengeluaran') ?>';
   var addUrl = '<?php echo site_url('laporan/addpengeluaran') ?>';
-  var deleteUrl = '<?php echo site_url('transaksi/delete') ?>';
+  var deleteUrl = '<?php echo site_url('laporan/deletepengeluaran/') ?>';
 </script>
 <script >
   let laporan_penjualan = $("#laporan_penjualan").DataTable({
@@ -170,7 +170,7 @@
     });
     
   function reloadTable() {
-    stok_keluar.ajax.reload()
+    laporan_penjualan.ajax.reload()
   }
   
   function addData() {
@@ -191,6 +191,20 @@
     })
   }
 
+  function del(id) {
+      $.ajax({
+          url: deleteUrl+id,
+          type: "get",
+          success: res => {
+            Swal.fire("Sukses", "Sukses Delete", "success")
+            reloadTable()
+          },
+          error: err => {
+              console.log(err)
+          }
+      })
+    }
+
   laporan_penjualan.on("order.dt search.dt", () => {
     laporan_penjualan.column(0, {
         search: "applied",
@@ -203,6 +217,7 @@
 
 </script>
 <script>
+
   $(function () {
     //Initialize Select2 Elements
     $('.select2').select2()
