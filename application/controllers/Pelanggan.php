@@ -14,74 +14,95 @@ class Pelanggan extends CI_Controller {
 
 	public function index()
 	{
-		$this->load->view('pelanggan');
-	}
-
-	public function read()
-	{
-		header('Content-type: application/json');
-		if ($this->pelanggan_model->read()->num_rows() > 0) {
-			foreach ($this->pelanggan_model->read()->result() as $pelanggan) {
-				$data[] = array(
-					'nama' => $pelanggan->nama,
-					'jenis_kelamin' => $pelanggan->jenis_kelamin,
-					'alamat' => $pelanggan->alamat,
-					'telepon' => $pelanggan->telepon,
-					'action' => '<button class="btn btn-sm btn-success" onclick="edit('.$pelanggan->id.')">Edit</button> <button class="btn btn-sm btn-danger" onclick="remove('.$pelanggan->id.')">Delete</button>'
-				);
-			}
-		} else {
-			$data = array();
-		}
-		$pelanggan = array(
-			'data' => $data
-		);
-		echo json_encode($pelanggan);
+		$data['pelanggan'] = $this->pelanggan_model->view();
+        $this->load->view('pelanggan', $data);
 	}
 
 	public function add()
 	{
-		$data = array(
-			'nama' => $this->input->post('nama'),
-			'alamat' => $this->input->post('alamat'),
-			'telepon' => $this->input->post('telepon'),
-			'jenis_kelamin' => $this->input->post('jenis_kelamin')
-		);
-		if ($this->pelanggan_model->create($data)) {
-			echo json_encode('sukses');
-		}
+        $validation = $this->form_validation; //untuk menghemat penulisan kode
+
+        $validation->set_rules('nama', 'Nama', 'required');
+        $validation->set_rules('jk', 'Jenis Kelamin', 'required');
+        $validation->set_rules('alamat', 'Telepon', 'required');
+        $validation->set_rules('telp', 'Keterangan', 'required');
+
+        if($validation->run() == FALSE) //jika form validation gagal tampilkan kembali form tambahnya
+        {
+            $this->load->view('tambah_pelanggan');
+        } else {
+			$data = array(
+				'nama' => $this->input->post('nama', true),
+				'jenis_kelamin' => $this->input->post('jk', true),
+				'alamat' =>   $this->input->post('alamat', true),
+				'telepon' => $this->input->post('telp', true),
+				'level' => $this->input->post('level', true)
+			);
+          $this->pelanggan_model->tambah($data);
+          redirect('pelanggan');
+        }
 	}
 
-	public function delete()
+	public function delete($id_pelanggan)
 	{
-		$id = $this->input->post('id');
-		if ($this->pelanggan_model->delete($id)) {
-			echo json_encode('sukses');
-		}
+		$this->pelanggan_model->delete($id_pelanggan);
+		echo '<script>
+                alert("Sukses Menghapus Data ");
+                window.location="'.base_url('pelanggan').'"
+            </script>';
 	}
 
-	public function edit()
-	{
-		$id = $this->input->post('id');
-		$data = array(
-			'nama' => $this->input->post('nama'),
-			'alamat' => $this->input->post('alamat'),
-			'telepon' => $this->input->post('telepon'),
-			'jenis_kelamin' => $this->input->post('jenis_kelamin')
-		);
-		if ($this->pelanggan_model->update($id,$data)) {
-			echo json_encode('sukses');
+	function edit($id_pelanggan){
+		$where = array('id' => $id_pelanggan);
+		$data['pelanggan'] = $this->pelanggan_model->edit_data($where,'pelanggan')->result();
+		$this->load->view('edit_pelanggan',$data);
 		}
-	}
+	
+	function update(){
+			$id = $this->input->post('id');
+			$nama = $this->input->post('nama');
+			$alamat = $this->input->post('alamat');
+			$telp = $this->input->post('telp');
+			$level = $this->input->post('level');
+			
+	
+			$data = array(
+				'nama' => $nama,
+				'alamat' => $alamat,
+				'telepon' => $telp,
+				'level' => $level,
+			);
+		 
+			$where = array(
+				'id' => $id
+			);
+		 
+			$this->pelanggan_model->update_data($where,$data,'pelanggan');
+			redirect('pelanggan');
+		}
 
-	public function get_pelanggan()
+	/*public function get_supplier()
 	{
 		$id = $this->input->post('id');
-		$pelanggan = $this->pelanggan_model->getSupplier($id);
-		if ($pelanggan->row()) {
-			echo json_encode($pelanggan->row());
+		$supplier = $this->supplier_model->getSupplier($id);
+		if ($supplier->row()) {
+			echo json_encode($supplier->row());
 		}
-	}
+	}*/
+
+	// public function search()
+	// {
+	// 	header('Content-type: application/json');
+	// 	$supplier = $this->input->post('supplier');
+	// 	$search = $this->supplier_model->search($supplier);
+	// 	foreach ($search as $supplier) {
+	// 		$data[] = array(
+	// 			'id' => $supplier->id,
+	// 			'text' => $supplier->nama
+	// 		);
+	// 	}
+	// 	echo json_encode($data);
+	// }
 
 	public function search()
 	{
@@ -91,13 +112,13 @@ class Pelanggan extends CI_Controller {
 		foreach ($search as $pelanggan) {
 			$data[] = array(
 				'id' => $pelanggan->id,
-				'text' => $pelanggan->nama
+				'text' => $pelanggan->nama." (".$pelanggan->level.")"
 			);
 		}
 		echo json_encode($data);
 	}
 
-}
+}  
 
-/* End of file Pelanggan.php */
-/* Location: ./application/controllers/Pelanggan.php */
+/* End of file Supplier.php */
+/* Location: ./application/controllers/Supplier.php */

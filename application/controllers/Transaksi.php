@@ -10,11 +10,13 @@ class Transaksi extends CI_Controller {
 			redirect('/');
 		}
 		$this->load->model('transaksi_model');
+		$this->load->model('platform_model');
 	}
 
 	public function index()
 	{
-		$this->load->view('transaksi');
+		$data["marketplace"] = $this->platform_model->read();
+		$this->load->view('transaksi',$data);
 	}
 
 	public function read()
@@ -53,7 +55,15 @@ class Transaksi extends CI_Controller {
 			'diskon' => $this->input->post('diskon'),
 			'pelanggan' => $this->input->post('pelanggan'),
 			'nota' => $this->input->post('nota'),
-			'kasir' => $this->session->userdata('id')
+			'kasir' => $this->session->userdata('id'),
+			'marketplace' => $this->input->post('marketplace'),
+			'jenis_piutang' => $this->input->post('jenis_piutang'),
+			'piutang_kurang' => $this->input->post('piutang_kurang'),
+			'jenis_bayar' => $this->input->post('jenis_bayar'),
+			'jenis_kirim' => $this->input->post('jenis_kirim'),
+			'ongkir' => $this->input->post('ongkir'),
+			'bank' => $this->input->post('bank'),
+
 		);
 		if ($this->transaksi_model->create($data)) {
 			$id_transaksi = $this->db->insert_id();
@@ -75,7 +85,7 @@ class Transaksi extends CI_Controller {
 
 	public function detail($id){
 		$data["id"] = $id;
-		$this->load->view('detail_transaksi', $data);
+		$this->load->view('detail_order', $data);
 	}
 
 	public function getdetail($id){

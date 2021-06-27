@@ -36,7 +36,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col">
-            <h1 class="m-0 text-dark">Tambah Reseller</h1>
+            <h1 class="m-0 text-dark">Tambah Pengguna</h1>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
@@ -50,7 +50,7 @@
         <div class="card-header">
         <div class="row">
           <div class="col-sm-6">
-          <form action="<?php echo site_url('reseller/add') ?>" method="post">
+          <form action="<?php echo site_url('pelanggan/add') ?>" method="post">
             <div class="form-group">
               <label> Nama </label>
               <input type="text" class="form-control col-sm-6" placeholder="Nama" id="nama" name="nama">
@@ -74,6 +74,13 @@
               <label> Telepon </label>
               <input type="text" class="form-control col-sm-6" placeholder="Telepon" id="telp" name="telp">
               <?= form_error('telepon', '<small class="pl-3 text-danger">', '</small>'); ?>
+            </div>
+            <div class="form-group">
+              <label> Status </label>
+              <select class="form-control" name="level" id="level">
+                        <option value="pelanggan">Pelanggan</option>
+                        <option value="reseller">Reseller</option>
+                </select>
             </div>
              <div class="form-group">
              <button class="btn btn-success" type="submit">Add</button>

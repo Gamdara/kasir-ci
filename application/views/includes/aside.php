@@ -58,10 +58,10 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="<?php echo site_url('reseller') ?>" class="nav-link <?php echo $uri == 'reseller' ? 'active' : 'no' ?>">
+              <a href="<?php echo site_url('pelanggan') ?>" class="nav-link <?php echo $uri == 'reseller' ? 'active' : 'no' ?>">
                 <i class="far fa-circle nav-icon"></i>
                 <p>
-                  Reseller
+                  Pelanggan & Reseller
                 </p>
               </a>
             </li>
@@ -168,7 +168,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="<?php echo site_url('laporan_stok_keluar') ?>" class="nav-link <?php echo $uri == 'laporan_stok_keluar' ? 'active' : 'no' ?>">
+              <a href="<?php echo site_url('laporan/piutang') ?>" class="nav-link <?php echo $uri == 'laporan_stok_keluar' ? 'active' : 'no' ?>">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Laporan Piutang </p>
               </a>

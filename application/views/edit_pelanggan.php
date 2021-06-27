@@ -36,7 +36,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col">
-            <h1 class="m-0 text-dark">Edit Reseller</h1>
+            <h1 class="m-0 text-dark">Edit pelanggan</h1>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
@@ -50,8 +50,8 @@
         <div class="card-header">
         <div class="row">
           <div class="col-sm-6">
-          <?php foreach($reseller as $u){ ?>
-            <form action="<?php echo base_url(). 'reseller/update'; ?>" method="post">
+          <?php foreach($pelanggan as $u){ ?>
+            <form action="<?php echo base_url(). 'pelanggan/update'; ?>" method="post">
             <input type="hidden" value="<?php echo $u->id ?>" name="id">
             <div class="form-group">
               <label> Nama </label>
@@ -71,6 +71,13 @@
               <label> Telepon </label>
               <input type="text" class="form-control col-sm-6" value="<?php echo $u->telepon ?>" id="telp" name="telp">
               <?= form_error('telepon', '<small class="pl-3 text-danger">', '</small>'); ?>
+            </div>
+            <div class="form-group">
+              <label> Status </label>
+              <select class="form-control" name="level" id="level">
+                        <option value="<?= $u->level ?>"><?= $u->level ?></option>
+                        <option value="<?= $u->level == "reseller" ? "pelanggan" : "reseller" ?>"><?= $u->level == "reseller" ? "pelanggan" : "reseller" ?></option>
+                </select>
             </div>
              <div class="form-group">
              <button class="btn btn-success" type="submit">Add</button>

@@ -22,6 +22,8 @@ let produk = $("#produk").DataTable({
     ]
 });
 
+console.log(produk.rows().data())
+
 let daftar_stok = $("#daftar_stok").DataTable({
     responsive: true,
     scrollX: true,

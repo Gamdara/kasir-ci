@@ -55,8 +55,8 @@
                 <b class="mr-2">Nota</b> <span id="nota"></span>
               </div>
             </div>
-            <div class="mb-2"><select id="pelanggan" style="width: 200px;" class="form-control select2 col-sm-6" onchange="getNama()"></select></div>
-            <div class="mb-2"><input id="tanggal" style="width: 200px;" type="text" class="form-control" placeholder="Tanggal" name="tanggal" required></div>
+            <div class="mb-2"><select id="pelanggan" style="width: 200px;" class="form-control select2 col-sm-6" onchange=""></select></div>
+            <div class="mb-2"><input id="tanggal" style="width: 200px;" type="text" class="form-control" placeholder="Tanggal" name="tanggal" value="<?php date_default_timezone_set('Asia/Jakarta'); echo date('d-m-Y H:i:s');?>" disabled></div>
           </div>
           <div class="col-sm-6 text-right nota">
             <div>
@@ -104,25 +104,34 @@
           <div class="row" style="margin-top: 2rem;">
             <div class="col-sm" style="height: 150px; border: 1px solid #ced4da; border-radius: .25rem; margin: 0 10px;">
               Delivery
-              <select class="form-control form-control-sm" name="marketplace" place>
-                <option>Marketplace</option>
-                <option value="bukalapak">bukalapak</option>
-                <option value="shopee">shopee</option>
+              <select class="form-control form-control-sm" name="marketplace" id="marketplace" place>
+                <option value="">Marketplace</option>
+                <?php foreach ($marketplace as $market) { ?>
+                  <option value="<?= $market['id'] ?>"><?= $market['nama'] ?></option>
+                <?php } ?>
+                <!-- <option value="shopee">shopee</option>
                 <option value="tokopediaCS1">tokopedia cs1</option>
-                <option value="tokopediaCS3">tokopedia cs3</option>
+                <option value="tokopediaCS3">tokopedia cs3</option> -->
               </select>
-              <select class="form-control form-control-sm" name="jenis_pengiriman" place>
-                <option>Jenis Pengiriman</option>
+              <select class="form-control form-control-sm" name="jenis_kirim" id="jenis_kirim" onchange="isDelivery()">
+                <option value="">Jenis Pengiriman</option>
                 <option value="JNE">JNE</option>
                 <option value="JNT">JNT</option>
                 <option value="pos indonesia">Pos Indonesia</option>
               </select>
-              <input class="form-control form-control-sm" type="number" name="ongkir" placeholder="Ongkir">
+              <input class="form-control form-control-sm" type="number" name="ongkir" id="ongkir" placeholder="Ongkir" disabled value="">
             </div>
             <div class="col-sm" style="height: 150px; border: 1px solid #ced4da; border-radius: .25rem;margin: 0 10px;">
               Piutang
-              <input class="form-control form-control-sm" name="dp_piutang" type="number" placeholder="Nominal">
-              <input class="form-control form-control-sm" name="piutang_kurang" type="number" placeholder="Kurang">
+              <div style="float:right">
+                <input type="radio" name="piutang" id="piutang" value="dp" onchange="isDp('dp')">
+                DP
+                <input type="radio" name="piutang" id="piutang" value="lunas" onchange="isDp('lunas')" checked>
+                Lunas
+              </div>
+              
+              <input class="form-control form-control-sm" name="nominal" id="nominal" type="number" placeholder="Nominal" onkeyup="setKurang()" disabled>
+              <input class="form-control form-control-sm" name="piutang_kurang" id="piutang_kurang" type="number" placeholder="Kurang" disabled value="">
             </div>
             
           </div>
@@ -166,16 +175,16 @@
       </div>
       <div class="form-group">
         <label>Jenis Bayar</label>
-        <select name="pelannggan" id="jenis_bayar" class="form-control select2">
-          <option>Bank / Transfer</option>
-          <option>Cash</option>
+        <select name="pelannggan" id="jenis_bayar" class="form-control select2" onchange="isCash()">
+          <option value="bank">Bank / Transfer</option>
+          <option  value="cash">Cash</option>
         </select>
       </div>
       <div class="form-group">
         <label>Bank</label>
-        <select name="pelannggan" id="opsi_bank" class="form-control select2">
-          <option>BCA</option>
-          <option>BRI</option>
+        <select name="pelannggan" id="bank" class="form-control select2">
+          <option value="BCA">BCA</option>
+          <option value="BRI">BRI</option>
         </select>
       </div>
       <div class="form-group">

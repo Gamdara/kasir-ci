@@ -1,3 +1,23 @@
+let laporan_piutang = $("#laporan_piutang").DataTable( {
+    responsive:true,
+    scrollX:true,
+    ajax:readUrl,
+    columnDefs:[{
+        searcable: false,
+        orderable: false,
+        targets: 0
+    }],
+    order:[
+        [1, "asc"]],
+        columns:[ 
+        {data: null}, 
+        {data: "nota"},
+        {data: "total_bayar"}, 
+        {data: "piutang_kurang"},
+        {data: "action"}
+    ]
+});
+
 let laporan_transaksi = $("#laporan_transaksi").DataTable( {
     responsive:true,
     scrollX:true,
@@ -100,13 +120,13 @@ laporan_penjualan.on("order.dt search.dt", ()=> {
     })
 });
 
-// laporan_bulanan.on("order.dt search.dt", ()=> {
-//     laporan_bulanan.column(0, {
-//         search: "applied", order: "applied"
-//     }).nodes().each((el, err)=> {
-//         el.innerHTML=err+1
-//     })
-// });
+laporan_piutang.on("order.dt search.dt", ()=> {
+    laporan_piutang.column(0, {
+        search: "applied", order: "applied"
+    }).nodes().each((el, err)=> {
+        el.innerHTML=err+1
+    })
+});
 
 laporan_transaksi.on("order.dt search.dt", ()=> {
     laporan_transaksi.column(0, {

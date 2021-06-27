@@ -85,6 +85,7 @@ class Transaksi_model extends CI_Model {
 	public function query($query)
 	{
 		$sql = $this->db->query($query);
+		$data = array();
 		foreach($sql->result() as $transaksi){
 			$data[] = $transaksi;
 		}
@@ -114,6 +115,11 @@ class Transaksi_model extends CI_Model {
 		}
 		return $data;
 	}
+
+	function update_data($where,$data,$table){
+        $this->db->where($where);
+        $this->db->update($table,$data);
+    }
 
 }
 

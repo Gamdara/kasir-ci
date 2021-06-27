@@ -125,5 +125,9 @@
   var satuanSearchUrl = '<?php echo site_url('satuan_produk/search') ?>';
 </script>
 <script src="<?php echo base_url('assets/js/unminify/produk.js') ?>"></script>
+<script>
+
+ 
+</script>
 </body>
 </html>

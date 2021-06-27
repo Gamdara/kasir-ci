@@ -38,6 +38,35 @@ function getNama() {
     })
 }
 
+function totalBayar(){
+    let total = parseInt($("#total").html());
+    let piutang_kurang = parseInt($("#piutang_kurang").val()) || 0;
+    let ongkir= parseInt($("#ongkir").val()) || 0;
+    let bayar = total - piutang_kurang + ongkir;
+    console.log(bayar)
+    $(".total_bayar").html(bayar)
+}
+
+function isDp(str){
+    if(str == 'dp')
+    $("#nominal").removeAttr("disabled")
+    else
+    $("#nominal").attr("disabled", "disabled");
+}
+
+function isDelivery(){
+    if($("#jenis_kirim").val() != "")
+    $("#ongkir").removeAttr("disabled")
+    else
+    $("#ongkir").attr("disabled", "disabled");
+}
+
+function setKurang(){
+    let nominal = parseInt($("#nominal").val()),
+    total = parseInt($("#total").html());
+    $("#piutang_kurang").val(total - nominal)
+}
+
 function checkStok() {
     $.ajax({
         url: produkGetStokUrl,
@@ -71,7 +100,6 @@ function checkStok() {
                         $("#total").html(total + harga * jumlah)
                     }
                 } else {
-                    
                     produk.push({
                         id_produk: barcode,
                         jumlah: jumlah
@@ -84,6 +112,7 @@ function checkStok() {
                         jumlah,
                         hargaTotal,
                         `<button name="${barcode}" class="btn btn-sm btn-danger" onclick="remove('${barcode}')">Hapus</btn>`]).draw();
+
                     $("#total").html(total + harga * jumlah);
                     $("#jumlah").val("");
                     $("#tambah").attr("disabled", "disabled");
@@ -155,7 +184,14 @@ function add() {
             jumlah_uang: $('[name="jumlah_uang"]').val(),
             diskon: $('[name="diskon"]').val(),
             pelanggan: $("#pelanggan").val(),
-            nota: $("#nota").html()
+            nota: $("#nota").html(),
+            marketplace: $("#marketplace").val(),
+            jenis_kirim: $("#jenis_kirim").val(),
+            jenis_piutang: $("#piutang").val(),
+            piutang_kurang : $("#piutang_kurang").val(),
+            ongkir: $("#ongkir").val(),
+            jenis_bayar: $("#jenis_bayar").val(),
+            bank: $("#bank").val(),
         },
         success: res => {
             if (isCetak) {
@@ -172,8 +208,15 @@ function add() {
     })
 }
 
+function isCash(){
+    if($('#jenis_bayar').val() == "cash")
+      $("#bank").attr("disabled", "disabled");
+    else
+      $("#bank").removeAttr("disabled");
+  }
+
 function kembalian() {
-    let total = $("#total").html(),
+    let total = $(".total_bayar").html(),
         jumlah_uang = $('[name="jumlah_uang"').val(),
         diskon = $('[name="diskon"]').val();
     $(".kembalian").html(jumlah_uang - total - diskon);
@@ -220,7 +263,8 @@ $(".modal").on("show.bs.modal", () => {
     let now = moment().format("D-MM-Y H:mm:ss"),
         total = $("#total").html(),
         jumlah_uang = $('[name="jumlah_uang"').val();
-    $("#tanggal").val(now), $(".total_bayar").html(total), $(".kembalian").html(Math.max(jumlah_uang - total, 0))
+    $("#tanggal").val(now), $(".kembalian").html(Math.max(jumlah_uang - total, 0))
+    totalBayar();
 });
 $("#form").validate({
     errorElement: "span",
