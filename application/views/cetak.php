@@ -5,46 +5,110 @@
 	<title>Cetak</title>
 </head>
 <body>
-	<div style="width: 500px; margin: auto;">
+	<div style="width: 300px; margin: auto;">
 		<br>
 		<center>
-			<?php echo $this->session->userdata('toko')->nama; ?><br>
-			<?php echo $this->session->userdata('toko')->alamat; ?><br><br>
+			<h3><?php echo $this->session->userdata('toko')->nama; ?></h3>
+			<?php echo $this->session->userdata('toko')->alamat; ?><br>
+			mastha@gmail.com<br>
+			0812345678910<br>
+			www.mastha.com<br>
+			
+			<hr>
 			<table width="100%">
-				<tr>
-					<td><?php echo $nota ?></td>
-					<td align="right"><?php echo $tanggal ?></td>
-				</tr>
+				
+					<tr>
+						<td>
+							<b>No.Nota</b>
+						</td>
+						<td align="center">
+							:
+						</td>
+						<td>
+							<?php echo $nota ?>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Waktu</b>
+						</td>
+						<td align="center">
+							:
+						</td>
+						<td>
+							<?php echo $tanggal ?>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Order</b>
+						</td>
+						<td align="center">
+							:
+						</td>
+						<td>
+							<?php echo $jumlah_produk ?>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Kasir</b>
+						</td>
+						<td align="center">
+							:
+						</td>
+						<td>
+							<?php echo $kasir ?>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Customer</b>
+						</td>
+						<td align="center">
+							:
+						</td>
+						<td>
+							<?php echo $nama_pelanggan ?>
+						</td>
+					</tr>
+				
 			</table>
 			<hr>
 			<table width="100%">
+			<?php foreach ($produk as $key): ?>
 				<tr>
-					<td width="50%"></td>
-					<td width="3%"></td>
-					<td width="10%" align="right"></td>
-					<td align="right" width="17%"><?php echo $kasir ?></td>
-				</tr>
-				<?php foreach ($produk as $key): ?>
-					<tr>
-						<td><?php echo $key->nama_produk ?></td>
-						<td></td>
-						<td align="right"><?php echo $key->jumlah ?></td>
+					<td>
+						<?php echo $key->nama_produk ?>
+					</td>
 						<?php if($level == "reseller") {?>
-						<td align="right"><?php echo $key->harga_reseller ?></td>
+					<td align="right" style="">
+						<?php echo $key->harga_reseller ?>
+					</td>
 						<?php }?>
 						<?php if($level != "reseller") {?>
-							<td align="right"><?php echo $key->harga_jual ?></td>
+					<td align="right">
+						<?php echo $key->harga_jual ?>
+					</td>
 						<?php }?>
-					</tr>
+				</tr>
 				<?php endforeach ?>
 			</table>
 			<hr>
 			<table width="100%">
 				<tr>
-					<td width="76%" align="right">
-						Harga Jual
+					<td>
+						<b>Subtotal <?php echo $jumlah_produk ?> Produk</b>
 					</td>
-					<td width="23%" align="right">
+					<td align="right">
+						<?php echo $total ?>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<b>Total Tagihan</b>
+					</td>
+					<td align="right">
 						<?php echo $total ?>
 					</td>
 				</tr>
@@ -52,37 +116,56 @@
 			<hr>
 			<table width="100%">
 				<tr>
-					<td width="76%" align="right">
-						Total
+					<td>
+						<?php if($jenis_bayar != 'cash') {?>
+						<b>Transfer Bank</b>
+						<?php } ?>
+						<?php if($jenis_bayar == 'cash') {?>
+						<b>Cash</b>
+						<?php } ?>
+						<br>
+						<?= $jenis_bayar == 'cash' ? '' : $bank  ?>
 					</td>
 					<td width="23%" align="right">
 						<?php echo $total ?>
 					</td>
 				</tr>
 				<tr>
-					<td width="76%" align="right">
-						Bayar
+					<td>
+						<b>Total Bayar</b>
 					</td>
 					<td width="23%" align="right">
 						<?php echo $bayar ?>
 					</td>
 				</tr>
 				<tr>
-					<td width="76%" align="right">
-						Kembalian
+					<td>
+						<b>Kembalian</b>
 					</td>
-					<td width="23%" align="right">
+					<td align="right">
 						<?php echo $kembalian ?>
 					</td>
 				</tr>
 			</table>
-			<br>
-			Terima Kasih <br>
-			<?php echo $this->session->userdata('toko')->nama; ?>
+			<hr>
+			<hr>
+			<table width="100%">
+				<tr align="center">
+					<td><b>Terimakasih, Semoga Sehat Selalu</b></td>
+				</tr>
+				<tr align="center">
+					<td><b>Terbayar</b></td>
+				</tr>
+				<tr align="center">
+					<td><b><?php echo $tanggal ?></b></td>
+				</tr>
+			</table>
+			<hr>
 		</center>
+
 	</div>
 	<script>
-		window.print()
+		// window.print()
 	</script>
 </body>
 </html>

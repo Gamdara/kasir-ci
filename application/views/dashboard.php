@@ -172,6 +172,6 @@
   var data_stokUrl = '<?php echo site_url('produk/data_stok') ?>';
   var penjualan_bulanUrl = '<?php echo site_url('transaksi/penjualan_bulan') ?>';
 </script>
-<script src="<?php echo base_url('assets/js/unminify/dashboard.js') ?>"></script>
+<!-- <script src="<?php echo base_url('assets/js/unminify/dashboard.js') ?>"></script> -->
 </body>
 </html>

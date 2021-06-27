@@ -143,7 +143,12 @@ class Transaksi extends CI_Controller {
 			'bayar' => $produk->jumlah_uang,
 			'kembalian' => $produk->jumlah_uang - $produk->total_bayar,
 			'kasir' => $produk->kasir,
-			'level' => $produk->level
+			'level' => $produk->level,
+			'nama_pelanggan' => $produk->nama_pelanggan,
+			'jumlah_produk' => $produk->jumlah_produk,
+			'jenis_bayar' => $produk->jenis_bayar,
+			'bank' => $produk->bank,
+			
 		);
 		$this->load->view('cetak', $data);
 	}
