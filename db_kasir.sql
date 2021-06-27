@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 27, 2021 at 05:38 PM
+-- Generation Time: Jun 27, 2021 at 06:45 PM
 -- Server version: 8.0.23
 -- PHP Version: 7.4.3
 
@@ -54,7 +54,8 @@ INSERT INTO `detail_transaksi` (`id`, `id_transaksi`, `id_produk`, `jumlah`) VAL
 (12, 19, 1, 3),
 (13, 20, 1, 3),
 (14, 21, 1, 3),
-(15, 22, 1, 3);
+(15, 22, 1, 3),
+(16, 23, 1, 4);
 
 -- --------------------------------------------------------
 
@@ -180,7 +181,7 @@ CREATE TABLE `pengeluaran` (
 --
 
 INSERT INTO `pengeluaran` (`id`, `tanggal`, `nominal`, `jenis_bayar`, `keterangan`) VALUES
-(5, '2021-06-24', 10000, 'BCA', '-');
+(9, '2021-06-27', 30000, 'cash', 'Makan');
 
 -- --------------------------------------------------------
 
@@ -247,7 +248,7 @@ CREATE TABLE `produk` (
 --
 
 INSERT INTO `produk` (`id`, `barcode`, `nama_produk`, `kategori`, `satuan`, `harga_beli`, `harga_jual`, `harga_reseller`, `stok`, `terjual`) VALUES
-(1, 'PULS ALPRB', 'Voucher Pulsa 50000', 1, 2, 45000, 55000, 50000, 81, 19),
+(1, 'PULS ALPRB', 'Voucher Pulsa 50000', 1, 2, 45000, 55000, 50000, 77, 23),
 (2, 'DJRM SPER', 'Djarum Super 12', 2, 1, 14000, 18000, 18000, 62, 2);
 
 -- --------------------------------------------------------
@@ -459,8 +460,8 @@ INSERT INTO `transaksi` (`id`, `tanggal`, `total_bayar`, `jumlah_uang`, `diskon`
 (18, '2021-06-25 19:59:04', 110000, 1000000, 0, 2, 'M3HJUCZYAYPC2HA', 1, 0, '', 0, '', '', 0, ''),
 (19, '2021-06-25 22:45:29', 165000, 1000000, 0, 1, '0FE2WMTYF3URGQK', 1, 3, 'lunas', 0, 'cash', 'JNE', 20000, 'BCA'),
 (20, '2021-06-27 12:55:41', 165000, 100000, 0, 1, '6DIDQ15QBYJM9UN', 1, 1, 'lunas', 0, 'cash', '', 0, 'BCA'),
-(21, '2021-06-27 16:41:33', 150000, 1000000, 0, 2, 'LC3JM81S730LTH9', 1, 0, 'dp', 0, 'bank', '', 0, 'BCA'),
-(22, '2021-06-27 16:43:56', 150000, 1000000, 0, 2, 'DTH61EEUWK9MSQ2', 1, 0, 'dp', 0, 'bank', '', 0, 'BCA');
+(22, '2021-06-27 16:43:56', 150000, 1000000, 0, 2, 'DTH61EEUWK9MSQ2', 1, 0, 'lunas', 0, 'bank', '', 0, 'BCA'),
+(23, '2021-06-27 18:45:12', 220000, 100000, 0, 1, '55I45POMUS8PRQV', 1, 0, 'dp', 120000, 'bank', '', 0, 'BCA');
 
 -- --------------------------------------------------------
 
@@ -594,7 +595,7 @@ ALTER TABLE `transaksi`
 -- AUTO_INCREMENT for table `detail_transaksi`
 --
 ALTER TABLE `detail_transaksi`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `gudang`
@@ -624,7 +625,7 @@ ALTER TABLE `pelanggan`
 -- AUTO_INCREMENT for table `pengeluaran`
 --
 ALTER TABLE `pengeluaran`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `pengguna`
@@ -690,7 +691,7 @@ ALTER TABLE `toko`
 -- AUTO_INCREMENT for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
