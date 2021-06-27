@@ -47,6 +47,7 @@ class Transaksi extends CI_Controller {
 	{
 		$produks = json_decode($this->input->post('produk'));
 		$tanggal = new DateTime($this->input->post('tanggal'));
+		$bank = $this->input->post('jenis_bayar') == "cash" ? "" : $this->input->post('bank');
 		// $data = $this->input->post('form')
 		$data = array(
 			'tanggal' => $tanggal->format('Y-m-d H:i:s'),
@@ -62,7 +63,7 @@ class Transaksi extends CI_Controller {
 			'jenis_bayar' => $this->input->post('jenis_bayar'),
 			'jenis_kirim' => $this->input->post('jenis_kirim'),
 			'ongkir' => $this->input->post('ongkir'),
-			'bank' => $this->input->post('bank'),
+			'bank' => $bank,
 
 		);
 		if ($this->transaksi_model->create($data)) {
@@ -85,6 +86,10 @@ class Transaksi extends CI_Controller {
 
 	public function detail($id){
 		$data["id"] = $id;
+		$query = $this->transaksi_model->query("
+		select transaksi.*, pelanggan.nama as nama_pelanggan, platform.nama as nama_marketplace from transaksi join pelanggan on pelanggan.id = transaksi.pelanggan left join platform on transaksi.marketplace = platform.id where transaksi.id = $id
+		");
+		$data["transaksi"] = $query[0];
 		$this->load->view('detail_order', $data);
 	}
 
@@ -121,16 +126,14 @@ class Transaksi extends CI_Controller {
 		$produk = $this->transaksi_model->getAll($id);
 		
 		$tanggal = new DateTime($produk->tanggal);
-		$barcode = explode(',', $produk->barcode);
-		$qty = explode(',', $produk->qty);
-
+		
 		$produk->tanggal = $tanggal->format('d m Y H:i:s');
 
-		$dataProduk = $this->transaksi_model->getName($barcode);
-		foreach ($dataProduk as $key => $value) {
-			$value->total = $qty[$key];
-			$value->harga_jual = $value->harga_jual * $qty[$key];
-		}
+		$dataProduk = $this->transaksi_model->query("
+		select jumlah, produk.* from detail_transaksi 
+		join produk on produk.id = detail_transaksi.id_produk 
+		where id_transaksi = $id
+		");
 
 		$data = array(
 			'nota' => $produk->nota,
@@ -139,7 +142,8 @@ class Transaksi extends CI_Controller {
 			'total' => $produk->total_bayar,
 			'bayar' => $produk->jumlah_uang,
 			'kembalian' => $produk->jumlah_uang - $produk->total_bayar,
-			'kasir' => $produk->kasir
+			'kasir' => $produk->kasir,
+			'level' => $produk->level
 		);
 		$this->load->view('cetak', $data);
 	}

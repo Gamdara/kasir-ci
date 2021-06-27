@@ -90,12 +90,12 @@ class Laporan extends CI_Controller {
 
 	function bayar($id){
 		$where = array('id' => $id);
-		
+		$bank = $this->input->post('jenis_bayar') == "cash" ? "" : $this->input->post('bank');
 		$data = array(
 			'piutang_kurang' => 0,
 			'jenis_bayar' => $this->input->post('jenis_bayar'),
 			'jenis_piutang' => 'lunas',
-			'bank' => $this->input->post('bank'),
+			'bank' => $bank,
 		);
 	 
 		$where = array(

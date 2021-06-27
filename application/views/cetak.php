@@ -28,8 +28,13 @@
 					<tr>
 						<td><?php echo $key->nama_produk ?></td>
 						<td></td>
-						<td align="right"><?php echo $key->total ?></td>
-						<td align="right"><?php echo $key->harga_jual ?></td>
+						<td align="right"><?php echo $key->jumlah ?></td>
+						<?php if($level == "reseller") {?>
+						<td align="right"><?php echo $key->harga_reseller ?></td>
+						<?php }?>
+						<?php if($level != "reseller") {?>
+							<td align="right"><?php echo $key->harga_jual ?></td>
+						<?php }?>
 					</tr>
 				<?php endforeach ?>
 			</table>
