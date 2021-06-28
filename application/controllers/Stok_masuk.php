@@ -9,6 +9,7 @@ class Stok_masuk extends CI_Controller {
 		if ($this->session->userdata('status') !== 'login' ) {
 			redirect('/');
 		}
+		$this->load->model('transaksi_model');
 		$this->load->model('stok_masuk_model');
 	}
 
@@ -36,19 +37,25 @@ class Stok_masuk extends CI_Controller {
 	public function read()
 	{
 		header('Content-type: application/json');
-		if ($this->stok_masuk_model->read()->num_rows() > 0) {
-			foreach ($this->stok_masuk_model->read()->result() as $stok_masuk) {
-				$tanggal = new DateTime($stok_masuk->tanggal);
-				$data[] = array(
-					'tanggal' => $tanggal->format('d-m-Y H:i:s'),
-					'barcode' => $stok_masuk->barcode,
-					'nama_produk' => $stok_masuk->nama_produk,
-					'jumlah' => $stok_masuk->jumlah,
-					'bayar' => $stok_masuk->bayar
-				);
-			}
-		} else {
-			$data = array();
+		$data = array();
+		$query = $this->transaksi_model->query("
+			select date_format(tanggal,'%d %b %Y') as tanggal,
+			
+			GROUP_CONCAT(DISTINCT nama_produk SEPARATOR ', ') as produk,
+			sum(jumlah) as jumlah
+			from stok_masuk
+			join produk on produk.id = stok_masuk.barcode
+			group by date_format(tanggal,'%d %b %Y')
+		");
+		foreach ($query as $stok_masuk) {
+			$data[] = array(
+				'tanggal' => $stok_masuk->tanggal,
+				'produk' => $stok_masuk->produk,
+				'faktur' => "FA/".strtotime($stok_masuk->tanggal)."/T".$stok_masuk->jumlah,
+				'jumlah' => $stok_masuk->jumlah,
+				'jenis' => "Tambah Stok Manual",
+				'status' => "SELESAI",
+			);
 		}
 		$stok_masuk = array(
 			'data' => $data

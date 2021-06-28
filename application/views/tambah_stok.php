@@ -187,6 +187,7 @@
       $("#tambah").attr("disabled", "disabled")
   }
   function setHarga(){
+    console.log($("#barang").val())
     validate()
     $.ajax({
         url : '<?php echo site_url('produk/get_produk') ?>',

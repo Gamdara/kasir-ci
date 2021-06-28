@@ -80,8 +80,8 @@
               <div class="mb-0">
                 <br>
                 <h5 class="mr-0">Delivery</h5>
-                <h5 class="mr-0">Marketplace : <?= $transaksi->nama_marketplace ?></h5>
-                <h5 class="mr-0">Jenis Pengiriman : <?= $transaksi->jenis_kirim ?></h5>
+                <h5 class="mr-0">Marketplace : <?= $transaksi->nama_marketplace ? $transaksi->nama_marketplace : "-" ?></h5>
+                <h5 class="mr-0">Jenis Pengiriman : <?= $transaksi->jenis_kirim ? $transaksi->jenis_kirim : "-"  ?></h5>
               </div>
         </div>
         <!-- </center>
@@ -90,8 +90,8 @@
               <div class="mb-0" style="">
                 <br>
                 <h5 class="mr-0">Piutang</h5>
-                <h5 class="mr-0">DP/Lunas : <?= $transaksi->jenis_piutang ?></h5>
-                <h5 class="mr-0">Kekurangan : <?= $transaksi->piutang_kurang ?></h5>
+                <h5 class="mr-0">DP/Lunas : <?= $transaksi->jenis_piutang ? $transaksi->jenis_piutang : "-" ?></h5>
+                <h5 class="mr-0">Kekurangan : <?= $transaksi->piutang_kurang ? $transaksi->piutang_kurang : "-"?></h5>
               </div>
         </div>
         <div class="col-sm-3" style="margin:7px;">
@@ -100,7 +100,7 @@
                 <h5 class="mr-0">Diskon : <?= $transaksi->diskon ?></h5>
                 <h5 class="mr-0">Bayar : <?= $transaksi->jumlah_uang ?></h5>
                 <h5 class="mr-0">Kembali : <?= $transaksi->jumlah_uang - $transaksi->total_bayar - $transaksi->diskon ?></h5>
-                <h5 class="mr-0">Jenis Bayar : <?= $transaksi->jenis_bayar ?></h5>
+                <h5 class="mr-0">Jenis Bayar : <?= $transaksi->jenis_bayar ? $transaksi->jenis_bayar : "-" ?></h5>
               </div>
               <!-- <?php print_r($transaksi) ?> -->
               <br>
@@ -116,12 +116,6 @@
         </div>
         
           <div class="card-body">
-          
-            <button type="button" class="btn btn-default float-right" id="daterange-btn">
-               <i class="far fa-calendar-alt"></i> Date range picker
-               <i class="fas fa-caret-down"></i>
-            </button>
-            
             <table class="table w-100 table-bordered table-hover" id="detail_transaksi">
               <thead>
               <tr>

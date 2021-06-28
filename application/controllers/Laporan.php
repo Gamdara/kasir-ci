@@ -7,6 +7,7 @@ class Laporan extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model('laporan_model');
+		$this->load->model('transaksi_model');
 	}
 
 	public function pengeluaran()
@@ -128,6 +129,13 @@ class Laporan extends CI_Controller {
 			"id_transaksi" => $id,
 			"tanggal" => date("Y-m-d")
 		);
+		$barangs = $this->laporan_model->query("select * from detail_transaksi where id_transaksi = $id ");
+		foreach ($barangs as $barang) {
+			$this->transaksi_model->removeStok($barang->id, $produk->jumlah * -1);
+			$this->transaksi_model->addTerjual($barang->id, $produk->jumlah * -1);
+		}
+		$this->laporan_model->create('refund',$add);
+
 		$this->laporan_model->create('refund',$add);
 		echo json_encode($id);
 	}

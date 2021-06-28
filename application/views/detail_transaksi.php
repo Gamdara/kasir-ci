@@ -37,18 +37,6 @@
       <div class="container-fluid">
         <div class="card">
           <div class="card-body">
-          <!-- <table class="table w-100 table-bordered table-hover" >
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th>Barcode</th> 
-                  <th>Nama Produk</th> 
-                  <th>Jumlah</th> 
-                  <th>Harga</th> 
-                  <th>Subtotal</th> 
-                </tr>
-              </thead>
-            </table> -->
             <table class="table w-100 table-bordered table-hover" id="detail_transaksi">
               <thead>
                 <tr>

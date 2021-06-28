@@ -40,7 +40,7 @@
         <div class="card">
         <div class="card-header">
         <div class="row">
-          <div class="col-sm-0" style="margin-right:55%; padding:7px">
+          <div class="col-sm-0" style="margin-right:53%; padding:7px">
               <div class="mb-0">
               <h5>Nota <span id="nota"><?= $transaksi->nota ?></span></h5>
                 
@@ -75,8 +75,8 @@
               <div class="mb-0">
                 <br>
                 <h5 class="mr-0">Delivery</h5>
-                <h5 class="mr-0">Marketplace : <?= $transaksi->nama_marketplace ?></h5>
-                <h5 class="mr-0">Jenis Pengiriman : <?= $transaksi->jenis_kirim ?></h5>
+                <h5 class="mr-0">Marketplace : <?= $transaksi->nama_marketplace ? $transaksi->nama_marketplace : "-" ?></h5>
+                <h5 class="mr-0">Jenis Pengiriman : <?= $transaksi->jenis_kirim ? $transaksi->jenis_kirim : "-"?></h5>
               </div>
         </div>
         <!-- </center>
@@ -95,7 +95,7 @@
                 <h5 class="mr-0">Diskon : <?= $transaksi->diskon ?></h5>
                 <h5 class="mr-0">Bayar : <?= $transaksi->jumlah_uang ?></h5>
                 <h5 class="mr-0">Kembali : <?= $transaksi->jumlah_uang - $transaksi->total_bayar - $transaksi->diskon ?></h5>
-                <h5 class="mr-0">Jenis Bayar : <?= $transaksi->jenis_bayar ?></h5>
+                <h5 class="mr-0">Jenis Bayar : <?= $transaksi->jenis_bayar ? $transaksi->jenis_bayar : "-" ?></h5>
               </div>
               <!-- <?php print_r($transaksi) ?> -->
               <br>
@@ -111,7 +111,6 @@
         </div>
         
           <div class="card-body">
-          
             <button type="button" class="btn btn-default float-right" id="daterange-btn">
                <i class="far fa-calendar-alt"></i> Date range picker
                <i class="fas fa-caret-down"></i>

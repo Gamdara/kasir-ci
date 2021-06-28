@@ -40,10 +40,6 @@
             <button class="btn btn-success" data-toggle="modal" data-target="#modal">Add</button>
           </div>
           <div class="card-body">
-             <button type="button" class="btn btn-default float-right" id="daterange-btn">
-               <i class="far fa-calendar-alt"></i> Date range picker
-               <i class="fas fa-caret-down"></i>
-            </button>
             <table class="table w-100 table-bordered table-hover" id="laporan_penjualan">
               <thead>
                 <tr>

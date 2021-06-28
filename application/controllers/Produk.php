@@ -99,10 +99,9 @@ class Produk extends CI_Controller {
 	{
 		header('Content-type: application/json');
 		$id = $this->input->post('id');
-		$kategori = $this->produk_model->getProduk($id);
-		if ($kategori->row()) {
-			echo json_encode($kategori->row());
-		}
+		$produk = $this->produk_model->getProduk($id);
+		if ($produk->row())
+			echo json_encode($produk->row());
 	}
 
 	public function get_barcode()

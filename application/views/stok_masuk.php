@@ -48,10 +48,11 @@
                 <tr>
                 <th>No</th>
                   <th>Tanggal</th>
-                  <th>Barcode</th>
-                  <th>Nama Produk</th>
+                  <th>No. Faktur</th>
+                  <th>Produk</th>
                   <th>Jumlah</th>
-                  <th>Bayar</th>
+                  <th>Jenis</th>
+                  <th>Status</th>
                 </tr>
               </thead>
             </table>

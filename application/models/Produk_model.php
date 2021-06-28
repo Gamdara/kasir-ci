@@ -21,8 +21,14 @@ class Produk_model extends CI_Model {
 
 	public function tambah()
     {
+		$barcode = $this->input->post('nama', true);
+		$barcode = preg_replace('#[aeiou]+#i', '', $barcode);
+		$barcode = preg_replace('/[0]/', '', $barcode );
+		$barcode = strtoupper($barcode);
+
         $data = array(
             'nama_produk' => $this->input->post('nama', true),
+			'barcode' => $barcode,
             'kategori' => $this->input->post('kategori', true),
             'harga_beli' => $this->input->post('beli', true),
 			'harga_jual' => $this->input->post('jual', true),
@@ -56,7 +62,7 @@ class Produk_model extends CI_Model {
 		$this->db->select('produk.id, produk.barcode, produk.nama_produk, produk.harga_jual, produk.harga_beli, produk.stok, kategori_produk.id as kategori_id, kategori_produk.kategori, satuan_produk.id as satuan_id, satuan_produk.satuan');
 		$this->db->from($this->table);
 		$this->db->join('kategori_produk', 'produk.kategori = kategori_produk.id');
-		$this->db->join('satuan_produk', 'produk.satuan = satuan_produk.id');
+		$this->db->join('satuan_produk', 'produk.satuan = satuan_produk.id', 'left');
 		$this->db->where('produk.id', $id);
 		return $this->db->get();
 	}

@@ -15,13 +15,15 @@ let stok_masuk = $("#stok_masuk").DataTable({
     }, {
         data: "tanggal"
     }, {
-        data: "barcode"
+        data: "faktur"
     }, {
-        data: "nama_produk"
+        data: "produk"
     }, {
         data: "jumlah"
     }, {
-        data: "bayar"
+        data: "jenis"
+    }, {
+        data: "status"
     }]
 });
 

@@ -164,7 +164,7 @@
             <li class="nav-item">
               <a href="<?php echo site_url('laporan/list_refund') ?>" class="nav-link <?php echo $uri == 'laporan_refund' ? 'active' : 'no' ?>">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Laporan refund </p>
+                <p>Laporan Refund </p>
               </a>
             </li>
             <li class="nav-item">
@@ -176,7 +176,7 @@
             <li class="nav-item">
               <a href="<?php echo site_url('laporan/pengeluaran') ?>" class="nav-link <?php echo $uri == 'laporan_penjualan/laporan_pengeluaran' ? 'active' : 'no' ?>">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Laporan Pengluaran </p>
+                <p>Laporan Pengeluaran </p>
               </a>
             </li>
           </ul>

@@ -35,7 +35,7 @@
             <div class="small-box bg-info">
               <div class="inner">
                 <h3 id="transaksi_hari"><?= $total_penjualan ?></h3>
-                <p>Total Penjualan</p>
+                <p>Total Penjualan Hari Ini</p>
               </div>
               <div class="icon">
                 <i class="fas fa-shopping-cart"></i>
@@ -49,7 +49,7 @@
             <div class="small-box bg-warning">
               <div class="inner">
                 <h3 id="transaksi_terakhir"><?= $total_transaksi ?></h3>
-                <p>Total Transaksi</p>
+                <p>Total Transaksi Hari Ini</p>
               </div>
               <div class="icon">
                 <i class="fas fa-money-bill"></i>
@@ -63,7 +63,7 @@
             <div class="small-box bg-danger">
               <div class="inner">
                 <h3 id="stok_hari"><?= $total_pengeluaran ?></h3>
-                <p>Total Pengeluaran</p>
+                <p>Total Pengeluaran Hari Ini</p>
               </div>
               <div class="icon">
                 <i class="fas fa-archive"></i>
@@ -78,6 +78,40 @@
           </div> -->
           <div class="col-md-6">
             <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Produk Terjual Hari Ini</h3>
+              </div>
+              <div class="card-body">
+                <?php foreach ($produk_harian as $p) { ?>
+                  <li class="list-group-item">
+                    <?= $p->nama_produk ?>
+                    <span class="float-right"><?= $p->jumlah ?></span>
+                  </li>
+                <?php } ?>
+                <!-- <div class="chart">
+                  <canvas id="produkTerlaris" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%"></canvas>
+                </div> -->
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Pengeluaran Hari Ini</h3>
+              </div>
+              <div class="card-body">
+                <?php foreach ($pengeluaran_harian as $p) { ?>
+                  <li class="list-group-item">
+                    <?= $p->keterangan ?>
+                    <span class="float-right"><?= $p->nominal ?></span>
+                  </li>
+                <?php } ?>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card card-success">
               <div class="card-header">
                 <h3 class="card-title">Produk Terjual </h3>
               </div>
@@ -95,7 +129,7 @@
             </div>
           </div>
           <div class="col-md-6">
-            <div class="card card-primary">
+            <div class="card card-success">
               <div class="card-header">
                 <h3 class="card-title">Pengeluaran</h3>
               </div>
@@ -106,50 +140,9 @@
                     <span class="float-right"><?= $p->nominal ?></span>
                   </li>
                 <?php } ?>
-                <!-- <div class="chart">
-                  <canvas id="produkTerlaris" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%"></canvas>
-                </div> -->
               </div>
             </div>
           </div>
-          <!-- <div class="col-md-6">
-            <div class="card card-warning">
-              <div class="card-header">
-                <h3 class="card-title">Produk Terjual Hari Ini</h3>
-              </div>
-              <div class="card-body">
-                <div class="chart" style="height: 250px;max-height: 250px; overflow-y: scroll;">
-                  <ul class="list-group" id="stok_produk"></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div> -->
-          <!-- <div class="col-md-6">
-            <div class="card card-warning">
-              <div class="card-header">
-                <h3 class="card-title">Metode Pembayaran</h3>
-              </div>
-              <div class="card-body">
-                <div class="chart" style="height: 250px;max-height: 250px; overflow-y: scroll;">
-                  <ul class="list-group" id="stok_produk"></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div> -->
-          <!-- <div class="col-12">
-            <div class="card card-success">
-              <div class="card-header">
-                <h3 class="card-title">Penjualan Bulan Ini</h3> 
-              </div>
-              <div class="card-body">
-                <div class="chart">
-                  <canvas id="bulanIni" style="min-height: 250px; height: 450px; max-height: 450px; max-width: 100%"></canvas>
-                </div>
-              </div>
-            </div>
-          </div> -->
         </div>
       </div><!-- /.container-fluid -->
     </section>
