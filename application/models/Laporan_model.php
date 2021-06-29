@@ -40,10 +40,11 @@ class Laporan_model extends CI_Model {
         $this->db->update($table,$data);
     }
 
-	public function addJumlah($id,$jumlah)
+	public function addJumlah($id,$jumlah,$total)
 	{
 		$this->db->where('id', $id);
 		$this->db->set('jumlah_uang', 'jumlah_uang+'.$jumlah, FALSE);
+		
 		return $this->db->update('transaksi');
 	}
 }

@@ -108,9 +108,9 @@ class Laporan extends CI_Controller {
 		$where = array(
 			'id' => $id
 		);
-	 
 		$this->laporan_model->update_data($where,$data,'transaksi');
-		$this->laporan_model->addJumlah($id,$this->input->post('jumlah_uang'));
+		$this->laporan_model->addJumlah($id,$this->input->post('jumlah_uang'),$this->input->post('total_bayar'));
+		$this->transaksi_model->addKas();
 		
 		echo json_encode($id);
 	}

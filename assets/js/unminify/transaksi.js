@@ -215,7 +215,7 @@ function add() {
         data: {
             produk: JSON.stringify(produk),
             tanggal: $("#tanggal").val(),
-            total_bayar: $("#total").html(),
+            total_bayar: totalbayar,
             jumlah_uang: $('[name="jumlah_uang"]').val(),
             diskon: $('[name="diskon"]').val(),
             pelanggan: $("#pelanggan").val(),
