@@ -55,7 +55,7 @@
                 <b class="mr-2">Nota</b> <span id="nota"></span>
               </div>
             </div>
-            <div class="mb-2"><select id="pelanggan" style="width: 200px;" class="form-control select2 col-sm-6" onchange="setReseller()"></select></div>
+            <div class="mb-2"><select id="pelanggan" style="width: 200px;" class="form-control select2 col-sm-6" onchange="setReseller(); checkEmpty();"></select></div>
             <div class="mb-2"><input id="tanggal" style="width: 200px;" type="text" class="form-control" placeholder="Tanggal" name="tanggal" value="<?php date_default_timezone_set('Asia/Jakarta'); echo date('d-m-Y H:i:s');?>" disabled></div>
           </div>
           <div class="col-sm-6 text-right nota">
@@ -77,6 +77,10 @@
               <div style="display: inline-block; vertical-align: bottom; width: 100px;">
                 <input type="number" class="form-control" placeholder="Jumlah" id="jumlah" onkeyup="checkEmpty()">
               </div>
+              <div class="form-group">
+              <label>Diskon</label>
+              <input placeholder="Diskon" type="number" style="width: 200px;" class="form-control" onkeyup="kembalian(); totalBayar();" name="diskon">
+            </div>
               <button style="display: inline-block; vertical-align: bottom;" id="tambah" class="btn btn-success" onclick="checkStok()" disabled>Tambah</button>
               <button style="display: inline-block; vertical-align: bottom;" id="bayar" class="btn btn-success" data-toggle="modal" data-target="#modal" disabled>Bayar</button>
               <div>
@@ -119,18 +123,18 @@
                 <option value="JNT">JNT</option>
                 <option value="pos indonesia">Pos Indonesia</option>
               </select>
-              <input class="form-control form-control-sm" type="number" name="ongkir" id="ongkir" placeholder="Ongkir" disabled value="">
+              <input class="form-control form-control-sm" type="number" name="ongkir" id="ongkir" placeholder="Ongkir" disabled value="" onkeyup="totalBayar();">
             </div>
             <div class="col-sm" style="height: 150px; border: 1px solid #ced4da; border-radius: .25rem;margin: 0 10px;">
               Piutang
               <div style="float:right">
-                <input type="radio" name="piutang" id="piutang" value="dp" onchange="isDp('dp')">
+                <input type="radio" name="piutang" id="piutang" value="dp" onchange="setDp(true)">
                 DP
-                <input type="radio" name="piutang" id="piutang" value="lunas" onchange="isDp('lunas')" checked>
-                Lunas
+                <input type="radio" name="piutang" id="piutang" value="full" onchange="setDp(false)" checked>
+                Full
               </div>
               
-              <input class="form-control form-control-sm" name="nominal" id="nominal" type="number" placeholder="Nominal" onkeyup="setKurang()" disabled>
+              <input class="form-control form-control-sm" name="nominal" id="nominal" type="number" placeholder="Nominal" onkeyup="setKurang(); " disabled>
               <input class="form-control form-control-sm" name="piutang_kurang" id="piutang_kurang" type="number" placeholder="Kurang" disabled value="">
             </div>
             
@@ -169,10 +173,7 @@
         <label>Jumlah Uang</label>
         <input placeholder="Jumlah Uang" type="number" class="form-control" name="jumlah_uang" onkeyup="kembalian()" required>
       </div>
-      <div class="form-group">
-        <label>Diskon</label>
-        <input placeholder="Diskon" type="number" class="form-control" onkeyup="kembalian()" name="diskon">
-      </div>
+    
       <div class="form-group">
         <label>Jenis Bayar</label>
         <select name="pelannggan" id="jenis_bayar" class="form-control select2" onchange="isCash()">

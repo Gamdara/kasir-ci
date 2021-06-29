@@ -46,6 +46,7 @@ class Laporan extends CI_Controller {
 		);
 		// $data = $this->input->post();
 		// $data['tanggal'] = $tanggal->format('Y-m-d H:i:s');
+		$this->transaksi_model->removeKas($this->input->post('nominal'));
 		if ($this->laporan_model->create('pengeluaran',$data)) {
 			echo json_encode($data);
 		}
@@ -115,6 +116,9 @@ class Laporan extends CI_Controller {
 	}
 
 	function refunded($id){
+		$transaksi = $this->transaksi_model->getAll($id);
+		if($transaksi->jenis_piutang == "lunas" || $transaksi->jenis_piutang == "dp")
+			$this->transaksi_model->removeKas(intval($transaksi->total_bayar) - intval($transaksi->piutang_kurang));
 		$where = array('id' => $id);
 		$data = array(
 			'jenis_piutang' => 'refund',
@@ -129,15 +133,15 @@ class Laporan extends CI_Controller {
 			"id_transaksi" => $id,
 			"tanggal" => date("Y-m-d")
 		);
+
 		$barangs = $this->laporan_model->query("select * from detail_transaksi where id_transaksi = $id ");
 		foreach ($barangs as $barang) {
 			$this->transaksi_model->addStok(intval($barang->id_produk), $barang->jumlah);
 			$this->transaksi_model->addTerjual(intval($barang->id_produk), $barang->jumlah * -1);
 		}
-		$this->laporan_model->create('refund',$add);
 
 		$this->laporan_model->create('refund',$add);
-		echo json_encode($id);
+		echo json_encode($transaksi->jenis_piutang);
 	}
 
 	public function refund($id){

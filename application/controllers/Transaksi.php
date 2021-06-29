@@ -24,14 +24,19 @@ class Transaksi extends CI_Controller {
 		// header('Content-type: application/json');
 		if ($this->transaksi_model->read()->num_rows() > 0) {
 			foreach ($this->transaksi_model->read()->result() as $transaksi) {
+				$cetak = $transaksi->jenis_piutang == "lunas" ? '<a class="btn btn-sm btn-success" href="'.site_url('transaksi/cetak/').$transaksi->id.'">Cetak</a>' : '<a class="btn btn-sm btn-success" href="'.site_url('transaksi/lunas/').$transaksi->id.'">Lunas</a>';
 				$tanggal = new DateTime($transaksi->tanggal);
 				$data[] = array(
 					'tanggal' => $tanggal->format('d-m-Y H:i:s'),
 					'total_bayar' => $transaksi->total_bayar,
+					'nota' => $transaksi->nota,
 					'jumlah_uang' => $transaksi->jumlah_uang,
 					'diskon' => $transaksi->diskon,
 					'pelanggan' => $transaksi->pelanggan,
-					'action' => '<a class="btn btn-sm btn-success" href="'.site_url('transaksi/detail/').$transaksi->id.'">View</a> <a class="btn btn-sm btn-success" href="'.site_url('transaksi/cetak/').$transaksi->id.'">Print</a> <button class="btn btn-sm btn-danger" onclick="remove('.$transaksi->id.')">Delete</button>'
+					'action' => '
+					<a class="btn btn-sm btn-success" href="'.site_url('transaksi/detail/').$transaksi->id.'">View</a>'.
+					$cetak
+					.'<button class="btn btn-sm btn-danger" onclick="remove('.$transaksi->id.')">Delete</button>'
 				);
 			}
 		} else {
@@ -41,6 +46,19 @@ class Transaksi extends CI_Controller {
 			'data' => $data
 		);
 		echo json_encode($transaksi);
+	}
+
+	public function lunas($id){
+		$transaksi = $this->transaksi_model->getAll($id);
+		$this->transaksi_model->addKas(intval($transaksi->total_bayar) - intval($transaksi->piutang_kurang));
+		$data = array(
+			'jenis_piutang' => 'lunas',
+		);
+		$where = array(
+			'id' => $id
+		);
+		$this->transaksi_model->update_data($where,$data,'transaksi');
+		redirect("transaksi/cetak/".$id);
 	}
 
 	public function add()
@@ -64,8 +82,9 @@ class Transaksi extends CI_Controller {
 			'jenis_kirim' => $this->input->post('jenis_kirim'),
 			'ongkir' => $this->input->post('ongkir'),
 			'bank' => $bank,
-
 		);
+		if($this->input->post('jenis_piutang') == 'dp')
+			$this->transaksi_model->addKas(intval($data["total_bayar"]) - intval($data["piutang_kurang"]));
 		if ($this->transaksi_model->create($data)) {
 			$id_transaksi = $this->db->insert_id();
 			foreach ($produks as $produk) {
@@ -77,6 +96,8 @@ class Transaksi extends CI_Controller {
 				$this->transaksi_model->createDetail($detail);
 				$this->transaksi_model->removeStok(intval($produk->id_produk), $produk->jumlah);
 				$this->transaksi_model->addTerjual(intval($produk->id_produk), $produk->jumlah);
+				
+				
 			}
 			echo json_encode($id_transaksi);
 		}

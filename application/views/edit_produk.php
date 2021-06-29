@@ -61,9 +61,9 @@
             <div class="form-group">
               <label> Kategori </label>
               <select class="form-control" name="kategori" id="kategori">
-                        <?php foreach($kategori_produk as $k) : ?>
-                            <option value="<?php echo $k->id;?>"> <?php echo $k->kategori; ?></option>
-                        <?php endforeach; ?>
+                <?php foreach($kategori_produk as $k) : ?>
+                    <option value="<?php echo $k->id;?>" <?= $k->id == $u->kategori ? "selected" : "" ?> > <?php echo $k->kategori; ?></option>
+                <?php endforeach; ?>
                 </select>
               <?= form_error('kategori', '<small class="pl-3 text-danger">', '</small>'); ?>
             </div>

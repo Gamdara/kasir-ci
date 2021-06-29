@@ -28,14 +28,14 @@ class Transaksi_model extends CI_Model {
 	{
 		$this->db->where('id', $id);
 		$this->db->set('terjual', 'terjual+'.$jumlah, FALSE);
-		return $this->db->update('produk');;
+		return $this->db->update('produk');
 	}
 
 	public function removeTerjual($id, $jumlah)
 	{
 		$this->db->where('id', $id);
 		$this->db->set('terjual', 'terjual-'.$jumlah, FALSE);
-		return $this->db->update('produk');;
+		return $this->db->update('produk');
 	}
 
 	public function create($data)
@@ -45,7 +45,7 @@ class Transaksi_model extends CI_Model {
 
 	public function read()
 	{
-		$this->db->select('transaksi.id, transaksi.tanggal, transaksi.total_bayar, transaksi.jumlah_uang, transaksi.diskon, pelanggan.nama as pelanggan');
+		$this->db->select('transaksi.id,transaksi.nota, transaksi.tanggal, transaksi.total_bayar, transaksi.jumlah_uang, transaksi.diskon,transaksi.jenis_piutang, pelanggan.nama as pelanggan');
 		$this->db->from($this->table);
 		$this->db->join('pelanggan', 'transaksi.pelanggan = pelanggan.id', 'left outer');
 		$this->db->where("transaksi.jenis_piutang !=", "refund");
@@ -114,7 +114,7 @@ class Transaksi_model extends CI_Model {
 
 	public function getAll($id)
 	{
-		$this->db->select('transaksi.nota, transaksi.tanggal, transaksi.total_bayar, transaksi.bank, transaksi.jenis_bayar, transaksi.jumlah_uang, pengguna.nama as kasir, pelanggan.nama as nama_pelanggan, pelanggan.level as level, sum(jumlah) as jumlah_produk');
+		$this->db->select('transaksi.nota, transaksi.tanggal, transaksi.total_bayar, transaksi.bank, transaksi.jenis_bayar, transaksi.jumlah_uang,transaksi.piutang_kurang,transaksi.jenis_piutang, pengguna.nama as kasir, pelanggan.nama as nama_pelanggan, pelanggan.level as level, sum(jumlah) as jumlah_produk');
 		$this->db->from('transaksi');
 		$this->db->join('pengguna', 'transaksi.kasir = pengguna.id');
 		$this->db->join('pelanggan', 'transaksi.pelanggan = pelanggan.id');
@@ -139,6 +139,19 @@ class Transaksi_model extends CI_Model {
         $this->db->update($table,$data);
     }
 
+	public function removeKas($kas)
+	{
+		$this->db->where('id', 1);
+		$this->db->set('kas', 'kas-'.$kas, FALSE);
+		return $this->db->update('toko');
+	}
+
+	public function addKas($kas)
+	{
+		$this->db->where('id', 1);
+		$this->db->set('kas', 'kas+'.$kas, FALSE);
+		return $this->db->update('toko');
+	}
 }
 
 /* End of file Transaksi_model.php */

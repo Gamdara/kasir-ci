@@ -207,6 +207,12 @@
 
   function remove(nama){
     stok.row($("[name=" + nama + "]").closest("tr")).remove().draw();
+    
+    produk = produk.filter(x=>{
+        return x.id_produk != nama
+    })
+    console.log(produk)
+
     $("#tambah").attr("disabled", "disabled");
     if (stok.rows().count() < 1) {
         $("#simpan").attr("disabled", "disabled")

@@ -42,6 +42,7 @@
                 <tr>
                   <th>No</th>
                   <th>Tanggal</th>
+                  <th>No. nota</th>
                   <th>Total Bayar</th> 
                   <th>Jumlah Uang</th> 
                   <th>Diskon</th> 

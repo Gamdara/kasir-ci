@@ -21,12 +21,15 @@ class Dashboard extends CI_Controller {
 			group by CAST(transaksi.tanggal AS DATE), produk.nama_produk
 			");
 			$pengeluaran = $this->transaksi_model->query("select ifnull(sum(nominal),0) as total_pengeluaran from pengeluaran where tanggal = curdate()")[0];
+			$kas = $this->transaksi_model->query("select kas from toko where id = 1")[0]->kas;
 
 			$data["total_penjualan"] = "Rp " . number_format($transaksi->total_bayar,2,',','.'); 
 			$data["total_transaksi"] = $transaksi->total_transaksi;
 			$data["total_pengeluaran"] = "Rp " . number_format( $pengeluaran->total_pengeluaran,2,',','.'); 
+			$data["kas"] = "Rp " . number_format( $kas,2,',','.'); 
 			
-			$data["produk"] = $this->transaksi_model->query("select * from produk");
+
+			$data["produk"] = $this->transaksi_model->query("select * from produk order by terjual desc limit 3");
 			$data["pengeluaran"] = $this->transaksi_model->query("select * from pengeluaran");
 			$data["produk_harian"] = $detail;
 			$data["pengeluaran_harian"] = $this->transaksi_model->query("select * from pengeluaran where tanggal = curdate()");

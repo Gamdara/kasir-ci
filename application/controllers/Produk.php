@@ -10,6 +10,7 @@ class Produk extends CI_Controller {
 			redirect('/');
 		}
 		$this->load->model('produk_model');
+		$this->load->model('transaksi_model');
 	}
 
 	public function index()

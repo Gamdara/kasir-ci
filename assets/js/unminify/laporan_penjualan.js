@@ -32,6 +32,7 @@ let laporan_transaksi = $("#laporan_transaksi").DataTable( {
         columns:[ 
         {data: null}, 
         {data: "tanggal"},
+        {data: "nota"},
         {data: "total_bayar"}, 
         {data: "jumlah_uang"},
         {data: "diskon"}, 
@@ -85,6 +86,8 @@ let laporan_bulanan = $("#laporan_bulanan").DataTable( {
 
 function reloadTable() {
     laporan_penjualan.ajax.reload()
+    laporan_transaksi.ajax.reload()
+    
 }
 
 function remove(id) {

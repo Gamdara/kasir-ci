@@ -85,7 +85,7 @@
               <div class="mb-0" style="">
                 <br>
                 <h5 class="mr-0">Piutang</h5>
-                <h5 class="mr-0">DP/Lunas : <?= $transaksi->piutang_kurang == 0 ? 'Lunas' : 'DP' ?></h5>
+                <h5 class="mr-0">DP/Full : <?= $transaksi->piutang_kurang == 0 ? 'Full' : 'DP' ?></h5>
                 <h5 class="mr-0">Kekurangan : <?= $transaksi->piutang_kurang ?></h5>
               </div>
         </div>
@@ -94,7 +94,7 @@
                 <br>
                 <h5 class="mr-0">Diskon : <?= $transaksi->diskon ?></h5>
                 <h5 class="mr-0">Bayar : <?= $transaksi->jumlah_uang ?></h5>
-                <h5 class="mr-0">Kembali : <?= $transaksi->jumlah_uang - $transaksi->total_bayar - $transaksi->diskon ?></h5>
+                <h5 class="mr-0">Kembali : <?= $transaksi->jumlah_uang - ($transaksi->total_bayar - $transaksi->diskon - $transaksi->piutang_kurang) ?></h5>
                 <h5 class="mr-0">Jenis Bayar : <?= $transaksi->jenis_bayar ? $transaksi->jenis_bayar : "-" ?></h5>
               </div>
               <!-- <?php print_r($transaksi) ?> -->

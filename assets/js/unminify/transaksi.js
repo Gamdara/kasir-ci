@@ -1,6 +1,10 @@
 let isCetak = false,
 produk = [],
+isDp = false,
 isReseller = false,
+hargabarang = 0,
+totalbayar = 0,
+
 transaksi = $("#transaksi").DataTable({
     responsive: true,
     lengthChange: false,
@@ -10,6 +14,7 @@ transaksi = $("#transaksi").DataTable({
 
 function reloadTable() {
     transaksi.ajax.reload()
+    console.log(transaksi.rows().data())
 }
 
 function nota(jumlah) {
@@ -40,12 +45,16 @@ function getNama() {
 }
 
 function totalBayar(){
-    let total = parseInt($("#total").html());
+    let total = hargabarang
     let piutang_kurang = parseInt($("#piutang_kurang").val()) || 0;
     let ongkir= parseInt($("#ongkir").val()) || 0;
-    let bayar = total - piutang_kurang + ongkir;
-    console.log(bayar)
+    let diskon= $('[name="diskon"]').val();
+    let bayar = total - piutang_kurang + ongkir - diskon;
+    
+    totalbayar = bayar
     $(".total_bayar").html(bayar)
+    $("#total").html(bayar)
+    
 }
 
 function setReseller(){
@@ -57,11 +66,13 @@ function setReseller(){
     console.log(isReseller)
 }
 
-function isDp(str){
-    if(str == 'dp')
+function setDp(bool){
+    isDp = bool
+    if(isDp)
     $("#nominal").removeAttr("disabled")
     else
     $("#nominal").attr("disabled", "disabled");
+    setKurang()
 }
 
 function isDelivery(){
@@ -72,9 +83,13 @@ function isDelivery(){
 }
 
 function setKurang(){
-    let nominal = parseInt($("#nominal").val()),
-    total = parseInt($("#total").html());
-    $("#piutang_kurang").val(total - nominal)
+    console.log(isDp)
+    let nominal = isDp ? parseInt($("#nominal").val()) : 0
+    $("#piutang_kurang").val(totalbayar - nominal)
+    if (nominal > 0)
+        $("#total").html(nominal || totalbayar)
+    else
+        $("#total").html(totalbayar)
 }
 
 function checkStok() {
@@ -117,7 +132,6 @@ function checkStok() {
                         id_produk: barcode,
                         jumlah: jumlah
                     });
-                    console.log(produk)
                     transaksi.row.add([
                         dataBarcode,
                         nama_produk,
@@ -126,7 +140,8 @@ function checkStok() {
                         hargaTotal,
                         `<button name="${barcode}" class="btn btn-sm btn-danger" onclick="remove('${barcode}')">Hapus</btn>`]).draw();
 
-                    $("#total").html(total + harga * jumlah);
+                    hargabarang = hargabarang + total + harga * jumlah
+                    totalBayar()
                     $("#jumlah").val("");
                     $("#tambah").attr("disabled", "disabled");
                     $("#bayar").removeAttr("disabled")
@@ -134,6 +149,7 @@ function checkStok() {
             }
         }
     })
+    console.log(transaksi.rows().data())
 }
 
 function bayarCetak() {
@@ -146,8 +162,10 @@ function bayar() {
 
 function checkEmpty() {
     let barcode = $("#barcode").val(),
+        pelanggan = $("#pelanggan").val(),
         jumlah = $("#jumlah").val();
-    if (barcode !== "" && jumlah !== "" && parseInt(jumlah) >= 1) {
+    console.log(pelanggan)
+    if (pelanggan != null && barcode !== "" && jumlah !== "" && parseInt(jumlah) >= 1) {
         $("#tambah").removeAttr("disabled")    
     } else {
         $("#tambah").attr("disabled", "disabled")
@@ -155,9 +173,12 @@ function checkEmpty() {
 }
 
 function checkUang() {
+    console.log($("input[name='piutang']:checked").val())
     let jumlah_uang = $('[name="jumlah_uang"').val(),
+        diskon= $('[name="diskon"]').val(),
         total_bayar = parseInt($(".total_bayar").html());
-    if (jumlah_uang !== "" && jumlah_uang >= total_bayar) {
+        
+    if (jumlah_uang !== "" && jumlah_uang >= total_bayar - diskon) {
         $("#add").removeAttr("disabled");
         $("#cetak").removeAttr("disabled")
     } else {
@@ -172,8 +193,13 @@ function remove(nama) {
         harga = data[2],
         total = parseInt($("#total").html());
         akhir = total - stok * harga
+
     $("#total").html(akhir);
     transaksi.row($("[name=" + nama + "]").closest("tr")).remove().draw();
+    produk = produk.filter(x=>{
+        return x.id_produk != nama
+    })
+    console.log(produk)
     $("#tambah").attr("disabled", "disabled");
     if (akhir < 1) {
         $("#bayar").attr("disabled", "disabled")
@@ -196,14 +222,14 @@ function add() {
             nota: $("#nota").html(),
             marketplace: $("#marketplace").val(),
             jenis_kirim: $("#jenis_kirim").val(),
-            jenis_piutang: $("#piutang").val(),
+            jenis_piutang: $("input[name='piutang']:checked").val(),
             piutang_kurang : $("#piutang_kurang").val(),
             ongkir: $("#ongkir").val(),
             jenis_bayar: $("#jenis_bayar").val(),
             bank: $("#bank").val(),
         },
         success: res => {
-            console.log($("#pelanggan").val())
+            console.log($("#piutang").val())
             if (isCetak) {
                 Swal.fire("Sukses", "Sukses Membayar", "success").
                     then(() => window.location.href = `${cetakUrl}${res}`)
@@ -229,7 +255,7 @@ function kembalian() {
     let total = $(".total_bayar").html(),
         jumlah_uang = $('[name="jumlah_uang"').val(),
         diskon = $('[name="diskon"]').val();
-    $(".kembalian").html(jumlah_uang - (total - diskon));
+    $(".kembalian").html(jumlah_uang - total);
     checkUang()
 }
 $("#barcode").select2({
@@ -274,7 +300,8 @@ $(".modal").on("show.bs.modal", () => {
         total = $("#total").html(),
         jumlah_uang = $('[name="jumlah_uang"').val();
     $("#tanggal").val(now), $(".kembalian").html(Math.max(jumlah_uang - total, 0))
-    totalBayar();
+    $(".total_bayar").html($("#total").html())
+
 });
 $("#form").validate({
     errorElement: "span",

@@ -90,7 +90,7 @@
               <div class="mb-0" style="">
                 <br>
                 <h5 class="mr-0">Piutang</h5>
-                <h5 class="mr-0">DP/Lunas : <?= $transaksi->jenis_piutang ? $transaksi->jenis_piutang : "-" ?></h5>
+                <h5 class="mr-0">DP/Full : <?= $transaksi->jenis_piutang ? $transaksi->jenis_piutang : "-" ?></h5>
                 <h5 class="mr-0">Kekurangan : <?= $transaksi->piutang_kurang ? $transaksi->piutang_kurang : "-"?></h5>
               </div>
         </div>
@@ -99,7 +99,7 @@
                 <br>
                 <h5 class="mr-0">Diskon : <?= $transaksi->diskon ?></h5>
                 <h5 class="mr-0">Bayar : <?= $transaksi->jumlah_uang ?></h5>
-                <h5 class="mr-0">Kembali : <?= $transaksi->jumlah_uang - $transaksi->total_bayar - $transaksi->diskon ?></h5>
+                <h5 class="mr-0">Kembali : <?= $transaksi->jumlah_uang - ($transaksi->total_bayar - $transaksi->diskon - $transaksi->piutang_kurang) ?></h5>
                 <h5 class="mr-0">Jenis Bayar : <?= $transaksi->jenis_bayar ? $transaksi->jenis_bayar : "-" ?></h5>
               </div>
               <!-- <?php print_r($transaksi) ?> -->
@@ -155,8 +155,9 @@
           url: '<?php echo base_url('laporan/refunded/'.$id); ?>',
           type: "get",
           success: res => {
-            Swal.fire("Sukses", "Sukses Refund", "success").
-                then(() => window.location.href = `<?php echo base_url('laporan/refund/'.$id); ?>`)
+            console.log(res)
+            Swal.fire("Sukses", "Sukses Refund", "success")
+            .then(() => window.location.href = `<?php echo base_url('laporan/refund/'.$id); ?>`)
           },
           error: err => {
               console.log(err)
