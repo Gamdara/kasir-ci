@@ -12,6 +12,13 @@ class Transaksi_model extends CI_Model {
 		return $this->db->update('produk');
 	}
 
+	public function addStok($id, $stok)
+	{
+		$this->db->where('id', $id);
+		$this->db->set('stok', 'stok+'.$stok, FALSE);
+		return $this->db->update('produk');
+	}
+
 	public function createDetail($data)
 	{
 		return $this->db->insert("detail_transaksi", $data);
@@ -21,6 +28,13 @@ class Transaksi_model extends CI_Model {
 	{
 		$this->db->where('id', $id);
 		$this->db->set('terjual', 'terjual+'.$jumlah, FALSE);
+		return $this->db->update('produk');;
+	}
+
+	public function removeTerjual($id, $jumlah)
+	{
+		$this->db->where('id', $id);
+		$this->db->set('terjual', 'terjual-'.$jumlah, FALSE);
 		return $this->db->update('produk');;
 	}
 

@@ -131,8 +131,8 @@ class Laporan extends CI_Controller {
 		);
 		$barangs = $this->laporan_model->query("select * from detail_transaksi where id_transaksi = $id ");
 		foreach ($barangs as $barang) {
-			$this->transaksi_model->removeStok($barang->id, $produk->jumlah * -1);
-			$this->transaksi_model->addTerjual($barang->id, $produk->jumlah * -1);
+			$this->transaksi_model->addStok(intval($barang->id_produk), $barang->jumlah);
+			$this->transaksi_model->addTerjual(intval($barang->id_produk), $barang->jumlah * -1);
 		}
 		$this->laporan_model->create('refund',$add);
 
