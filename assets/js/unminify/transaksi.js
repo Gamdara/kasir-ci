@@ -229,7 +229,7 @@ function kembalian() {
     let total = $(".total_bayar").html(),
         jumlah_uang = $('[name="jumlah_uang"').val(),
         diskon = $('[name="diskon"]').val();
-    $(".kembalian").html(jumlah_uang - total - diskon);
+    $(".kembalian").html(jumlah_uang - (total - diskon));
     checkUang()
 }
 $("#barcode").select2({
