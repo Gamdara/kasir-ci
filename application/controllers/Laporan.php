@@ -96,6 +96,9 @@ class Laporan extends CI_Controller {
 	}
 
 	function bayar($id){
+		$transaksi = $this->transaksi_model->getAll($id);
+		if($transaksi->jenis_piutang == "lunas" || $transaksi->jenis_piutang == "dp")
+			$this->transaksi_model->addKas(intval($transaksi->piutang_kurang));
 		$where = array('id' => $id);
 		$bank = $this->input->post('jenis_bayar') == "cash" ? "" : $this->input->post('bank');
 		$data = array(
@@ -109,8 +112,7 @@ class Laporan extends CI_Controller {
 			'id' => $id
 		);
 		$this->laporan_model->update_data($where,$data,'transaksi');
-		$this->laporan_model->addJumlah($id,$this->input->post('jumlah_uang'),$this->input->post('total_bayar'));
-		$this->transaksi_model->addKas();
+		$this->laporan_model->addJumlah($id,$this->input->post('jumlah_uang'));
 		
 		echo json_encode($id);
 	}
