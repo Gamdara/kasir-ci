@@ -23,7 +23,7 @@ class Produk_model extends CI_Model {
 	public function tambah()
     {
 		$barcode = $this->input->post('nama', true);
-		$barcode = preg_replace('#[aeiou]+#i', '', $barcode);
+		$barcode = preg_replace('#[aeiou\+\-]+#i', '', $barcode);
 		$barcode = preg_replace('/[0]/', '', $barcode );
 		$barcode = strtoupper($barcode);
 
