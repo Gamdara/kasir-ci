@@ -83,8 +83,9 @@ class Transaksi extends CI_Controller {
 			'ongkir' => $this->input->post('ongkir'),
 			'bank' => $bank,
 		);
-		if($this->input->post('jenis_piutang') == 'dp')
+		if($this->input->post('jenis_piutang') == 'dp' || $this->input->post('jenis_piutang') == 'lunas')
 			$this->transaksi_model->addKas(intval($data["total_bayar"]) - intval($data["piutang_kurang"]));
+		
 		if ($this->transaksi_model->create($data)) {
 			$id_transaksi = $this->db->insert_id();
 			foreach ($produks as $produk) {
@@ -96,7 +97,6 @@ class Transaksi extends CI_Controller {
 				$this->transaksi_model->createDetail($detail);
 				$this->transaksi_model->removeStok(intval($produk->id_produk), $produk->jumlah);
 				$this->transaksi_model->addTerjual(intval($produk->id_produk), $produk->jumlah);
-				
 				
 			}
 			echo json_encode($id_transaksi);
@@ -137,7 +137,9 @@ class Transaksi extends CI_Controller {
 	public function delete()
 	{
 		$id = $this->input->post('id');
+		$transaksi = $this->transaksi_model->getAll($id);
 		if ($this->transaksi_model->delete($id)) {
+			$this->transaksi_model->removeKas(intval($transaksi->total_bayar));
 			echo json_encode('sukses');
 		}
 	}

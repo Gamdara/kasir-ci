@@ -76,7 +76,7 @@
                 </div>
                 <div class="form-group">
                   <label>Jumlah Uang</label>
-                  <input placeholder="Jumlah Uang" type="number" class="form-control" name="jumlah_uang" onkeyup="kembalian()" required>
+                  <input placeholder="Jumlah Uang" type="number" class="form-control" name="jumlah_uang" onkeyup="kembalian()" required value="0">
                 </div>
                 <div class="form-group">
                   <b>Piutang Kurang:</b> <span id="piutang_kurang"><?= $u->piutang_kurang ?></span>

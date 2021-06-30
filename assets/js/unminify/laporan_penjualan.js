@@ -87,7 +87,7 @@ let laporan_bulanan = $("#laporan_bulanan").DataTable( {
 function reloadTable() {
     laporan_penjualan.ajax.reload()
     laporan_transaksi.ajax.reload()
-    
+    laporan_piutang.ajax.reload()
 }
 
 function remove(id) {
@@ -96,7 +96,8 @@ function remove(id) {
         text: "Hapus data ini?",
         type: "warning",
         showCancelButton: true
-    }).then(()=> {
+    }).then((result)=> {
+        if(result.isCanceled) return
         $.ajax( {
             url:deleteUrl,
             type:"post",

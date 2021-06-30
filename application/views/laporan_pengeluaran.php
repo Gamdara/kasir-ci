@@ -188,6 +188,12 @@
   }
 
   function del(id) {
+    Swal.fire( {
+        title: "Hapus",
+        text: "Hapus data ini?",
+        type: "warning",
+        showCancelButton: true
+    }).then(()=> {
       $.ajax({
           url: deleteUrl+id,
           type: "get",
@@ -199,8 +205,8 @@
               console.log(err)
           }
       })
-    }
-
+    })
+  }
   laporan_penjualan.on("order.dt search.dt", () => {
     laporan_penjualan.column(0, {
         search: "applied",

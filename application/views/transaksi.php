@@ -130,11 +130,11 @@
               <div style="float:right">
                 <input type="radio" name="piutang" id="piutang" value="dp" onchange="setDp(true)">
                 DP
-                <input type="radio" name="piutang" id="piutang" value="full" onchange="setDp(false)" checked>
+                <input type="radio" name="piutang" id="piutang" value="full" onchange="setDp(false)">
                 Full
               </div>
               
-              <input class="form-control form-control-sm" name="nominal" id="nominal" type="number" placeholder="Nominal" onkeyup="setKurang(); " disabled>
+              <input class="form-control form-control-sm" name="nominal" id="nominal" type="number" placeholder="Nominal" onkeyup="totalBayar() " disabled>
               <input class="form-control form-control-sm" name="piutang_kurang" id="piutang_kurang" type="number" placeholder="Kurang" disabled value="">
             </div>
             

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 29, 2021 at 11:18 PM
+-- Generation Time: Jun 30, 2021 at 01:42 PM
 -- Server version: 8.0.23
 -- PHP Version: 7.4.3
 
@@ -40,31 +40,6 @@ CREATE TABLE `detail_transaksi` (
 --
 
 INSERT INTO `detail_transaksi` (`id`, `id_transaksi`, `id_produk`, `jumlah`) VALUES
-(1, 10, 1, 2),
-(2, 10, 2, 3),
-(3, 11, 1, 2),
-(4, 11, 2, 3),
-(5, 12, 1, 2),
-(6, 13, 1, 2),
-(7, 14, 1, 1),
-(8, 15, 1, 1),
-(9, 16, 1, 1),
-(10, 17, 2, 2),
-(11, 18, 1, 2),
-(12, 19, 1, 3),
-(13, 20, 1, 3),
-(14, 21, 1, 3),
-(15, 22, 1, 3),
-(16, 23, 1, 4),
-(17, 24, 1, 1),
-(18, 24, 2, 1),
-(19, 25, 1, 4),
-(20, 26, 2, 3),
-(21, 27, 2, 2),
-(22, 28, 1, 2),
-(23, 29, 1, 5),
-(24, 30, 1, 2),
-(25, 31, 2, 2),
 (26, 32, 2, 4),
 (27, 33, 2, 4),
 (28, 34, 2, 2),
@@ -79,7 +54,15 @@ INSERT INTO `detail_transaksi` (`id`, `id_transaksi`, `id_produk`, `jumlah`) VAL
 (37, 43, 2, 2),
 (38, 44, 1, 2),
 (39, 45, 1, 3),
-(40, 46, 2, 2);
+(40, 46, 2, 2),
+(41, 47, 2, 2),
+(42, 48, 1, 3),
+(43, 49, 1, 3),
+(44, 50, 1, 3),
+(45, 51, 1, 1),
+(46, 52, 2, 1),
+(47, 53, 1, 2),
+(48, 54, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -145,9 +128,9 @@ INSERT INTO `kategori_produk` (`id`, `kategori`) VALUES
 --
 CREATE TABLE `laporan_bulanan` (
 `bulan` varchar(69)
-,`jumlah_transaksi` decimal(42,0)
 ,`total_beli` decimal(54,0)
 ,`total_jual` decimal(54,0)
+,`jumlah_transaksi` decimal(42,0)
 );
 
 -- --------------------------------------------------------
@@ -157,10 +140,10 @@ CREATE TABLE `laporan_bulanan` (
 -- (See below for the actual view)
 --
 CREATE TABLE `laporan_harian` (
-`jumlah_transaksi` bigint
-,`tanggal` varchar(40)
+`tanggal` varchar(40)
 ,`total_beli` decimal(32,0)
 ,`total_jual` decimal(32,0)
+,`jumlah_transaksi` bigint
 );
 
 -- --------------------------------------------------------
@@ -199,16 +182,6 @@ CREATE TABLE `pengeluaran` (
   `jenis_bayar` varchar(100) NOT NULL,
   `keterangan` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `pengeluaran`
---
-
-INSERT INTO `pengeluaran` (`id`, `tanggal`, `nominal`, `jenis_bayar`, `keterangan`) VALUES
-(9, '2021-06-27', 30000, 'cash', 'Makan'),
-(13, '2021-06-29', 30000, 'Cash', 'Minum'),
-(14, '2021-06-29', 20000, '', 'Stok'),
-(15, '2021-06-29', 30000, 'Cash', 'makan');
 
 -- --------------------------------------------------------
 
@@ -275,8 +248,8 @@ CREATE TABLE `produk` (
 --
 
 INSERT INTO `produk` (`id`, `barcode`, `nama_produk`, `kategori`, `satuan`, `harga_beli`, `harga_jual`, `harga_reseller`, `stok`, `terjual`) VALUES
-(1, 'PULS ALPRB', 'Voucher Pulsa 50000', 1, 2, 45000, 55000, 50000, 72, 28),
-(2, 'DJRM SPER', 'Djarum Super 12', 2, 1, 14000, 18000, 18000, 45, 19),
+(1, 'PULS ALPRB', 'Voucher Pulsa 50000', 1, 2, 45000, 55000, 50000, 60, 40),
+(2, 'DJRM SPER', 'Djarum Super 12', 2, 1, 14000, 18000, 18000, 41, 23),
 (3, 'VCHR PLS ', 'Voucher Pulsa 10000', 1, 0, 10000, 10000, 10000, 0, 0);
 
 -- --------------------------------------------------------
@@ -296,32 +269,8 @@ CREATE TABLE `refund` (
 --
 
 INSERT INTO `refund` (`id`, `id_transaksi`, `tanggal`) VALUES
-(1, 3, '2021-06-27'),
-(2, 13, '2021-06-27'),
-(5, 16, '2021-06-27'),
-(6, 28, '2021-06-29'),
-(7, 28, '2021-06-29'),
-(8, 29, '2021-06-29'),
-(9, 29, '2021-06-29'),
-(10, 30, '2021-06-29'),
-(11, 30, '2021-06-29'),
-(12, 31, '2021-06-29'),
-(13, 31, '2021-06-29'),
-(14, 32, '2021-06-29'),
-(15, 32, '2021-06-29'),
-(16, 41, '2021-06-29'),
-(17, 14, '2021-06-29'),
-(18, 39, '2021-06-29'),
-(19, 24, '2021-06-29'),
-(20, 42, '2021-06-29'),
-(21, 40, '2021-06-29'),
-(22, 37, '2021-06-29'),
-(23, 43, '2021-06-29'),
-(24, 22, '2021-06-29'),
-(25, 44, '2021-06-29'),
-(26, 45, '2021-06-29'),
-(27, 38, '2021-06-29'),
-(28, 25, '2021-06-29');
+(28, 25, '2021-06-29'),
+(29, 52, '2021-06-30');
 
 -- --------------------------------------------------------
 
@@ -473,7 +422,7 @@ CREATE TABLE `toko` (
 --
 
 INSERT INTO `toko` (`id`, `nama`, `alamat`, `kas`) VALUES
-(1, 'Toko Tuma', 'Jln Raya Klesem Selatan No 1E Wanadadi, Banjarnegara, Indonesia', 184001);
+(1, 'Toko Tuma', 'Jln Raya Klesem Selatan No 1E Wanadadi, Banjarnegara, Indonesia', 0);
 
 -- --------------------------------------------------------
 
@@ -498,41 +447,6 @@ CREATE TABLE `transaksi` (
   `ongkir` int NOT NULL,
   `bank` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `transaksi`
---
-
-INSERT INTO `transaksi` (`id`, `tanggal`, `total_bayar`, `jumlah_uang`, `diskon`, `pelanggan`, `nota`, `kasir`, `marketplace`, `jenis_piutang`, `piutang_kurang`, `jenis_bayar`, `jenis_kirim`, `ongkir`, `bank`) VALUES
-(13, '2021-06-25 00:58:17', 110000, 1111111, 0, 1, '9MJNXQM0A2UX9SL', 1, 0, 'refund', 0, '', '', 0, ''),
-(14, '2021-06-25 09:39:49', 55000, 100000, 0, 1, 'ZC5HK3R975XI6AC', 1, 0, 'refund', 0, '', '', 0, ''),
-(16, '2021-06-25 09:39:49', 55000, 100000, 0, 1, 'ZC5HK3R975XI6AC', 1, 0, 'refund', 0, '', '', 0, ''),
-(18, '2021-06-25 19:59:04', 110000, 1000000, 0, 2, 'M3HJUCZYAYPC2HA', 1, 0, '', 0, '', '', 0, ''),
-(19, '2021-06-25 22:45:29', 165000, 1000000, 0, 1, '0FE2WMTYF3URGQK', 1, 3, 'lunas', 0, 'cash', 'JNE', 20000, 'BCA'),
-(20, '2021-06-27 12:55:41', 165000, 100000, 0, 1, '6DIDQ15QBYJM9UN', 1, 1, 'lunas', 0, 'cash', '', 0, 'BCA'),
-(22, '2021-06-27 16:43:56', 150000, 1000000, 0, 2, 'DTH61EEUWK9MSQ2', 1, 0, 'refund', 0, 'bank', '', 0, 'BCA'),
-(23, '2021-06-27 18:45:12', 220000, 100000, 0, 1, '55I45POMUS8PRQV', 1, 0, 'dp', 120000, 'bank', '', 0, 'BCA'),
-(24, '2021-06-27 21:35:01', 68000, 70000, 0, 2, 'S15JRA03WRAKTRR', 1, 0, 'refund', 0, 'bank', '', 0, 'BCA'),
-(25, '2021-06-29 00:17:51', 220000, 220000, 0, 1, 'LX25U7BEGYIX0WA', 1, 0, 'refund', 0, 'bank', '', 0, 'BCA'),
-(27, '2021-06-29 00:40:42', 36000, 36000, 0, 1, 'ANR7AINQJ7TGIGU', 1, 0, 'dp', 0, 'bank', '', 0, 'BCA'),
-(28, '2021-06-29 12:00:56', 110000, 110000, 0, 1, 'VT5WPLJ13MA9TK4', 1, 0, 'refund', 0, 'bank', '', 0, 'BCA'),
-(29, '2021-06-29 12:07:41', 275000, 275000, 0, 1, 'RTXQMLKPUASP964', 1, 0, 'refund', 0, 'bank', '', 0, 'BCA'),
-(30, '2021-06-29 12:09:25', 110000, 110000, 0, 1, '0SSNT9VM5H5IRX4', 1, 0, 'refund', 0, 'bank', '', 0, 'BCA'),
-(31, '2021-06-29 12:12:22', 36000, 36000, 0, 1, 'LHQ5OX87UCH1V4R', 1, 0, 'refund', 0, 'bank', '', 0, 'BCA'),
-(32, '2021-06-29 12:14:27', 72000, 72000, 0, 1, 'IU5DG6OVFE297R6', 1, 0, 'refund', 0, 'bank', '', 0, 'BCA'),
-(33, '2021-06-29 19:03:08', 72000, 30000, 10000, 1, 'WJBE44JBHMS28X4', 1, 3, 'dp', 42000, 'bank', 'JNT', 10000, 'BCA'),
-(34, '2021-06-29 19:05:04', 36000, 20000, 0, 1, 'R2ZAG983C11DIWW', 1, 0, 'dp', 18000, 'bank', '', 0, 'BCA'),
-(36, '2021-06-29 19:21:12', 18000, 20000, 0, 1, '5D0WBIQQ2WKK5A6', 1, 0, 'dp', 0, 'bank', '', 0, 'BCA'),
-(37, '2021-06-29 19:23:47', 36000, 36000, 0, 1, '749VNY7QMQAMR4T', 1, 0, 'refund', 0, 'bank', '', 0, 'BCA'),
-(38, '2021-06-29 19:26:28', 36000, 40000, 0, 1, 'ZT91UKQNAT5AWBM', 1, 0, 'refund', 0, 'bank', '', 0, 'BCA'),
-(39, '2021-06-29 19:35:42', 110000, 110000, 0, 1, '4X37E3STQGY9JG4', 1, 0, 'refund', 0, 'bank', '', 0, 'BCA'),
-(40, '2021-06-29 19:52:39', 36000, 36000, 0, 1, 'ML0GQVDYBRTUF6U', 1, 0, 'refund', 0, 'bank', '', 0, 'BCA'),
-(41, '2021-06-29 19:55:58', 18000, 18000, 0, 1, 'T2C18U6KCVAP5VH', 1, 0, 'refund', 0, 'bank', '', 0, 'BCA'),
-(42, '2021-06-29 21:29:48', 36000, 20000, 0, 1, 'GFKKDX0T38IALZ3', 1, 0, 'refund', 16000, 'bank', '', 0, 'BCA'),
-(43, '2021-06-29 21:35:14', 36000, 40000, 4000, 1, 'XK2S5WVKRQ5JNQY', 1, 0, 'refund', 0, 'bank', '', 0, 'BCA'),
-(44, '2021-06-29 21:37:33', 110000, 111111, 0, 1, '98CHM6X5NUBJS7W', 1, 0, 'refund', 0, 'bank', '', 0, 'BCA'),
-(45, '2021-06-29 21:38:54', 150000, 100000, 0, 2, 'GIDYOG66HM37E0M', 1, 0, 'refund', 50000, 'cash', '', 0, ''),
-(46, '2021-06-29 22:48:13', 20000, 20000, 0, 1, 'SLMLOI0Y8PSGOB2', 1, 0, 'dp', 16000, 'cash', '', 0, '');
 
 -- --------------------------------------------------------
 
@@ -666,7 +580,7 @@ ALTER TABLE `transaksi`
 -- AUTO_INCREMENT for table `detail_transaksi`
 --
 ALTER TABLE `detail_transaksi`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `gudang`
@@ -696,7 +610,7 @@ ALTER TABLE `pelanggan`
 -- AUTO_INCREMENT for table `pengeluaran`
 --
 ALTER TABLE `pengeluaran`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `pengguna`
@@ -720,7 +634,7 @@ ALTER TABLE `produk`
 -- AUTO_INCREMENT for table `refund`
 --
 ALTER TABLE `refund`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `reseller`
@@ -762,7 +676,7 @@ ALTER TABLE `toko`
 -- AUTO_INCREMENT for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

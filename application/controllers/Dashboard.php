@@ -21,12 +21,16 @@ class Dashboard extends CI_Controller {
 			group by CAST(transaksi.tanggal AS DATE), produk.nama_produk
 			");
 			$pengeluaran = $this->transaksi_model->query("select ifnull(sum(nominal),0) as total_pengeluaran from pengeluaran where tanggal = curdate()")[0];
-			$kas = $this->transaksi_model->query("select kas from toko where id = 1")[0]->kas;
+			
+			$pemasukan = $this->transaksi_model->query("select ifnull(sum(total_bayar - piutang_kurang),0) as kas from transaksi where jenis_piutang = 'dp' or jenis_piutang='lunas'")[0]->kas;
+			$keluar = $this->transaksi_model->query("select ifnull(sum(nominal),0) as total_pengeluaran from pengeluaran")[0]->total_pengeluaran;
+			$refund = $this->transaksi_model->query("select ifnull(sum(total_bayar - piutang_kurang),0) as kas from transaksi where jenis_piutang = 'refund'")[0]->kas;
+			
 
 			$data["total_penjualan"] = "Rp " . number_format($transaksi->total_bayar,2,',','.'); 
 			$data["total_transaksi"] = $transaksi->total_transaksi;
 			$data["total_pengeluaran"] = "Rp " . number_format( $pengeluaran->total_pengeluaran,2,',','.'); 
-			$data["kas"] = "Rp " . number_format( $kas,2,',','.'); 
+			$data["kas"] = "Rp " . number_format( $pemasukan-$keluar-$refund,2,',','.'); 
 			
 
 			$data["produk"] = $this->transaksi_model->query("select * from produk order by terjual desc limit 3");

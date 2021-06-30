@@ -74,7 +74,7 @@ class Laporan extends CI_Controller {
 		header('Content-type: application/json');
 		$data = array();
 		$no = 0;
-		$piutangs = $this->laporan_model->query("select * from transaksi where jenis_piutang = 'dp'");
+		$piutangs = $this->laporan_model->query("select * from transaksi where jenis_piutang = 'dp' or jenis_piutang = 'full'");
 		foreach ($piutangs as $piutang) {
 			$piutang->no = ++$no;
 			$piutang->action = "
@@ -97,8 +97,10 @@ class Laporan extends CI_Controller {
 
 	function bayar($id){
 		$transaksi = $this->transaksi_model->getAll($id);
-		if($transaksi->jenis_piutang == "lunas" || $transaksi->jenis_piutang == "dp")
+		if($transaksi->jenis_piutang == "dp")
 			$this->transaksi_model->addKas(intval($transaksi->piutang_kurang));
+		else
+			$this->transaksi_model->addKas(intval($transaksi->total_bayar));
 		$where = array('id' => $id);
 		$bank = $this->input->post('jenis_bayar') == "cash" ? "" : $this->input->post('bank');
 		$data = array(

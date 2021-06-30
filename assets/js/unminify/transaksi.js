@@ -46,14 +46,20 @@ function getNama() {
 
 function totalBayar(){
     let total = hargabarang
-    let piutang_kurang = parseInt($("#piutang_kurang").val()) || 0;
     let ongkir= parseInt($("#ongkir").val()) || 0;
     let diskon= $('[name="diskon"]').val();
-    let bayar = total - piutang_kurang + ongkir - diskon;
-    
+    let bayar = total + ongkir - diskon;
     totalbayar = bayar
+
     $(".total_bayar").html(bayar)
     $("#total").html(bayar)
+    
+    let nominal = isDp ? parseInt($("#nominal").val()) : 0
+    $("#piutang_kurang").val(totalbayar - nominal)
+    if (nominal > 0)
+        $("#total").html(nominal || totalbayar)
+    else
+        $("#total").html(totalbayar)
     
 }
 
@@ -72,7 +78,7 @@ function setDp(bool){
     $("#nominal").removeAttr("disabled")
     else
     $("#nominal").attr("disabled", "disabled");
-    setKurang()
+    totalBayar()
 }
 
 function isDelivery(){
@@ -84,12 +90,7 @@ function isDelivery(){
 
 function setKurang(){
     console.log(isDp)
-    let nominal = isDp ? parseInt($("#nominal").val()) : 0
-    $("#piutang_kurang").val(totalbayar - nominal)
-    if (nominal > 0)
-        $("#total").html(nominal || totalbayar)
-    else
-        $("#total").html(totalbayar)
+    
 }
 
 function checkStok() {
@@ -121,11 +122,18 @@ function checkStok() {
                     if (stok < data[3] + jumlah) {
                         Swal.fire('stok', "Stok Tidak Cukup", "warning")
                     } else {
+                        produk.filter((x)=>{
+                            if(x.id_produk == barcode)
+                                x.jumlah += jumlah
+                            return x
+                        });
+                        console.log(produk)
                         data[3] = data[3] + jumlah;
                         row.data(data).draw();
                         indexProduk = produk.findIndex(a => a.id_produk == barcode);
                         produk[indexProduk].stok = stok - data[3];
-                        $("#total").html(total + harga * jumlah)
+                        hargabarang +=  harga * jumlah
+                        totalBayar()
                     }
                 } else {
                     produk.push({
@@ -140,7 +148,7 @@ function checkStok() {
                         hargaTotal,
                         `<button name="${barcode}" class="btn btn-sm btn-danger" onclick="remove('${barcode}')">Hapus</btn>`]).draw();
 
-                    hargabarang = hargabarang + total + harga * jumlah
+                    hargabarang +=  harga * jumlah
                     totalBayar()
                     $("#jumlah").val("");
                     $("#tambah").attr("disabled", "disabled");
@@ -190,13 +198,13 @@ function checkUang() {
 function remove(nama) {
     let data = transaksi.row($("[name=" + nama + "]").closest("tr")).data(),
         stok = data[3],
-        harga = data[2],
-        total = parseInt($("#total").html());
-        akhir = total - stok * harga
+        harga = data[2];
+        hargabarang -= stok * harga
 
-    $("#total").html(akhir);
+    totalBayar()
     transaksi.row($("[name=" + nama + "]").closest("tr")).remove().draw();
     produk = produk.filter(x=>{
+
         return x.id_produk != nama
     })
     console.log(produk)
@@ -208,6 +216,7 @@ function remove(nama) {
 
 function add() {
     let data = transaksi.rows().data()
+    let jenis = $("input[name='piutang']:checked").val() == null ? "lunas" : $("input[name='piutang']:checked").val()
     $.ajax({
         url: addUrl,
         type: "post",
@@ -216,13 +225,13 @@ function add() {
             produk: JSON.stringify(produk),
             tanggal: $("#tanggal").val(),
             total_bayar: totalbayar,
-            jumlah_uang: $('[name="jumlah_uang"]').val(),
+            jumlah_uang: jenis == 'full' ? 0 : $('[name="jumlah_uang"]').val(),
             diskon: $('[name="diskon"]').val(),
             pelanggan: $("#pelanggan").val(),
             nota: $("#nota").html(),
             marketplace: $("#marketplace").val(),
             jenis_kirim: $("#jenis_kirim").val(),
-            jenis_piutang: $("input[name='piutang']:checked").val(),
+            jenis_piutang: jenis,
             piutang_kurang : $("#piutang_kurang").val(),
             ongkir: $("#ongkir").val(),
             jenis_bayar: $("#jenis_bayar").val(),
