@@ -129,13 +129,16 @@ function checkStok() {
                         });
                         console.log(produk)
                         data[3] = data[3] + jumlah;
+                        data[4] = data[2] * data[3];
+                        
                         row.data(data).draw();
                         indexProduk = produk.findIndex(a => a.id_produk == barcode);
                         produk[indexProduk].stok = stok - data[3];
                         hargabarang +=  harga * jumlah
                         totalBayar()
                     }
-                } else {
+                } 
+                else {
                     produk.push({
                         id_produk: barcode,
                         jumlah: jumlah
@@ -204,12 +207,11 @@ function remove(nama) {
     totalBayar()
     transaksi.row($("[name=" + nama + "]").closest("tr")).remove().draw();
     produk = produk.filter(x=>{
-
         return x.id_produk != nama
     })
     console.log(produk)
     $("#tambah").attr("disabled", "disabled");
-    if (akhir < 1) {
+    if (transaksi.rows().count() < 1) {
         $("#bayar").attr("disabled", "disabled")
     }
 }

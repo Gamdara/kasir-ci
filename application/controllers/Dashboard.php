@@ -13,7 +13,7 @@ class Dashboard extends CI_Controller {
 	public function index()
 	{
 		if ($this->session->userdata('status') == 'login' ) {
-			$transaksi = $this->transaksi_model->query("select ifnull(sum(total_bayar),0) as total_bayar, ifnull(count(id),0) as total_transaksi from transaksi where CAST(tanggal AS DATE) = curdate() and jenis_piutang != 'refund'")[0];
+			$transaksi = $this->transaksi_model->query("select ifnull(sum(total_bayar-piutang_kurang),0) as total_bayar, ifnull(count(id),0) as total_transaksi from transaksi where CAST(tanggal AS DATE) = curdate() and jenis_piutang != 'refund'")[0];
 			$detail = $this->transaksi_model->query("select produk.nama_produk as nama_produk, sum(detail_transaksi.jumlah) as jumlah from detail_transaksi 
 			join transaksi on detail_transaksi.id_transaksi = transaksi.id
 			join produk on detail_transaksi.id_produk = produk.id

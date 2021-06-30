@@ -181,7 +181,7 @@
     const barang = document.getElementById('barang').value;
     const jumlah = document.getElementById('jumlah').value;
 
-    if(sup != "" && barang != "" && jumlah > 1)
+    if(sup != "" && barang != "" && jumlah > 0)
       $("#tambah").removeAttr("disabled")
     else
       $("#tambah").attr("disabled", "disabled")
@@ -231,31 +231,30 @@
     const harga = $("#harga_beli").val();
     const bayar = jumlah * harga
 
-    let ref = produk.find(el => el.supplier == sup.value && el.barcode == barang.value);
-    
-    // console.log(produk);
-    
-    if(ref != undefined){
-      ref.jumlah = jumlah;
-      // const ref = stok.rows( function ( idx, data, node ) {
-      //   return data.supplier == sup.value && data.barcode == barang.value
-      // } )
-      // .data();
-      // stok.rows().every(el=>{
-      //   console.log(this.data())
-      // })
-      stok.rows().each( function ( index ) {
-          var row = stok.row( index );
+    let a = stok.rows().indexes().filter((a, t) => supText == stok.row(a).data()[0] && barangText == stok.row(a).data()[1]);
+    if (a.length > 0) {
+      let row = stok.row(a[0]),
+      data = row.data();
+      console.log(produk)
       
-          var data = row.data();
-          // data[4] = jumlah;
-          // ... do something with data(), or row.node(), etc
-          console.log(data);
-          return;
-      } );
-      stok.draw();
-    }
+      data[3] = parseInt(data[3])+parseInt(jumlah);
+      data[2] = parseInt(harga) * parseInt(data[3]);
+      produk.filter((x)=>{
+          if(x.barcode == barang.value && x.supplier == sup.value){
+            x.bayar = parseInt(data[2])
+            x.jumlah = parseInt(data[3])
+          }
+          return x
+      });
+        
+        row.data(data).draw();
+        
+        total += harga * jumlah;
 
+        $("#simpan").removeAttr("disabled")
+        $("#total").html(total);
+    } 
+    else{
     produk.push({
       tanggal: tanggal,
       barcode: parseInt(barang.value),
@@ -277,6 +276,7 @@
 
     $("#simpan").removeAttr("disabled")
     $("#total").html(total);
+  }
   }
 
   function add(){
