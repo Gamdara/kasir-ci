@@ -30,7 +30,7 @@ class Dashboard extends CI_Controller {
 			$data["total_penjualan"] = "Rp " . number_format($transaksi->total_bayar,2,',','.'); 
 			$data["total_transaksi"] = $transaksi->total_transaksi;
 			$data["total_pengeluaran"] = "Rp " . number_format( $pengeluaran->total_pengeluaran,2,',','.'); 
-			$data["kas"] = "Rp " . number_format( $pemasukan-$keluar-$refund,2,',','.'); 
+			$data["kas"] = "Rp " . number_format( $pemasukan-$keluar,2,',','.'); 
 			
 
 			$data["produk"] = $this->transaksi_model->query("select * from produk order by terjual desc limit 3");
