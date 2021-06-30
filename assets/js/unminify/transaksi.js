@@ -145,7 +145,7 @@ function checkStok() {
                         nama_produk,
                         harga,
                         jumlah,
-                        hargaTotal,
+                        harga * jumlah,
                         `<button name="${barcode}" class="btn btn-sm btn-danger" onclick="remove('${barcode}')">Hapus</btn>`]).draw();
 
                     hargabarang +=  harga * jumlah
@@ -217,6 +217,7 @@ function remove(nama) {
 function add() {
     let data = transaksi.rows().data()
     let jenis = $("input[name='piutang']:checked").val() == null ? "lunas" : $("input[name='piutang']:checked").val()
+
     $.ajax({
         url: addUrl,
         type: "post",

@@ -66,7 +66,7 @@ class Transaksi extends CI_Controller {
 		$produks = json_decode($this->input->post('produk'));
 		$tanggal = new DateTime($this->input->post('tanggal'));
 		$bank = $this->input->post('jenis_bayar') == "cash" ? "" : $this->input->post('bank');
-		// $data = $this->input->post('form')
+		$kurang = $this->input->post('jenis_piutang') == 'lunas' ? 0 : $this->input->post('piutang_kurang');
 		$data = array(
 			'tanggal' => $tanggal->format('Y-m-d H:i:s'),
 			'total_bayar' => $this->input->post('total_bayar'),
@@ -77,7 +77,7 @@ class Transaksi extends CI_Controller {
 			'kasir' => $this->session->userdata('id'),
 			'marketplace' => $this->input->post('marketplace'),
 			'jenis_piutang' => $this->input->post('jenis_piutang'),
-			'piutang_kurang' => $this->input->post('piutang_kurang'),
+			'piutang_kurang' => $kurang,
 			'jenis_bayar' => $this->input->post('jenis_bayar'),
 			'jenis_kirim' => $this->input->post('jenis_kirim'),
 			'ongkir' => $this->input->post('ongkir'),
