@@ -165,6 +165,7 @@ class Transaksi extends CI_Controller {
 			'total' => $produk->total_bayar,
 			'bayar' => $produk->jumlah_uang,
 			'kembalian' => $produk->jumlah_uang - $produk->total_bayar,
+			'ongkir' => $produk->ongkir,
 			'kasir' => $produk->kasir,
 			'level' => $produk->level,
 			'nama_pelanggan' => $produk->nama_pelanggan,

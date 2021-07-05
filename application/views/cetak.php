@@ -81,16 +81,26 @@
 					<td>
 						<?php echo $key->nama_produk ?>
 					</td>
+					<td>
+						<?php echo $key->jumlah ?>
+					</td>
 						<?php if($level == "reseller") {?>
 					<td align="right" style="">
 						<?php echo $key->harga_reseller ?>
+					</td>
+					<td align="right" style="">
+						<?php echo $key->harga_reseller * $key->jumlah?>
 					</td>
 						<?php }?>
 						<?php if($level != "reseller") {?>
 					<td align="right">
 						<?php echo $key->harga_jual ?>
 					</td>
+					<td align="right">
+						<?php echo $key->harga_jual * $key->jumlah?>
+					</td>
 						<?php }?>
+					
 				</tr>
 				<?php endforeach ?>
 			</table>
@@ -101,9 +111,19 @@
 						<b>Subtotal <?php echo $jumlah_produk ?> Produk</b>
 					</td>
 					<td align="right">
-						<?php echo $total ?>
+						<?php echo $total - $ongkir ?>
 					</td>
 				</tr>
+				<?php if($ongkir != 0){ ?>
+				<tr>
+					<td>
+						<b>Ongkir </b>
+					</td>
+					<td align="right">
+						<?= $ongkir ?>
+					</td>
+				</tr>
+				<?php } ?>
 				<tr>
 					<td>
 						<b>Total Tagihan</b>

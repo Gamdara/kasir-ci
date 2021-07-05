@@ -117,7 +117,7 @@ class Transaksi_model extends CI_Model {
 
 	public function getAll($id)
 	{
-		$this->db->select('transaksi.nota, transaksi.tanggal, transaksi.total_bayar, transaksi.bank, transaksi.jenis_bayar, transaksi.jumlah_uang,transaksi.piutang_kurang,transaksi.jenis_piutang, pengguna.nama as kasir, pelanggan.nama as nama_pelanggan, pelanggan.level as level, sum(jumlah) as jumlah_produk');
+		$this->db->select('transaksi.nota,transaksi.ongkir, transaksi.tanggal, transaksi.total_bayar, transaksi.bank, transaksi.jenis_bayar, transaksi.jumlah_uang,transaksi.piutang_kurang,transaksi.jenis_piutang, pengguna.nama as kasir, pelanggan.nama as nama_pelanggan, pelanggan.level as level, sum(jumlah) as jumlah_produk');
 		$this->db->from('transaksi');
 		$this->db->join('pengguna', 'transaksi.kasir = pengguna.id');
 		$this->db->join('pelanggan', 'transaksi.pelanggan = pelanggan.id');
