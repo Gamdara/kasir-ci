@@ -234,11 +234,11 @@ class Transaksi extends CI_Controller {
 			total_jual, 
 			jumlah_transaksi, 
 			(
-				total_jual - total_beli - sum(pengeluaran.nominal)
+				total_jual - total_beli - ifnull(sum(pengeluaran.nominal),0)
 			) as laba_kotor ,
-			sum(pengeluaran.nominal) as total_pengeluaran
+			ifnull(sum(pengeluaran.nominal),0) as total_pengeluaran
 		from laporan_bulanan
-		join pengeluaran on date_format(pengeluaran.tanggal, '%M %Y') = bulan
+		left join pengeluaran on date_format(pengeluaran.tanggal, '%M %Y') = bulan
 		group by bulan
 		";
 
