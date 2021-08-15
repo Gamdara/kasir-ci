@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 30, 2021 at 01:42 PM
+-- Generation Time: Aug 15, 2021 at 05:16 PM
 -- Server version: 8.0.23
 -- PHP Version: 7.4.3
 
@@ -40,29 +40,13 @@ CREATE TABLE `detail_transaksi` (
 --
 
 INSERT INTO `detail_transaksi` (`id`, `id_transaksi`, `id_produk`, `jumlah`) VALUES
-(26, 32, 2, 4),
-(27, 33, 2, 4),
-(28, 34, 2, 2),
-(29, 35, 2, 1),
-(30, 36, 2, 1),
-(31, 37, 2, 2),
-(32, 38, 2, 2),
-(33, 39, 1, 2),
-(34, 40, 2, 2),
-(35, 41, 2, 1),
-(36, 42, 2, 2),
-(37, 43, 2, 2),
-(38, 44, 1, 2),
-(39, 45, 1, 3),
-(40, 46, 2, 2),
-(41, 47, 2, 2),
-(42, 48, 1, 3),
-(43, 49, 1, 3),
-(44, 50, 1, 3),
-(45, 51, 1, 1),
-(46, 52, 2, 1),
-(47, 53, 1, 2),
-(48, 54, 2, 2);
+(49, 55, 4, 2),
+(50, 56, 4, 1),
+(51, 57, 4, 1),
+(52, 58, 4, 1),
+(53, 59, 1, 2),
+(54, 60, 1, 2),
+(55, 61, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -118,7 +102,9 @@ CREATE TABLE `kategori_produk` (
 
 INSERT INTO `kategori_produk` (`id`, `kategori`) VALUES
 (1, 'Tekhnologi'),
-(2, 'Kebutuhan');
+(2, 'Kebutuhan'),
+(5, 'Alat Kesehatan'),
+(6, 'Kursi Roda');
 
 -- --------------------------------------------------------
 
@@ -158,7 +144,7 @@ CREATE TABLE `pelanggan` (
   `jenis_kelamin` set('Pria','Wanita','Lainya') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `alamat` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `telepon` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `level` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL
+  `level` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -182,6 +168,15 @@ CREATE TABLE `pengeluaran` (
   `jenis_bayar` varchar(100) NOT NULL,
   `keterangan` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `pengeluaran`
+--
+
+INSERT INTO `pengeluaran` (`id`, `tanggal`, `nominal`, `jenis_bayar`, `keterangan`) VALUES
+(18, '2021-06-30', 5000, 'trf', 'makan'),
+(19, '2021-08-13', 20000, 'cash', 'bensin'),
+(20, '2021-08-15', 15000, 'cash', 'makan');
 
 -- --------------------------------------------------------
 
@@ -235,7 +230,7 @@ CREATE TABLE `produk` (
   `barcode` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `nama_produk` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `kategori` int NOT NULL,
-  `satuan` int NOT NULL,
+  `satuan` int DEFAULT NULL,
   `harga_beli` int NOT NULL,
   `harga_jual` int NOT NULL,
   `harga_reseller` int NOT NULL,
@@ -248,9 +243,13 @@ CREATE TABLE `produk` (
 --
 
 INSERT INTO `produk` (`id`, `barcode`, `nama_produk`, `kategori`, `satuan`, `harga_beli`, `harga_jual`, `harga_reseller`, `stok`, `terjual`) VALUES
-(1, 'PULS ALPRB', 'Voucher Pulsa 50000', 1, 2, 45000, 55000, 50000, 60, 40),
-(2, 'DJRM SPER', 'Djarum Super 12', 2, 1, 14000, 18000, 18000, 41, 23),
-(3, 'VCHR PLS ', 'Voucher Pulsa 10000', 1, 0, 10000, 10000, 10000, 0, 0);
+(1, 'PULS ALPRB', 'Handsanitizer 500ML', 2, 2, 45000, 55000, 50000, 54, 46),
+(2, 'DJRM SPER', 'Alkohol 70%', 2, 1, 14000, 18000, 18000, 37, 25),
+(3, 'VCHR PLS ', 'Betadine', 2, NULL, 5000, 20000, 15000, 20, 0),
+(4, 'KRS RD', 'Kursi Roda Standart', 6, NULL, 5000, 20000, 10000, 17, 3),
+(5, 'RM SLNG', 'Arm Sling', 2, NULL, 15000, 50000, 25000, 57, 3),
+(6, 'SRNG TNGN', 'Sarung Tangan', 2, NULL, 45000, 95000, 55000, 35, 0),
+(7, 'TNS MNL', 'Tensi Manual', 5, NULL, 55000, 110000, 100000, 15, 0);
 
 -- --------------------------------------------------------
 
@@ -269,8 +268,8 @@ CREATE TABLE `refund` (
 --
 
 INSERT INTO `refund` (`id`, `id_transaksi`, `tanggal`) VALUES
-(28, 25, '2021-06-29'),
-(29, 52, '2021-06-30');
+(30, 57, '2021-06-30'),
+(31, 58, '2021-08-15');
 
 -- --------------------------------------------------------
 
@@ -343,7 +342,9 @@ INSERT INTO `stok_keluar` (`id`, `tanggal`, `barcode`, `jumlah`, `Keterangan`) V
 (10, '2021-06-25 12:38:40', 2, '2', '-'),
 (11, '2021-06-25 12:39:43', 2, '1', '-'),
 (12, '2021-06-25 12:40:21', 1, '3', '-'),
-(13, '2021-06-25 12:40:21', 2, '3', '-');
+(13, '2021-06-25 12:40:21', 2, '3', '-'),
+(14, '2021-08-15 12:20:45', 2, '1', 'bonus'),
+(15, '2021-08-15 12:20:45', 2, '1', 'bonus');
 
 -- --------------------------------------------------------
 
@@ -369,18 +370,18 @@ INSERT INTO `stok_masuk` (`id`, `tanggal`, `barcode`, `jumlah`, `keterangan`, `s
 (1, '2020-02-21 13:41:25', 1, '10', 'penambahan', NULL, 0),
 (2, '2020-02-21 13:41:40', 2, '20', 'penambahan', 1, 0),
 (3, '2020-02-21 13:42:23', 1, '10', 'penambahan', 2, 0),
-(4, '0000-00-00 00:00:00', 1, '2', 'penambahan', 1, 0),
-(5, '0000-00-00 00:00:00', 1, '4', 'penambahan', 1, 0),
-(6, '0000-00-00 00:00:00', 2, '4', 'penambahan', 1, 0),
-(7, '0000-00-00 00:00:00', 1, '100', 'penambahan', 1, 0),
-(8, '0000-00-00 00:00:00', 1, '100', 'penambahan', 1, 0),
-(9, '0000-00-00 00:00:00', 1, '2', 'penambahan', 1, 110000),
 (10, '2021-06-23 12:48:44', 1, '2', 'penambahan', 1, 110000),
 (11, '2021-06-23 12:49:17', 1, '22', 'penambahan', 1, 1210000),
 (12, '2021-06-24 14:17:12', 1, '80', 'penambahan', 1, 3600000),
 (13, '2021-06-24 14:17:44', 2, '80', 'penambahan', 1, 1120000),
 (14, '2021-06-24 23:57:32', 1, '80', 'penambahan', 1, 3600000),
-(15, '2021-06-25 12:40:05', 1, '100', 'penambahan', 1, 4500000);
+(15, '2021-06-25 12:40:05', 1, '100', 'penambahan', 1, 4500000),
+(16, '2021-06-30 21:54:34', 4, '20', 'penambahan', 1, 100000),
+(17, '2021-08-15 12:13:24', 5, '10', 'penambahan', 1, 150000),
+(18, '2021-08-15 12:19:18', 5, '50', 'penambahan', 1, 750000),
+(19, '2021-08-15 12:19:18', 6, '35', 'penambahan', 1, 1575000),
+(20, '2021-08-15 12:19:18', 7, '15', 'penambahan', 1, 825000),
+(21, '2021-08-15 12:20:02', 3, '20', 'penambahan', 1, 100000);
 
 -- --------------------------------------------------------
 
@@ -422,7 +423,7 @@ CREATE TABLE `toko` (
 --
 
 INSERT INTO `toko` (`id`, `nama`, `alamat`, `kas`) VALUES
-(1, 'Toko Tuma', 'Jln Raya Klesem Selatan No 1E Wanadadi, Banjarnegara, Indonesia', 0);
+(1, 'Toko Mastha', 'Jln Raya Klesem Selatan No 1E Wanadadi, Banjarnegara, Indonesia', 810000);
 
 -- --------------------------------------------------------
 
@@ -439,14 +440,27 @@ CREATE TABLE `transaksi` (
   `pelanggan` int DEFAULT NULL,
   `nota` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `kasir` int NOT NULL,
-  `marketplace` int NOT NULL,
-  `jenis_piutang` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `marketplace` int DEFAULT NULL,
+  `jenis_piutang` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `piutang_kurang` int NOT NULL,
-  `jenis_bayar` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `jenis_kirim` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `jenis_bayar` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `jenis_kirim` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `ongkir` int NOT NULL,
-  `bank` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL
+  `bank` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `transaksi`
+--
+
+INSERT INTO `transaksi` (`id`, `tanggal`, `total_bayar`, `jumlah_uang`, `diskon`, `pelanggan`, `nota`, `kasir`, `marketplace`, `jenis_piutang`, `piutang_kurang`, `jenis_bayar`, `jenis_kirim`, `ongkir`, `bank`) VALUES
+(55, '2021-06-30 21:55:22', 40000, 40000, 0, 1, '5GFH8Y7D0TTMNA0', 1, NULL, 'lunas', 0, 'cash', '', 0, ''),
+(56, '2021-06-30 21:55:57', 15000, 15000, 0, 2, 'R16SLJ1DU93I05V', 1, 3, 'lunas', 0, 'bank', 'JNT', 5000, 'BCA'),
+(57, '2021-06-30 21:58:24', 20000, 20000, 0, 1, 'FX96NEPVXTGZLG6', 1, NULL, 'refund', 0, 'bank', '', 0, 'BCA'),
+(58, '2021-06-30 22:06:14', 10000, 10000, 0, 2, 'Z53M4OVN258DTW3', 1, NULL, 'refund', 0, 'bank', '', 0, 'BCA'),
+(59, '2021-08-13 20:56:27', 110000, 110000, 0, 1, 'ILD4P06U98OL0WV', 1, NULL, 'lunas', 0, 'bank', '', 0, 'BCA'),
+(60, '2021-08-15 11:51:08', 110000, 110000, 0, 1, '1CQZEWLHN189PG2', 1, NULL, 'lunas', 0, 'cash', '', 0, ''),
+(61, '2021-08-15 11:55:36', 125000, 130000, 0, 1, 'RW536PU2ET3ATK0', 1, 3, 'lunas', 0, 'bank', 'JNT', 15000, 'BCA');
 
 -- --------------------------------------------------------
 
@@ -474,7 +488,9 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- Indexes for table `detail_transaksi`
 --
 ALTER TABLE `detail_transaksi`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_produk` (`id_produk`),
+  ADD KEY `fk_transaksi` (`id_transaksi`);
 
 --
 -- Indexes for table `gudang`
@@ -522,13 +538,15 @@ ALTER TABLE `platform`
 -- Indexes for table `produk`
 --
 ALTER TABLE `produk`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_kategori` (`kategori`);
 
 --
 -- Indexes for table `refund`
 --
 ALTER TABLE `refund`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_refund` (`id_transaksi`);
 
 --
 -- Indexes for table `reseller`
@@ -546,13 +564,16 @@ ALTER TABLE `satuan_produk`
 -- Indexes for table `stok_keluar`
 --
 ALTER TABLE `stok_keluar`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_stkeluar` (`barcode`);
 
 --
 -- Indexes for table `stok_masuk`
 --
 ALTER TABLE `stok_masuk`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_supplier` (`supplier`),
+  ADD KEY `fk_bar` (`barcode`);
 
 --
 -- Indexes for table `supplier`
@@ -570,7 +591,10 @@ ALTER TABLE `toko`
 -- Indexes for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_kasir` (`kasir`),
+  ADD KEY `fk_marketplace` (`marketplace`),
+  ADD KEY `fk_pelanggan` (`pelanggan`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -580,7 +604,7 @@ ALTER TABLE `transaksi`
 -- AUTO_INCREMENT for table `detail_transaksi`
 --
 ALTER TABLE `detail_transaksi`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 
 --
 -- AUTO_INCREMENT for table `gudang`
@@ -598,7 +622,7 @@ ALTER TABLE `karyawan`
 -- AUTO_INCREMENT for table `kategori_produk`
 --
 ALTER TABLE `kategori_produk`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `pelanggan`
@@ -610,7 +634,7 @@ ALTER TABLE `pelanggan`
 -- AUTO_INCREMENT for table `pengeluaran`
 --
 ALTER TABLE `pengeluaran`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `pengguna`
@@ -628,13 +652,13 @@ ALTER TABLE `platform`
 -- AUTO_INCREMENT for table `produk`
 --
 ALTER TABLE `produk`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `refund`
 --
 ALTER TABLE `refund`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `reseller`
@@ -652,13 +676,13 @@ ALTER TABLE `satuan_produk`
 -- AUTO_INCREMENT for table `stok_keluar`
 --
 ALTER TABLE `stok_keluar`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `stok_masuk`
 --
 ALTER TABLE `stok_masuk`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `supplier`
@@ -676,7 +700,51 @@ ALTER TABLE `toko`
 -- AUTO_INCREMENT for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `detail_transaksi`
+--
+ALTER TABLE `detail_transaksi`
+  ADD CONSTRAINT `fk_produk` FOREIGN KEY (`id_produk`) REFERENCES `produk` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `fk_transaksi` FOREIGN KEY (`id_transaksi`) REFERENCES `transaksi` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `produk`
+--
+ALTER TABLE `produk`
+  ADD CONSTRAINT `fk_kategori` FOREIGN KEY (`kategori`) REFERENCES `kategori_produk` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `refund`
+--
+ALTER TABLE `refund`
+  ADD CONSTRAINT `fk_refund` FOREIGN KEY (`id_transaksi`) REFERENCES `transaksi` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `stok_keluar`
+--
+ALTER TABLE `stok_keluar`
+  ADD CONSTRAINT `fk_stkeluar` FOREIGN KEY (`barcode`) REFERENCES `produk` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `stok_masuk`
+--
+ALTER TABLE `stok_masuk`
+  ADD CONSTRAINT `fk_bar` FOREIGN KEY (`barcode`) REFERENCES `produk` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `fk_supplier` FOREIGN KEY (`supplier`) REFERENCES `supplier` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `transaksi`
+--
+ALTER TABLE `transaksi`
+  ADD CONSTRAINT `fk_kasir` FOREIGN KEY (`kasir`) REFERENCES `karyawan` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `fk_marketplace` FOREIGN KEY (`marketplace`) REFERENCES `platform` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `fk_pelanggan` FOREIGN KEY (`pelanggan`) REFERENCES `pelanggan` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -75,7 +75,7 @@ class Transaksi extends CI_Controller {
 			'pelanggan' => $this->input->post('pelanggan'),
 			'nota' => $this->input->post('nota'),
 			'kasir' => $this->session->userdata('id'),
-			'marketplace' => $this->input->post('marketplace'),
+			'marketplace' => $this->input->post('marketplace') == "" ? null : $this->input->post('marketplace'),
 			'jenis_piutang' => $this->input->post('jenis_piutang'),
 			'piutang_kurang' => $kurang,
 			'jenis_bayar' => $this->input->post('jenis_bayar'),
