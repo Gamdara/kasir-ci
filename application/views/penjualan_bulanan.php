@@ -73,6 +73,7 @@
 <script src="<?php echo base_url('assets/vendor/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') ?>"></script>
 <script src="<?php echo base_url('assets/vendor/adminlte/plugins/sweetalert2/sweetalert2.min.js') ?>"></script>
 <script src="<?php echo base_url('assets/vendor/adminlte/plugins/daterangepicker/daterangepicker.js') ?>"></script>
+<script src="<?php echo base_url('assets/vendor/adminlte/plugins/chart.js/Chart.min.js') ?>"></script>
 <script>
   var readUrl = '<?php echo site_url('transaksi/getbulan') ?>';
   var deleteUrl = '<?php echo site_url('transaksi/delete') ?>';
@@ -82,7 +83,7 @@
 </script>
 
 <script src="<?php echo base_url('assets/js/unminify/laporan_penjualan.js') ?>"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
 
 <script>
   
@@ -108,12 +109,14 @@
                       label:'Pemasukan',
                       backgroundColor : "#3e95cd",
                       borderColor: ['#3e95cd'],
+                      fill:false,
                       data: data.map(r => {return r.total_jual })
                       },
                       {
                       label:'Jumlah Transaksi',
                       backgroundColor : "#e25070",
                       borderColor: ['#e25070'],
+                      fill:false,
                       data: data.map(r =>  {return r.jumlah_transaksi})
                       },
                           
