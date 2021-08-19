@@ -17,7 +17,7 @@ let laporan_piutang = $("#laporan_piutang").DataTable( {
         {data: "action"}
     ]
 });
-
+// let chart,ctx;
 let laporan_transaksi = $("#laporan_transaksi").DataTable( {
     responsive:true,
     scrollX:true,
@@ -58,6 +58,7 @@ let laporan_penjualan = $("#laporan_penjualan").DataTable( {
         {data: "total_beli"}, 
         {data: "total_jual"},
         {data: "jumlah_transaksi"}, 
+        {data: "total_pengeluaran"},
         {data: "laba"}
     ]
 });
@@ -74,6 +75,7 @@ let laporan_bulanan = $("#laporan_bulanan").DataTable( {
     order:[
         [1, "asc"]],
         columns:[ 
+        {data: null}, 
         {data: "bulan"},
         {data: "total_beli"}, 
         {data: "total_jual"},
@@ -117,7 +119,17 @@ function remove(id) {
 }
 
 laporan_penjualan.on("order.dt search.dt", ()=> {
+    datas = [[],[]]
     laporan_penjualan.column(0, {
+        search: "applied", order: "applied"
+    }).nodes().each((el, err)=> {
+        el.innerHTML=err+1
+    })
+    
+});
+
+laporan_bulanan.on("order.dt search.dt", ()=> {
+    laporan_bulanan.column(0, {
         search: "applied", order: "applied"
     }).nodes().each((el, err)=> {
         el.innerHTML=err+1
@@ -130,6 +142,7 @@ laporan_piutang.on("order.dt search.dt", ()=> {
     }).nodes().each((el, err)=> {
         el.innerHTML=err+1
     })
+    
 });
 
 laporan_transaksi.on("order.dt search.dt", ()=> {

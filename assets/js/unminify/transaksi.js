@@ -4,7 +4,9 @@ isDp = false,
 isReseller = false,
 hargabarang = 0,
 totalbayar = 0,
-
+diskon =  0,
+promos = [],
+diskons = [],
 transaksi = $("#transaksi").DataTable({
     responsive: true,
     lengthChange: false,
@@ -44,10 +46,69 @@ function getNama() {
     })
 }
 
-function totalBayar(){
+function setDiskon(){
+    diskon = 0;
+    diskons = []
+    let li = `
+    <li class="list-group-item d-flex flex-row justify-content-between align-items-center font-weight-bold">
+    Nama Promo
+    <span >Diskon</span>
+    <span >Potongan (rp)</span>
+  </li>
+    `;
+    promos.map(r => {
+        let pot = 0
+        if(r.jenis == 'rp') pot += parseInt(r.potongan)
+        else pot += parseInt(hargabarang) * parseInt(r.potongan) / 100
+        diskon += pot
+        diskons.push({
+            potongan : pot,
+            nama : r.nama,
+            diskon : r.potongan,
+            jenis : r.jenis
+        })
+        li += `
+            <li class="list-group-item d-flex flex-row justify-content-between align-items-center">
+                ${r.nama}
+                <span >${r.potongan}(${r.jenis == 'rp' ? 'rp' : '%'})</span>
+                <span>${pot}</span>
+            </li>
+        `
+        $('#ldisk').html(li)
+    })
+    if(diskon == 0) $('#cekdiskon').css('display','none')
+    else $('#cekdiskon').css('display','block')
+    $('[name="diskon"]').val(diskon)
+}
+
+async function totalBayar(){
+    console.log('masuk total')
     let total = hargabarang
     let ongkir= parseInt($("#ongkir").val()) || 0;
-    let diskon= $('[name="diskon"]').val();
+
+    await $.ajax({
+        url: diskonUrl,
+        type: "post",
+        dataType: "json",
+        data: {
+            total: hargabarang,
+            produk: produk
+        },
+        success: res => {
+            // res.map(r=> {
+            //     if(r.jenis == 'rp') diskon += parseInt(r.potongan)
+            //     else diskon += parseInt(total) * parseInt(r.potongan) / 100
+            //     console.log(r)
+            // })
+            promos = res;
+            console.log(promos)
+        },
+        error: e => {
+            console.log("diskon gamau",e)
+        }
+        
+    })
+    setDiskon();
     let bayar = total + ongkir - diskon;
     totalbayar = bayar
 
@@ -160,7 +221,6 @@ function checkStok() {
             }
         }
     })
-    console.log(transaksi.rows().data())
 }
 
 function bayarCetak() {

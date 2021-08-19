@@ -15,11 +15,12 @@
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <!-- Add icons to the links using the .nav-icon class
              with font-awesome or any other icon font library -->
+        <?php if ($role === 'admin'): ?>
         <li class="nav-item">
           <a href="<?php echo site_url('dashboard') ?>" class="nav-link <?php echo $uri == 'dashboard' || $uri == '' ? 'active' : 'no' ?>">
             <i class="nav-icon fas fa-tachometer-alt"></i>
             <p>
-              Dashboard
+              Dashboard 
             </p>
           </a>
         </li>
@@ -81,6 +82,33 @@
             <i class="fas fa-money-bill nav-icon"></i>
             <p>Transaksi</p>
           </a>
+        </li>
+        <li class="nav-item has-treeview">
+          <a href="<?php echo site_url('promo') ?>" class="nav-link <?php echo $uri == 'promo' ? 'active' : 'no' ?>">
+            <i class="nav-icon fas fa-money-bill"></i>
+            <p>
+              Promo
+            </p>
+            <i class="right fas fa-angle-right"></i>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="<?php echo site_url('promo/pembelian') ?>" class="nav-link <?php echo $uri == 'promo/pembelian' ? 'active' : 'no' ?>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>
+                  Per Total Pembelian
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?php echo site_url('promo/produk') ?>" class="nav-link <?php echo $uri == 'promo/produk' ? 'active' : 'no' ?>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>
+                  Per Produk
+                </p>
+              </a>
+            </li>
+          </ul>
         </li>
         <li class="nav-item has-treeview">
           <a href="<?php echo site_url('produk') ?>" class="nav-link <?php echo $uri == 'produk' ? 'active' : 'no' ?>">
@@ -152,13 +180,7 @@
             <li class="nav-item">
               <a id="harian" href="<?php echo site_url('laporan_penjualan/index') ?>" class="nav-link <?php echo $uri == 'laporan_penjualan/index' ? 'active' : 'no' ?>">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Laporan Harian</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a id="bulanan" href="<?php echo site_url('laporan_penjualan/bulanan') ?>" class="nav-link <?php echo $uri == 'laporan_penjualan/bulanan' ? 'active' : 'no' ?>">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Laporan Bulanan </p>
+                <p>Laporan Harian / Bulanan</p>
               </a>
             </li>
             <li class="nav-item">
@@ -181,14 +203,23 @@
             </li>
           </ul>
         </li>
-        <?php if ($role === 'admin'): ?>
+        
           <li class="nav-item">
-            <a href="<?php echo site_url('pengaturan') ?>" class="nav-link <?php echo $uri == 'pengaturan' ? 'active' : 'no' ?>">
+            <a href="<?php echo site_url('pengaturan') ?>" class="nav-link <?php echo $uri == 'pengaturan' ? 'active' : 'no'; ?>">
               <i class="fas fa-cog nav-icon"></i>
               <p>Pengaturan</p>
             </a>
           </li>
         <?php endif ?>
+        <?php if($role === 'kasir'): ?>
+          <li class="nav-item">
+          <a href="<?php echo site_url('transaksi') ?>" class="nav-link <?php echo $uri == 'transaksi' ? 'active' : 'no' ?>">
+            <i class="fas fa-money-bill nav-icon"></i>
+            <p>Transaksi</p>
+          </a>
+        </li>
+        <?php endif?>
+        
        
       </ul>
     </nav>

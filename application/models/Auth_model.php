@@ -10,6 +10,10 @@ class Auth_model extends CI_Model {
 		return $this->db->get('pengguna')->row();
 	}
 
+	public function regist($data){
+		$this->db->insert("pengguna", $data);
+	}
+
 	public function getUser($username)
 	{
 		$this->db->where('username', $username);

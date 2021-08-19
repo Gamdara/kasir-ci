@@ -38,8 +38,10 @@ class Dashboard extends CI_Controller {
 			$data["produk_harian"] = $detail;
 			$data["pengeluaran_harian"] = $this->transaksi_model->query("select * from pengeluaran where tanggal = curdate()");
 			
-			
+			if($this->session->userdata('role') == 'admin')
 			$this->load->view('dashboard', $data);
+			else
+			redirect('/transaksi');
 		} else {
 			$this->load->view('login');
 		}

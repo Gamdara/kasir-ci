@@ -17,7 +17,8 @@ class Auth extends CI_Controller {
 				if ($this->auth_model->getUser($username)->num_rows() > 0) {
 					$data = $this->auth_model->getUser($username)->row();
 					$toko = $this->auth_model->getToko();
-					if (password_verify($this->input->post('password'), $data->password)) {
+					if (password_verify($this->input->post('password'), $data->password)) {	
+					// if ($this->input->post('password' == $data->password)) {
 						$userdata = array(
 							'id' => $data->id,
 							'username' => $data->username,
@@ -50,6 +51,20 @@ class Auth extends CI_Controller {
 		redirect('/');
 	}
 
+	public function regist()
+	{
+		$pass = password_hash("kasir", PASSWORD_DEFAULT);
+		$data = array(
+			'username' => 'kasir',
+			'password' => $pass,
+			'nama' => 'kasir',
+			'role' => '2'
+		);
+		$insert = $this->auth_model->regist($data);
+		redirect('/');
+	}
+
+	
 }
 
 /* End of file Auth.php */

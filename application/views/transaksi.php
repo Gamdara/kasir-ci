@@ -77,10 +77,13 @@
               <div style="display: inline-block; vertical-align: bottom; width: 100px;">
                 <input type="number" class="form-control" placeholder="Jumlah" id="jumlah" onkeyup="checkEmpty()">
               </div>
-              <div class="form-group">
-              <label>Diskon</label>
-              <input placeholder="Diskon" type="number" style="width: 200px;" class="form-control" onkeyup="kembalian(); totalBayar();" name="diskon">
-            </div>
+              <div class="form-group ">
+                <label>Diskon</label>
+                <div class="d-flex justify-content-start">
+                <input placeholder="Diskon" type="number" style="width: 200px;" class="form-control" readonly onkeyup="kembalian(); totalBayar();" name="diskon">
+                <button style="display: none" id="cekdiskon" class="btn btn-success ml-3" data-toggle="modal" data-target="#mdiskon" >Cek Diskon</button>
+                </div>
+              </div>
               <button style="display: inline-block; vertical-align: bottom;" id="tambah" class="btn btn-success" onclick="checkStok()" disabled>Tambah</button>
               <button style="display: inline-block; vertical-align: bottom;" id="bayar" class="btn btn-success" data-toggle="modal" data-target="#modal" disabled>Bayar</button>
               <div>
@@ -161,14 +164,6 @@
   </div>
   <div class="modal-body">
     <form id="form">
-      <!-- <div class="form-group">
-        <label>Tanggal</label>
-        <input type="text" class="form-control" name="tanggal" id="tanggal" required>
-      </div>
-      <div class="form-group">
-        <label>Pelanggan</label>
-        <select name="pelannggan" id="pelanggan" class="form-control select2"></select>
-      </div> -->
       <div class="form-group">
         <label>Jumlah Uang</label>
         <input placeholder="Jumlah Uang" type="number" class="form-control" name="jumlah_uang" onkeyup="kembalian()" required>
@@ -202,6 +197,24 @@
 </div>
 </div>
 </div>
+
+<div class="modal fade" id="mdiskon">
+<div class="modal-dialog">
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title">Promos</h5>
+    <button class="close" data-dismiss="modal">
+      <span>&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ul class="list-group mt-3" id="ldisk">
+    </ul>
+  </div>
+</div>
+</div>
+</div>
+
 <!-- ./wrapper -->
 <?php $this->load->view('includes/footer'); ?>
 <?php $this->load->view('partials/footer'); ?>
@@ -214,6 +227,8 @@
 <script src="<?php echo base_url('assets/vendor/adminlte/plugins/moment/moment.min.js') ?>"></script>
 <script>
   var produkGetNamaUrl = '<?php echo site_url('produk/get_nama') ?>';
+  var diskonUrl = '<?php echo base_url('promo/getdiskon') ?>';
+  
   var produkGetStokUrl = '<?php echo site_url('produk/get_stok') ?>';
   var addUrl = '<?php echo site_url('transaksi/add') ?>';
   var getBarcodeUrl = '<?php echo site_url('produk/get_barcode') ?>';

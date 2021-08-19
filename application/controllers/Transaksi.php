@@ -216,7 +216,8 @@ class Transaksi extends CI_Controller {
 				'total_beli' => $transaksi->total_beli,
 				'total_jual' => $transaksi->total_jual,
 				'jumlah_transaksi' => $transaksi->jumlah_transaksi,
-				'laba' => $transaksi->laba_kotor,
+				'total_pengeluaran' => $transaksi->total_pengeluaran,
+				'laba' => $transaksi->laba_kotor
 			);
 		}
 

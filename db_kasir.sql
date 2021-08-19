@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 15, 2021 at 05:16 PM
+-- Generation Time: Aug 19, 2021 at 08:26 PM
 -- Server version: 8.0.23
 -- PHP Version: 7.4.3
 
@@ -21,6 +21,26 @@ SET time_zone = "+00:00";
 --
 -- Database: `db_kasir`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `detail_promo`
+--
+
+CREATE TABLE `detail_promo` (
+  `id_promo` int NOT NULL,
+  `id_produk` int NOT NULL,
+  `min_jumlah` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `detail_promo`
+--
+
+INSERT INTO `detail_promo` (`id_promo`, `id_produk`, `min_jumlah`) VALUES
+(14, 2, 2),
+(14, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -114,9 +134,9 @@ INSERT INTO `kategori_produk` (`id`, `kategori`) VALUES
 --
 CREATE TABLE `laporan_bulanan` (
 `bulan` varchar(69)
+,`jumlah_transaksi` decimal(42,0)
 ,`total_beli` decimal(54,0)
 ,`total_jual` decimal(54,0)
-,`jumlah_transaksi` decimal(42,0)
 );
 
 -- --------------------------------------------------------
@@ -126,10 +146,10 @@ CREATE TABLE `laporan_bulanan` (
 -- (See below for the actual view)
 --
 CREATE TABLE `laporan_harian` (
-`tanggal` varchar(40)
+`jumlah_transaksi` bigint
+,`tanggal` varchar(40)
 ,`total_beli` decimal(32,0)
 ,`total_jual` decimal(32,0)
-,`jumlah_transaksi` bigint
 );
 
 -- --------------------------------------------------------
@@ -199,7 +219,8 @@ CREATE TABLE `pengguna` (
 INSERT INTO `pengguna` (`id`, `username`, `password`, `nama`, `role`) VALUES
 (1, 'admin', '$2y$10$/I7laWi1mlNFxYSv54EUPOH8MuZhmRWxhE.LaddTK9TSmVe.IHP2C', 'Admin', '1'),
 (2, 'ibrahimalanshor', '$2y$10$5thNuizSyAdrGXC9A/WYd.StNiSRUy0eBZJ401hGBfUpwGINu9kyG', 'Ibrahim Al Anshor', '2'),
-(3, 'admin', 'admin', 'admin', '1');
+(3, 'admin', 'adminn', 'admin', '1'),
+(21, 'kasir', '$2y$10$p1KfCkz39y7txU7witp5/uoEC3JtS/8JUvra3GZlocb63UyWv0DUe', 'kasir', '2');
 
 -- --------------------------------------------------------
 
@@ -250,6 +271,32 @@ INSERT INTO `produk` (`id`, `barcode`, `nama_produk`, `kategori`, `satuan`, `har
 (5, 'RM SLNG', 'Arm Sling', 2, NULL, 15000, 50000, 25000, 57, 3),
 (6, 'SRNG TNGN', 'Sarung Tangan', 2, NULL, 45000, 95000, 55000, 35, 0),
 (7, 'TNS MNL', 'Tensi Manual', 5, NULL, 55000, 110000, 100000, 15, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `promo`
+--
+
+CREATE TABLE `promo` (
+  `id` int NOT NULL,
+  `nama` varchar(50) NOT NULL,
+  `deskripsi` varchar(500) NOT NULL,
+  `potongan` int NOT NULL,
+  `jenis` varchar(20) NOT NULL,
+  `durasi` date NOT NULL,
+  `min_beli` int NOT NULL,
+  `kategori` varchar(10) NOT NULL,
+  `status` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `promo`
+--
+
+INSERT INTO `promo` (`id`, `nama`, `deskripsi`, `potongan`, `jenis`, `durasi`, `min_beli`, `kategori`, `status`) VALUES
+(2, 'Diskon 15000', 'setiap pembelian diatas 100000', 15000, 'rp', '2021-08-27', 100000, 'perbeli', 'aktif'),
+(14, 'Alkohol Betadin', 'Alkohol Betadin diskon', 5, 'persen', '2021-08-20', 50000, 'perproduk', 'aktif');
 
 -- --------------------------------------------------------
 
@@ -485,6 +532,13 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 
 --
+-- Indexes for table `detail_promo`
+--
+ALTER TABLE `detail_promo`
+  ADD KEY `fk_dpromo` (`id_promo`),
+  ADD KEY `fk_pproduk` (`id_produk`);
+
+--
 -- Indexes for table `detail_transaksi`
 --
 ALTER TABLE `detail_transaksi`
@@ -540,6 +594,12 @@ ALTER TABLE `platform`
 ALTER TABLE `produk`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_kategori` (`kategori`);
+
+--
+-- Indexes for table `promo`
+--
+ALTER TABLE `promo`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `refund`
@@ -640,7 +700,7 @@ ALTER TABLE `pengeluaran`
 -- AUTO_INCREMENT for table `pengguna`
 --
 ALTER TABLE `pengguna`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `platform`
@@ -653,6 +713,12 @@ ALTER TABLE `platform`
 --
 ALTER TABLE `produk`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `promo`
+--
+ALTER TABLE `promo`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `refund`
@@ -705,6 +771,13 @@ ALTER TABLE `transaksi`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `detail_promo`
+--
+ALTER TABLE `detail_promo`
+  ADD CONSTRAINT `fk_dpromo` FOREIGN KEY (`id_promo`) REFERENCES `promo` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `fk_pproduk` FOREIGN KEY (`id_produk`) REFERENCES `produk` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `detail_transaksi`
