@@ -67,6 +67,7 @@
             <div class="form-group">
               <label>Nama Barang</label>
               <div class="form-inline">
+              <!-- <?php var_dump($barang) ?> -->
               <select class="form-control select2" style="width: 100%;" name="barang" id="barang" onchange="setHarga()">
               <option value="">No Selected</option>
               <?php foreach($barang as $k) : ?>
@@ -207,12 +208,15 @@
 
   function remove(nama){
     stok.row($("[name=" + nama + "]").closest("tr")).remove().draw();
-    
-    produk = produk.filter(x=>{
-        return x.id_produk != nama
+    total = 0
+    console.log("sebelum",total,produk)
+    produk = produk.filter(x=> x.barcode != nama)
+    produk.map(p => {
+      console.log(total)
+      total += p.bayar
     })
-    console.log(produk)
-
+    console.log("sesudah",total,produk)
+    $("#total").html(total || 0);
     $("#tambah").attr("disabled", "disabled");
     if (stok.rows().count() < 1) {
         $("#simpan").attr("disabled", "disabled")
@@ -239,7 +243,7 @@
       
       data[3] = parseInt(data[3])+parseInt(jumlah);
       data[2] = parseInt(harga) * parseInt(data[3]);
-      produk.filter((x)=>{
+      produk.map((x)=>{
           if(x.barcode == barang.value && x.supplier == sup.value){
             x.bayar = parseInt(data[2])
             x.jumlah = parseInt(data[3])
@@ -263,17 +267,16 @@
       supplier: parseInt(sup.value),
       bayar : bayar
     })
-
+    // console.log("barcode",sup.value)
     stok.row.add([
       supText,
       barangText,
       bayar,
       jumlah,
-      `<button name="${sup.value}" class="btn btn-sm btn-danger" onclick="remove('${sup.value}')">Hapus</btn>`
+      `<button name="${barang.value}" class="btn btn-sm btn-danger" onclick="remove('${barang.value}')">Hapus</btn>`
     ]).draw()
-
+    
     total += harga * jumlah;
-
     $("#simpan").removeAttr("disabled")
     $("#total").html(total);
   }
