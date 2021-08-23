@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 19, 2021 at 08:26 PM
+-- Generation Time: Aug 23, 2021 at 12:24 PM
 -- Server version: 8.0.23
 -- PHP Version: 7.4.3
 
@@ -66,7 +66,9 @@ INSERT INTO `detail_transaksi` (`id`, `id_transaksi`, `id_produk`, `jumlah`) VAL
 (52, 58, 4, 1),
 (53, 59, 1, 2),
 (54, 60, 1, 2),
-(55, 61, 1, 2);
+(55, 61, 1, 2),
+(58, 66, 2, 2),
+(59, 70, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -265,7 +267,7 @@ CREATE TABLE `produk` (
 
 INSERT INTO `produk` (`id`, `barcode`, `nama_produk`, `kategori`, `satuan`, `harga_beli`, `harga_jual`, `harga_reseller`, `stok`, `terjual`) VALUES
 (1, 'PULS ALPRB', 'Handsanitizer 500ML', 2, 2, 45000, 55000, 50000, 54, 46),
-(2, 'DJRM SPER', 'Alkohol 70%', 2, 1, 14000, 18000, 18000, 37, 25),
+(2, 'DJRM SPER', 'Alkohol 70%', 2, 1, 14000, 18000, 18000, 33, 29),
 (3, 'VCHR PLS ', 'Betadine', 2, NULL, 5000, 20000, 15000, 20, 0),
 (4, 'KRS RD', 'Kursi Roda Standart', 6, NULL, 5000, 20000, 10000, 17, 3),
 (5, 'RM SLNG', 'Arm Sling', 2, NULL, 15000, 50000, 25000, 57, 3),
@@ -470,7 +472,7 @@ CREATE TABLE `toko` (
 --
 
 INSERT INTO `toko` (`id`, `nama`, `alamat`, `kas`) VALUES
-(1, 'Toko Mastha', 'Jln Raya Klesem Selatan No 1E Wanadadi, Banjarnegara, Indonesia', 810000);
+(1, 'Toko Mastha', 'Jln Raya Klesem Selatan No 1E Wanadadi, Banjarnegara, Indonesia', 990000);
 
 -- --------------------------------------------------------
 
@@ -507,7 +509,9 @@ INSERT INTO `transaksi` (`id`, `tanggal`, `total_bayar`, `jumlah_uang`, `diskon`
 (58, '2021-06-30 22:06:14', 10000, 10000, 0, 2, 'Z53M4OVN258DTW3', 1, NULL, 'refund', 0, 'bank', '', 0, 'BCA'),
 (59, '2021-08-13 20:56:27', 110000, 110000, 0, 1, 'ILD4P06U98OL0WV', 1, NULL, 'lunas', 0, 'bank', '', 0, 'BCA'),
 (60, '2021-08-15 11:51:08', 110000, 110000, 0, 1, '1CQZEWLHN189PG2', 1, NULL, 'lunas', 0, 'cash', '', 0, ''),
-(61, '2021-08-15 11:55:36', 125000, 130000, 0, 1, 'RW536PU2ET3ATK0', 1, 3, 'lunas', 0, 'bank', 'JNT', 15000, 'BCA');
+(61, '2021-08-15 11:55:36', 125000, 130000, 0, 1, 'RW536PU2ET3ATK0', 1, 3, 'lunas', 0, 'bank', 'JNT', 15000, 'BCA'),
+(66, '2021-08-23 12:13:40', 36000, 40000, 0, 1, 'YGS0UB1HGIX2V66', 1, NULL, 'lunas', 0, 'bank', '', 0, 'BCA'),
+(70, '2021-08-23 12:18:40', 36000, 100000, 0, 1, 'AUBI0YHX71BQFA0', 21, NULL, 'lunas', 0, 'bank', '', 0, 'BCA');
 
 -- --------------------------------------------------------
 
@@ -652,9 +656,9 @@ ALTER TABLE `toko`
 --
 ALTER TABLE `transaksi`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_kasir` (`kasir`),
   ADD KEY `fk_marketplace` (`marketplace`),
-  ADD KEY `fk_pelanggan` (`pelanggan`);
+  ADD KEY `fk_pelanggan` (`pelanggan`),
+  ADD KEY `fk_kasir` (`kasir`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -664,7 +668,7 @@ ALTER TABLE `transaksi`
 -- AUTO_INCREMENT for table `detail_transaksi`
 --
 ALTER TABLE `detail_transaksi`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT for table `gudang`
@@ -718,7 +722,7 @@ ALTER TABLE `produk`
 -- AUTO_INCREMENT for table `promo`
 --
 ALTER TABLE `promo`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `refund`
@@ -766,7 +770,7 @@ ALTER TABLE `toko`
 -- AUTO_INCREMENT for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 
 --
 -- Constraints for dumped tables
@@ -815,7 +819,7 @@ ALTER TABLE `stok_masuk`
 -- Constraints for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  ADD CONSTRAINT `fk_kasir` FOREIGN KEY (`kasir`) REFERENCES `karyawan` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `fk_kasir` FOREIGN KEY (`kasir`) REFERENCES `pengguna` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   ADD CONSTRAINT `fk_marketplace` FOREIGN KEY (`marketplace`) REFERENCES `platform` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   ADD CONSTRAINT `fk_pelanggan` FOREIGN KEY (`pelanggan`) REFERENCES `pelanggan` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 COMMIT;
